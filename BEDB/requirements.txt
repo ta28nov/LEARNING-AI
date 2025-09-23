@@ -1,0 +1,38 @@
+# Python runtime
+# Use Python 3.11.x (stable for these libs)
+
+fastapi==0.116.2
+uvicorn[standard]==0.35.0
+pydantic==2.11.1
+pydantic-settings==2.10.1
+
+# Auth / security / uploads
+python-multipart==0.0.20
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+
+# MongoDB + ODM
+pymongo==4.15.1
+beanie==2.0.0
+
+# Google GenAI (Gemini) official SDK
+google-genai==1.38.0
+google-auth==2.40.3
+
+# File + async helpers
+python-magic==0.4.27
+aiofiles==24.1.0
+
+# Testing / dev
+pytest==8.4.2
+pytest-asyncio==1.1.0
+httpx==0.24.1
+
+# Formatting / static checks
+black==23.3.0
+isort==5.12.0
+mypy==1.3.0
+
+# Additional dependencies for production
+python-dotenv==1.0.0
+email-validator==2.0.0
