@@ -98,7 +98,7 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ### 2. Create docker-compose.yml
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -245,40 +245,33 @@ run:
   "cpu": "512",
   "memory": "1024",
   "executionRoleArn": "arn:aws:iam::account:role/ecsTaskExecutionRole",
-  "containerDefinitions": [
-    {
-      "name": "ai-learning-app",
-      "image": "your-account.dkr.ecr.region.amazonaws.com/ai-learning-app:latest",
-      "portMappings": [
-        {
-          "containerPort": 8000,
-          "protocol": "tcp"
-        }
-      ],
-      "environment": [
-        {
-          "name": "MONGODB_URL",
-          "value": "mongodb+srv://username:password@cluster.mongodb.net/"
-        },
-        {
-          "name": "SECRET_KEY",
-          "value": "your-secret-key"
-        },
-        {
-          "name": "GOOGLE_API_KEY",
-          "value": "your-google-api-key"
-        }
-      ],
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/ai-learning-app",
-          "awslogs-region": "us-east-1",
-          "awslogs-stream-prefix": "ecs"
-        }
-      }
-    }
-  ]
+  "containerDefinitions":
+    [
+      {
+        "name": "ai-learning-app",
+        "image": "your-account.dkr.ecr.region.amazonaws.com/ai-learning-app:latest",
+        "portMappings": [{ "containerPort": 8000, "protocol": "tcp" }],
+        "environment":
+          [
+            {
+              "name": "MONGODB_URL",
+              "value": "mongodb+srv://username:password@cluster.mongodb.net/",
+            },
+            { "name": "SECRET_KEY", "value": "your-secret-key" },
+            { "name": "GOOGLE_API_KEY", "value": "your-google-api-key" },
+          ],
+        "logConfiguration":
+          {
+            "logDriver": "awslogs",
+            "options":
+              {
+                "awslogs-group": "/ecs/ai-learning-app",
+                "awslogs-region": "us-east-1",
+                "awslogs-stream-prefix": "ecs",
+              },
+          },
+      },
+    ],
 }
 ```
 
@@ -289,21 +282,30 @@ run:
 ```yaml
 # cloudbuild.yaml
 steps:
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/ai-learning-app', '.']
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/ai-learning-app']
-  - name: 'gcr.io/cloud-builders/gcloud'
-    args: [
-      'run', 'deploy', 'ai-learning-app',
-      '--image', 'gcr.io/$PROJECT_ID/ai-learning-app',
-      '--region', 'us-central1',
-      '--platform', 'managed',
-      '--allow-unauthenticated',
-      '--set-env-vars', 'MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/',
-      '--set-env-vars', 'SECRET_KEY=your-secret-key',
-      '--set-env-vars', 'GOOGLE_API_KEY=your-google-api-key'
-    ]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/$PROJECT_ID/ai-learning-app", "."]
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$PROJECT_ID/ai-learning-app"]
+  - name: "gcr.io/cloud-builders/gcloud"
+    args:
+      [
+        "run",
+        "deploy",
+        "ai-learning-app",
+        "--image",
+        "gcr.io/$PROJECT_ID/ai-learning-app",
+        "--region",
+        "us-central1",
+        "--platform",
+        "managed",
+        "--allow-unauthenticated",
+        "--set-env-vars",
+        "MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/",
+        "--set-env-vars",
+        "SECRET_KEY=your-secret-key",
+        "--set-env-vars",
+        "GOOGLE_API_KEY=your-google-api-key",
+      ]
 ```
 
 #### 2. Deploy to Cloud Run
@@ -334,28 +336,28 @@ location: eastus
 name: ai-learning-app
 properties:
   containers:
-  - name: ai-learning-app
-    properties:
-      image: your-registry.azurecr.io/ai-learning-app:latest
-      resources:
-        requests:
-          cpu: 1
-          memoryInGb: 2
-      ports:
-      - port: 8000
-      environmentVariables:
-      - name: MONGODB_URL
-        value: mongodb+srv://username:password@cluster.mongodb.net/
-      - name: SECRET_KEY
-        value: your-secret-key
-      - name: GOOGLE_API_KEY
-        value: your-google-api-key
+    - name: ai-learning-app
+      properties:
+        image: your-registry.azurecr.io/ai-learning-app:latest
+        resources:
+          requests:
+            cpu: 1
+            memoryInGb: 2
+        ports:
+          - port: 8000
+        environmentVariables:
+          - name: MONGODB_URL
+            value: mongodb+srv://username:password@cluster.mongodb.net/
+          - name: SECRET_KEY
+            value: your-secret-key
+          - name: GOOGLE_API_KEY
+            value: your-google-api-key
   osType: Linux
   ipAddress:
     type: Public
     ports:
-    - protocol: tcp
-      port: 8000
+      - protocol: tcp
+        port: 8000
   restartPolicy: Always
 type: Microsoft.ContainerInstance/containerGroups
 ```
@@ -610,17 +612,17 @@ async def create_indexes():
     # User indexes
     await User.create_index("email")
     await User.create_index("created_at")
-    
+
     # Course indexes
     await Course.create_index("owner_id")
     await Course.create_index("title")
     await Course.create_index("level")
     await Course.create_index("tags")
-    
+
     # Quiz indexes
     await Quiz.create_index("course_id")
     await Quiz.create_index("created_at")
-    
+
     # Chat indexes
     await ChatSession.create_index("user_id")
     await ChatSession.create_index("created_at")
@@ -651,13 +653,13 @@ async def cache_middleware(request: Request, call_next):
                 content=cached_response,
                 media_type="application/json"
             )
-    
+
     response = await call_next(request)
-    
+
     # Cache successful GET responses
     if request.method == "GET" and response.status_code == 200:
         redis_client.setex(cache_key, 300, response.body)
-    
+
     return response
 ```
 
@@ -694,7 +696,7 @@ from pydantic import validator
 class CourseCreate(BaseModel):
     title: str = Field(..., min_length=1, max_length=200)
     description: str = Field(..., min_length=1, max_length=1000)
-    
+
     @validator('title')
     def validate_title(cls, v):
         if not v.strip():
@@ -707,16 +709,19 @@ class CourseCreate(BaseModel):
 ### Common Issues
 
 1. **Database Connection Errors**
+
    - Check MongoDB connection string
    - Verify network connectivity
    - Check authentication credentials
 
 2. **File Upload Issues**
+
    - Verify file size limits
    - Check file permissions
    - Ensure upload directory exists
 
 3. **AI Service Errors**
+
    - Verify Google API key
    - Check API quotas and limits
    - Monitor error logs

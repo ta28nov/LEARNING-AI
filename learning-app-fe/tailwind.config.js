@@ -32,6 +32,13 @@ export default {
           800: '#854d0e',
           900: '#713f12',
         },
+        border: "hsl(var(--border))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+      },
+      borderColor: {
+        DEFAULT: "hsl(var(--border))",
+        border: "hsl(var(--border))",
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
