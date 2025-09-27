@@ -5,7 +5,7 @@ from pydantic import Field
 from typing import Optional
 from datetime import datetime
 from enum import Enum
-from bson import ObjectId
+from app.models.base import PyObjectId
 
 
 class ChatMode(str, Enum):
@@ -24,9 +24,9 @@ class ChatStatus(str, Enum):
 class ChatSession(Document):
     """Chat session document model."""
     
-    user_id: ObjectId = Field(..., index=True)
-    course_id: Optional[ObjectId] = Field(None, index=True)
-    upload_id: Optional[ObjectId] = Field(None, index=True)
+    user_id: PyObjectId = Field(..., index=True)
+    course_id: Optional[PyObjectId] = Field(None, index=True)
+    upload_id: Optional[PyObjectId] = Field(None, index=True)
     title: str
     mode: ChatMode = ChatMode.HYBRID
     status: ChatStatus = ChatStatus.ACTIVE
@@ -50,7 +50,7 @@ class ChatSession(Document):
 class ChatMessage(Document):
     """Chat message document model."""
     
-    session_id: ObjectId = Field(..., index=True)
+    session_id: PyObjectId = Field(..., index=True)
     sender: str  # "user" or "ai"
     message: str
     answer: Optional[str] = None

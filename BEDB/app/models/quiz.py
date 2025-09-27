@@ -4,14 +4,14 @@ from beanie import Document
 from pydantic import Field
 from typing import Optional, List
 from datetime import datetime
-from bson import ObjectId
+from app.models.base import PyObjectId
 
 
 class Quiz(Document):
     """Quiz document model."""
     
-    course_id: ObjectId = Field(..., index=True)
-    chapter_id: Optional[ObjectId] = Field(None, index=True)
+    course_id: PyObjectId = Field(..., index=True)
+    chapter_id: Optional[PyObjectId] = Field(None, index=True)
     title: str
     prompt: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
@@ -31,7 +31,7 @@ class Quiz(Document):
 class QuizQuestion(Document):
     """Quiz question document model."""
     
-    quiz_id: ObjectId = Field(..., index=True)
+    quiz_id: PyObjectId = Field(..., index=True)
     question: str
     options: List[str] = Field(default_factory=list)
     correct_answer: int  # Index of correct option
@@ -52,8 +52,8 @@ class QuizQuestion(Document):
 class QuizHistory(Document):
     """Quiz history document model."""
     
-    quiz_id: ObjectId = Field(..., index=True)
-    user_id: ObjectId = Field(..., index=True)
+    quiz_id: PyObjectId = Field(..., index=True)
+    user_id: PyObjectId = Field(..., index=True)
     score: float  # Percentage score
     total_questions: int
     correct_answers: int

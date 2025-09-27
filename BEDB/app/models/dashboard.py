@@ -5,7 +5,7 @@ from pydantic import Field
 from typing import Optional
 from datetime import datetime
 from enum import Enum
-from bson import ObjectId
+from app.models.base import PyObjectId
 
 
 class ProgressStatus(str, Enum):
@@ -18,9 +18,9 @@ class ProgressStatus(str, Enum):
 class DashboardProgress(Document):
     """Dashboard progress document model."""
     
-    user_id: ObjectId = Field(..., index=True)
-    course_id: ObjectId = Field(..., index=True)
-    chapter_id: Optional[ObjectId] = Field(None, index=True)
+    user_id: PyObjectId = Field(..., index=True)
+    course_id: PyObjectId = Field(..., index=True)
+    chapter_id: Optional[PyObjectId] = Field(None, index=True)
     status: ProgressStatus = ProgressStatus.NOT_STARTED
     progress: float = Field(default=0.0, ge=0.0, le=100.0)  # Percentage
     time_spent: int = Field(default=0)  # Time in minutes

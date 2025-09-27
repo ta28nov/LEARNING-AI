@@ -5,7 +5,7 @@ from pydantic import Field
 from typing import Optional
 from datetime import datetime
 from enum import Enum
-from bson import ObjectId
+from app.models.base import PyObjectId
 
 
 class UploadStatus(str, Enum):
@@ -28,7 +28,7 @@ class FileType(str, Enum):
 class Upload(Document):
     """Upload document model."""
     
-    user_id: ObjectId = Field(..., index=True)
+    user_id: PyObjectId = Field(..., index=True)
     filename: str
     file_type: FileType
     file_path: str

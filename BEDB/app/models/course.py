@@ -1,11 +1,11 @@
 """Course and Chapter models."""
 
-from beanie import Document
-from pydantic import Field
 from typing import Optional, List
-from datetime import datetime
 from enum import Enum
-from bson import ObjectId
+from datetime import datetime
+from pydantic import Field
+
+from app.models.base import BaseDocument, PyObjectId
 
 
 class CourseLevel(str, Enum):
@@ -15,10 +15,13 @@ class CourseLevel(str, Enum):
     ADVANCED = "advanced"
 
 
-class Course(Document):
+class Course(BaseDocument):
     """Course document model."""
     
-    owner_id: ObjectId = Field(..., index=True)
+    class Settings:
+        name = "courses"
+    
+    owner_id: PyObjectId = Field(..., index=True)
     title: str
     description: str
     outline: Optional[str] = None
@@ -42,10 +45,13 @@ class Course(Document):
         return f"Course(title={self.title}, owner_id={self.owner_id})"
 
 
-class Chapter(Document):
+class Chapter(BaseDocument):
     """Chapter document model."""
     
-    course_id: ObjectId = Field(..., index=True)
+    class Settings:
+        name = "chapters"
+
+    course_id: PyObjectId = Field(..., index=True)
     title: str
     content: str
     order: int = Field(..., index=True)

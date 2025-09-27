@@ -1,0 +1,25 @@
+# GHI_CHU.txt
+# Ghi chú về python-magic cho các môi trường khác nhau
+
+## Môi trường Windows (phát triển local)
+- Trên Windows không có sẵn libmagic.
+- Vì vậy cần dùng gói `python-magic-bin==0.4.14` thay cho `python-magic`.
+
+Các bước:
+    pip uninstall python-magic -y
+    pip install python-magic-bin==0.4.14
+
+## Môi trường Linux / Docker / Production (deploy)
+- Giữ nguyên `python-magic==0.4.27` trong requirements.txt.
+- Cần cài libmagic trên hệ thống hoặc trong container.
+
+Với Debian/Ubuntu:
+    apt-get update && apt-get install -y libmagic1
+
+Với Alpine:
+    apk add --no-cache file
+
+---
+Tóm tắt:
+- Windows (dev): dùng python-magic-bin
+- Linux/Docker (deploy): dùng python-magic + libmagic hệ thống

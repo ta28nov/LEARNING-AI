@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card';
 import { useAuthStore } from '@/stores/authStore';
+import { useTranslation } from "react-i18next";
 
 const loginSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -20,6 +21,8 @@ export function LoginPage() {
   const navigate = useNavigate();
   const { login, isLoading } = useAuthStore();
   const [error, setError] = useState('');
+
+  const { t } = useTranslation(); 
 
   const {
     register,

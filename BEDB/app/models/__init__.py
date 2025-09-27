@@ -1,5 +1,6 @@
 """Database models."""
 
+from .base import BaseDocument, PyObjectId
 from .user import User
 from .course import Course, Chapter
 from .upload import Upload

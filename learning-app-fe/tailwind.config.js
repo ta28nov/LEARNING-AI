@@ -1,4 +1,25 @@
-/** @type {import('tailwindcss').Config} */
+/** @type      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+          50: 'oklch(97.1% 0.013 17.38)',
+          100: 'oklch(93.6% 0.032 17.717)', 
+          200: 'oklch(88.5% 0.062 18.334)',
+          300: 'oklch(80.8% 0.114 19.571)',
+          400: 'oklch(70.4% 0.191 22.216)',
+          500: 'oklch(62.3% 0.214 259.815)',
+          600: 'oklch(54.6% 0.245 262.881)',
+          700: 'oklch(48.8% 0.243 264.376)',
+          800: 'oklch(42.4% 0.199 265.638)',
+          900: 'oklch(37.9% 0.146 265.522)',
+          950: 'oklch(28.2% 0.091 267.935)',
+        },
+        secondary: {indcss').Config} */
 export default {
   content: [
     "./index.html",
@@ -9,16 +30,17 @@ export default {
     extend: {
       colors: {
         primary: {
-          50: '#eff6ff',
-          100: '#dbeafe',
-          200: '#bfdbfe',
-          300: '#93c5fd',
-          400: '#60a5fa',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-          800: '#1e40af',
-          900: '#1e3a8a',
+          50: 'oklch(97.1% 0.013 17.38)',
+          100: 'oklch(93.6% 0.032 17.717)',
+          200: 'oklch(88.5% 0.062 18.334)',
+          300: 'oklch(80.8% 0.114 19.571)',
+          400: 'oklch(70.4% 0.191 22.216)',
+          500: 'oklch(62.3% 0.214 259.815)',
+          600: 'oklch(54.6% 0.245 262.881)',
+          700: 'oklch(48.8% 0.243 264.376)',
+          800: 'oklch(42.4% 0.199 265.638)',
+          900: 'oklch(37.9% 0.146 265.522)',
+          950: 'oklch(28.2% 0.091 267.935)',
         },
         secondary: {
           50: '#fefce8',

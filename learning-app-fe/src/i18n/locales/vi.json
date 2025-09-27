@@ -45,7 +45,6 @@
     "passwordTooShort": "Mật khẩu phải có ít nhất 6 ký tự",
     "passwordsNotMatch": "Mật khẩu không khớp",
     "nameRequired": "Vui lòng nhập họ tên",
-    "forgotPassword": "Quên mật khẩu?",
     "forgotPasswordDescription": "Nhập email của bạn và chúng tôi sẽ gửi link đặt lại mật khẩu",
     "sendResetLink": "Gửi link đặt lại",
     "resetEmailSent": "Email đặt lại mật khẩu đã được gửi!",

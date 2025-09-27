@@ -1,10 +1,11 @@
 """User model."""
 
-from beanie import Document
 from pydantic import EmailStr, Field
 from typing import Optional
 from datetime import datetime
 from enum import Enum
+
+from app.models.base import BaseDocument
 
 
 class UserRole(str, Enum):
@@ -14,8 +15,11 @@ class UserRole(str, Enum):
     ADMIN = "admin"
 
 
-class User(Document):
+class User(BaseDocument):
     """User document model."""
+
+    class Settings:
+        name = "users"
     
     email: EmailStr = Field(..., unique=True, index=True)
     password_hash: str
