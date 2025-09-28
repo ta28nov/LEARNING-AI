@@ -272,7 +272,7 @@
     "week": "Tuần"
   },
   "admin": {
-    "title": "Bảng điều khiển quản trị",
+    "dashboard": "Bảng điều khiển quản trị",
     "subtitle": "Quản lý người dùng, khóa học và cài đặt hệ thống",
     "userManagement": "Quản lý người dùng",
     "courseManagement": "Quản lý khóa học",

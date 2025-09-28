@@ -45,7 +45,6 @@
     "passwordTooShort": "Password must be at least 6 characters",
     "passwordsNotMatch": "Passwords don't match",
     "nameRequired": "Name must be at least 2 characters",
-    "forgotPassword": "Forgot your password?",
     "forgotPasswordDescription": "Enter your email and we'll send you a reset link",
     "sendResetLink": "Send Reset Link",
     "resetEmailSent": "Password reset email sent!",
@@ -273,7 +272,7 @@
     "week": "Week"
   },
   "admin": {
-    "title": "Admin Dashboard",
+    "adminDashboard": "Admin Dashboard",
     "subtitle": "Manage users, courses, and system settings",
     "userManagement": "User Management",
     "courseManagement": "Course Management",

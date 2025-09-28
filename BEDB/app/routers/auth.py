@@ -38,7 +38,8 @@ async def register(user_data: UserCreate):
     )
     
     await user.insert()
-    return UserResponse.model_validate(user)
+    user_data = user.to_json()
+    return UserResponse.model_validate(user_data)
 
 
 @router.post("/login", response_model=Token)
@@ -81,7 +82,8 @@ async def login(user_credentials: UserLogin):
 @router.get("/me", response_model=UserResponse)
 async def get_current_user_info(current_user: User = Depends(get_current_active_user)):
     """Get current user information."""
-    return UserResponse.model_validate(current_user)
+    user_data = current_user.to_json()
+    return UserResponse.model_validate(user_data)
 
 
 @router.put("/me", response_model=UserResponse)
@@ -97,7 +99,8 @@ async def update_current_user(
         current_user.avatar = avatar
     
     await current_user.save()
-    return UserResponse.model_validate(current_user)
+    user_data = current_user.to_json()
+    return UserResponse.model_validate(user_data)
 
 
 @router.post("/refresh", response_model=Token)

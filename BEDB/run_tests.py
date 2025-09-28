@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Comprehensive test runner for the AI Learning Application.
-This script runs all tests to verify the backend setup.
+kiểm tra toàn diện các thành phần backend.
+Chạy tập lệnh này để xác minh thiết lập cơ sở dữ liệu, kiểm tra cú pháp Python, kiểm tra nhập mô-đun và kiểm tra điểm cuối API.
 """
 
 import asyncio

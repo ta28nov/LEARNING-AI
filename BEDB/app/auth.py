@@ -10,8 +10,13 @@ from app.config import settings
 from app.models.user import User
 from bson import ObjectId
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Password hashing with bcrypt
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    bcrypt__default_rounds=12,
+    deprecated="auto",
+    truncate_error=False  # Raise error for passwords >72 bytes
+)
 
 # JWT token scheme
 security = HTTPBearer()
@@ -19,11 +24,18 @@ security = HTTPBearer()
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against its hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        is_valid = pwd_context.verify(plain_password, hashed_password)
+        return is_valid
+    except Exception as e:
+        print(f"Password verification error: {e}")
+        return False
 
 
 def get_password_hash(password: str) -> str:
-    """Hash a password."""
+    """Hash a password using bcrypt."""
+    if not password:
+        raise ValueError("Password cannot be empty")
     return pwd_context.hash(password)
 
 
