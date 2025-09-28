@@ -28,6 +28,9 @@ class ChatSessionResponse(BaseModel):
     
     class Config:
         from_attributes = True
+        json_encoders = {
+            "ObjectId": str
+        }
 
 
 class ChatMessageCreate(BaseModel):
@@ -47,6 +50,9 @@ class ChatMessageResponse(BaseModel):
     
     class Config:
         from_attributes = True
+        json_encoders = {
+            "ObjectId": str
+        }
 
 
 class ChatResponse(BaseModel):

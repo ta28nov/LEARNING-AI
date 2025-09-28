@@ -20,6 +20,11 @@ class User(BaseDocument):
 
     class Settings:
         name = "users"
+        indexes = [
+            "email",
+            "created_at",
+            "is_active"
+        ]
     
     email: EmailStr = Field(..., unique=True, index=True)
     password_hash: str
@@ -27,16 +32,6 @@ class User(BaseDocument):
     avatar: Optional[str] = None
     role: UserRole = UserRole.STUDENT
     is_active: bool = True
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Settings:
-        name = "users"
-        indexes = [
-            "email",
-            "created_at",
-            "is_active"
-        ]
     
     def __str__(self) -> str:
         return f"User(email={self.email}, name={self.name})"

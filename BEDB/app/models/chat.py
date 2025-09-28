@@ -5,7 +5,7 @@ from pydantic import Field
 from typing import Optional
 from datetime import datetime
 from enum import Enum
-from app.models.base import PyObjectId
+from app.models.base import BaseDocument, PyObjectId
 
 
 class ChatMode(str, Enum):
@@ -21,7 +21,7 @@ class ChatStatus(str, Enum):
     DELETED = "deleted"
 
 
-class ChatSession(Document):
+class ChatSession(BaseDocument):
     """Chat session document model."""
     
     user_id: PyObjectId = Field(..., index=True)
@@ -47,7 +47,7 @@ class ChatSession(Document):
         return f"ChatSession(title={self.title}, user_id={self.user_id}, mode={self.mode})"
 
 
-class ChatMessage(Document):
+class ChatMessage(BaseDocument):
     """Chat message document model."""
     
     session_id: PyObjectId = Field(..., index=True)

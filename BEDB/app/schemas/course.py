@@ -41,6 +41,9 @@ class CourseResponse(BaseModel):
     
     class Config:
         from_attributes = True
+        json_encoders = {
+            "ObjectId": str
+        }
 
 
 class ChapterCreate(BaseModel):
@@ -69,3 +72,6 @@ class ChapterResponse(BaseModel):
     
     class Config:
         from_attributes = True
+        json_encoders = {
+            "ObjectId": str
+        }

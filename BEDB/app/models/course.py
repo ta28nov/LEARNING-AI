@@ -20,6 +20,13 @@ class Course(BaseDocument):
     
     class Settings:
         name = "courses"
+        indexes = [
+            "owner_id",
+            "title",
+            "level",
+            "tags",
+            "created_at"
+        ]
     
     owner_id: PyObjectId = Field(..., index=True)
     title: str
@@ -28,18 +35,6 @@ class Course(BaseDocument):
     source: Optional[str] = None  # Source material or origin
     level: CourseLevel = CourseLevel.BEGINNER
     tags: List[str] = Field(default_factory=list)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Settings:
-        name = "courses"
-        indexes = [
-            "owner_id",
-            "title",
-            "level",
-            "tags",
-            "created_at"
-        ]
     
     def __str__(self) -> str:
         return f"Course(title={self.title}, owner_id={self.owner_id})"
@@ -50,21 +45,16 @@ class Chapter(BaseDocument):
     
     class Settings:
         name = "chapters"
-
-    course_id: PyObjectId = Field(..., index=True)
-    title: str
-    content: str
-    order: int = Field(..., index=True)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-    
-    class Settings:
-        name = "chapters"
         indexes = [
             "course_id",
             "order",
             "created_at"
         ]
+
+    course_id: PyObjectId = Field(..., index=True)
+    title: str
+    content: str
+    order: int = Field(..., index=True)
     
     def __str__(self) -> str:
         return f"Chapter(title={self.title}, course_id={self.course_id}, order={self.order})"

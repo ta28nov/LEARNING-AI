@@ -28,6 +28,9 @@ class UploadResponse(BaseModel):
     
     class Config:
         from_attributes = True
+        json_encoders = {
+            "ObjectId": str
+        }
 
 
 class UploadUpdate(BaseModel):

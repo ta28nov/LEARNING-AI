@@ -11,6 +11,7 @@ from app.models.user import User
 from app.auth import get_current_active_user
 from app.services.genai_service import genai_service
 from app.services.vector_service import vector_service
+from app.utils import validate_object_id, safe_object_id_conversion
 from bson import ObjectId
 
 router = APIRouter(prefix="/courses", tags=["courses"])
@@ -177,7 +178,8 @@ async def get_course(
 ):
     """Get a specific course."""
     try:
-        course = await Course.get(ObjectId(course_id))
+        obj_id = validate_object_id(course_id, "course ID")
+        course = await Course.get(obj_id)
         if not course:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -191,6 +193,8 @@ async def get_course(
             pass
         
         return CourseResponse.model_validate(course)
+    except HTTPException:
+        raise
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

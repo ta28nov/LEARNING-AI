@@ -24,6 +24,9 @@ class QuizResponse(BaseModel):
     
     class Config:
         from_attributes = True
+        json_encoders = {
+            "ObjectId": str
+        }
 
 
 class QuizQuestionResponse(BaseModel):
@@ -38,6 +41,9 @@ class QuizQuestionResponse(BaseModel):
     
     class Config:
         from_attributes = True
+        json_encoders = {
+            "ObjectId": str
+        }
 
 
 class QuizSubmission(BaseModel):
@@ -58,6 +64,9 @@ class QuizResult(BaseModel):
     
     class Config:
         from_attributes = True
+        json_encoders = {
+            "ObjectId": str
+        }
 
 
 class QuizHistoryResponse(BaseModel):
@@ -72,3 +81,6 @@ class QuizHistoryResponse(BaseModel):
     
     class Config:
         from_attributes = True
+        json_encoders = {
+            "ObjectId": str
+        }

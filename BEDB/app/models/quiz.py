@@ -4,10 +4,10 @@ from beanie import Document
 from pydantic import Field
 from typing import Optional, List
 from datetime import datetime
-from app.models.base import PyObjectId
+from app.models.base import BaseDocument, PyObjectId
 
 
-class Quiz(Document):
+class Quiz(BaseDocument):
     """Quiz document model."""
     
     course_id: PyObjectId = Field(..., index=True)
@@ -28,7 +28,7 @@ class Quiz(Document):
         return f"Quiz(title={self.title}, course_id={self.course_id})"
 
 
-class QuizQuestion(Document):
+class QuizQuestion(BaseDocument):
     """Quiz question document model."""
     
     quiz_id: PyObjectId = Field(..., index=True)
@@ -49,7 +49,7 @@ class QuizQuestion(Document):
         return f"QuizQuestion(quiz_id={self.quiz_id}, order={self.order})"
 
 
-class QuizHistory(Document):
+class QuizHistory(BaseDocument):
     """Quiz history document model."""
     
     quiz_id: PyObjectId = Field(..., index=True)

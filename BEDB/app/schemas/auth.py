@@ -32,6 +32,9 @@ class UserResponse(BaseModel):
     
     class Config:
         from_attributes = True
+        json_encoders = {
+            "ObjectId": str
+        }
 
 
 class Token(BaseModel):

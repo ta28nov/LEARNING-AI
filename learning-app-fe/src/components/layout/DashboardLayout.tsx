@@ -65,15 +65,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* Sidebar */}
       <div className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0
+        fixed inset-y-0 left-0 z-50 w-64 bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl shadow-2xl border-r border-white/20 dark:border-white/10 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-700">
-            <Link to="/dashboard" className="flex items-center space-x-2">
-              <Brain className="h-8 w-8 text-primary-600" />
-              <span className="text-xl font-bold text-gray-900 dark:text-white">AI Learning</span>
+          <div className="flex items-center justify-between h-16 px-6 border-b border-slate-200/50 dark:border-slate-700/50">
+            <Link to="/dashboard" className="flex items-center space-x-3 group">
+              <div className="relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-600 to-secondary-600 rounded-lg blur-sm opacity-75 group-hover:opacity-100 transition-opacity"></div>
+                <Brain className="relative h-8 w-8 text-white" />
+              </div>
+              <span className="text-xl font-bold gradient-text">AI Learning</span>
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -94,15 +97,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                   key={item.name}
                   to={item.href}
                     className={`
-                      flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                      group flex items-center px-3 py-3 rounded-xl text-sm font-medium transition-all duration-200 relative
                       ${active 
-                        ? 'bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-300 border-r-2 border-primary-600' 
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
+                        ? 'bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-900/20 dark:to-primary-800/20 text-primary-700 dark:text-primary-300 shadow-lg border border-primary-200 dark:border-primary-700' 
+                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white hover:shadow-md'
                       }
                     `}
                   onClick={() => setSidebarOpen(false)}
                 >
-                  <Icon className="mr-3 h-5 w-5" />
+                  {active && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-primary-500 to-secondary-500 rounded-r-full"></div>
+                  )}
+                  <Icon className={`mr-3 h-5 w-5 transition-transform group-hover:scale-110 ${active ? 'text-primary-600 dark:text-primary-400' : ''}`} />
                   {item.name}
                 </Link>
               );

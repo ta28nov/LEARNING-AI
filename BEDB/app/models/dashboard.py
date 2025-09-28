@@ -5,7 +5,7 @@ from pydantic import Field
 from typing import Optional
 from datetime import datetime
 from enum import Enum
-from app.models.base import PyObjectId
+from app.models.base import BaseDocument, PyObjectId
 
 
 class ProgressStatus(str, Enum):
@@ -15,7 +15,7 @@ class ProgressStatus(str, Enum):
     COMPLETED = "completed"
 
 
-class DashboardProgress(Document):
+class DashboardProgress(BaseDocument):
     """Dashboard progress document model."""
     
     user_id: PyObjectId = Field(..., index=True)
