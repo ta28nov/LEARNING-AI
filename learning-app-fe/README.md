@@ -348,10 +348,9 @@ MIT License - xem file LICENSE để biết chi tiết.
 - [Zustand](https://zustand-demo.pmnd.rs)
 
 ### Liên hệ
-- 📧 Email: support@ailearning.com
-- 💬 Discord: [AI Learning Community]
-- 🐛 Issues: [GitHub Issues]
+- 📧 Email: tiphong05@gmail.com
+- 🐛 Issues: ta28nov
 
 ---
 
-**🎉 Chúc bạn có trải nghiệm tuyệt vời với AI Learning Platform!**
+
