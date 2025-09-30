@@ -1,45 +1,4 @@
-# 🎨 UI/UX Guide - Chạy ứng dụng với giao diện hiện đại
 
-## 🚀 **Cách chạy ứng dụng với UI/UX mới**
-
-### **1. Cài đặt dependencies**
-```bash
-cd learning-app-fe
-npm install
-```
-
-### **2. Chạy development server**
-```bash
-npm run dev
-```
-
-### **3. Mở trình duyệt**
-```
-http://localhost:3000
-```
-
-## 🎨 **Các tính năng UI/UX mới**
-
-### **🌟 Landing Page**
-- **Hero Section**: Gradient background với floating animations
-- **Typography**: Large gradient text với modern spacing
-- **CTA Buttons**: Enhanced với hover animations và shimmer effects
-- **Stats Section**: Animated counters với gradient icons
-- **Features**: Hover lift effects với gradient backgrounds
-- **Footer**: Multi-column layout với social links
-
-### **🎭 Animations & Effects**
-- **Fade In**: Smooth entrance animations
-- **Float**: Floating elements với staggered timing
-- **Shimmer**: Loading shimmer effects
-- **Hover Lift**: Cards lift on hover với enhanced shadows
-- **Glow**: Glowing effects cho interactive elements
-
-### **🎨 Color System**
-- **Primary**: Deep Ocean Blue gradient palette
-- **Secondary**: Vibrant Purple gradient palette
-- **Accent**: Cyan accent colors
-- **Status**: Success (Emerald), Warning (Amber), Error (Red)
 
 ### **🔧 Enhanced Components**
 
@@ -277,14 +236,6 @@ const LazyComponent = React.lazy(() => import('./Component'));
 - **3xl**: `1.5rem` (24px)
 - **full**: `9999px`
 
-## 🎯 **Kết quả**
-
-✅ **Modern Design System**: Chuẩn quốc tế với color palette hiện đại
-✅ **Smooth Animations**: 60fps animations với hardware acceleration
-✅ **Glass Morphism**: Modern glass effects với backdrop blur
-✅ **Responsive Design**: Hoạt động mượt mà trên mọi thiết bị
-✅ **Dark Mode**: Automatic theme switching
-✅ **Accessibility**: WCAG compliant với keyboard navigation
 ✅ **Performance**: Optimized cho tốc độ và hiệu suất
 ✅ **Component Library**: Reusable components với variants
 
