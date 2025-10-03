@@ -16,6 +16,14 @@ Nền tảng học tập thông minh được hỗ trợ bởi AI với giao di�
 - **Chi tiết khóa học**: Xem nội dung chi tiết, chương học và tiến độ
 - **Học tương tác**: Giao diện học tập trực quan với navigation dễ dàng
 
+### 🎓 Hệ thống Ghi danh (Enrollment System)
+- **Ghi danh khóa học**: Đăng ký tham gia khóa học công khai một cách dễ dàng
+- **Quản lý học viên**: Giảng viên theo dõi danh sách sinh viên và hoạt động
+- **Dashboard sinh viên**: Xem tất cả khóa học đã đăng ký và tiến độ
+- **Dashboard giảng viên**: Quản lý khóa học, xem analytics và thống kê chi tiết
+- **Phân quyền thông minh**: Chỉ khóa học PUBLIC mới cho phép ghi danh
+- **Hủy ghi danh**: Sinh viên có thể hủy đăng ký khóa học bất cứ lúc nào
+
 ### 📁 Quản lý tệp tin
 - **Drag & Drop**: Kéo thả tệp tin dễ dàng
 - **Multi-format**: Hỗ trợ PDF, DOCX, TXT
@@ -141,6 +149,7 @@ learning-app-fe/
 │   ├── pages/             # Page components
 │   │   ├── auth/          # Authentication pages
 │   │   ├── courses/       # Course pages
+│   │   ├── enrollment/    # Enrollment pages (Student & Instructor)
 │   │   ├── chat/          # Chat pages
 │   │   ├── quiz/          # Quiz pages
 │   │   └── admin/         # Admin pages
@@ -216,6 +225,7 @@ import { FadeIn, StaggerContainer, StaggerItem } from '@/components/ui';
 ### Services
 - **authService**: Authentication và user management
 - **courseService**: Course CRUD operations
+- **enrollmentService**: Student/Instructor enrollment operations
 - **uploadService**: File upload và management
 - **chatService**: AI chat functionality
 - **quizService**: Quiz generation và submission

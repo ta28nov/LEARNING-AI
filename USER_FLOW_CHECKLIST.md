@@ -74,8 +74,45 @@ Kiểm tra chi tiết từng chức năng theo user flow đã định nghĩa và
 | **Tạo bằng prompt** | AI sinh outline | ✅ **HOÀN THÀNH** | ✅ **HOÀN THÀNH** | `POST /api/v1/courses/from-prompt` |
 | **Xóa/chỉnh sửa** | Course management | ✅ **HOÀN THÀNH** | ✅ **HOÀN THÀNH** | Full CRUD |
 | **Search/Filter** | Find courses | ✅ **HOÀN THÀNH** | ✅ **HOÀN THÀNH** | Client-side filter |
+| **Course visibility** | PUBLIC/PRIVATE/DRAFT | ✅ **HOÀN THÀNH** | ✅ **HOÀN THÀNH** | Visibility settings |
+| **Enrollment system** | Browse public courses | ✅ **HOÀN THÀNH** | ✅ **HOÀN THÀNH** | Student enrollment |
 
 **📍 File:** `learning-app-fe/src/pages/courses/CoursesPage.tsx`
+
+### 🎓 2.3.1 Enrollment System (Student)
+
+| Chức năng | Yêu cầu | Frontend Status | Backend Status | Ghi chú |
+|-----------|---------|-----------------|----------------|---------|
+| **Browse public courses** | View PUBLIC courses | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | Visibility filter |
+| **Enroll in course** | One-click enroll | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | `POST /api/v1/student/courses/{id}/enroll` |
+| **Unenroll from course** | Drop course | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | `DELETE /api/v1/student/courses/{id}/enroll` |
+| **My enrolled courses** | List with progress | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | `GET /api/v1/student/enrolled-courses` |
+| **Enrollment status** | active/completed/dropped | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | Status filtering |
+| **Course progress** | Track completion % | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | Progress tracking |
+| **Student dashboard** | Enrollment stats | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | `GET /api/v1/student/dashboard` |
+| **Re-enrollment** | Reactivate dropped | ✅ **HOÀN THÀNH** | ✅ **HOÀN THÀNH** | Auto reactivation |
+
+**📍 Services:** 
+- `learning-app-fe/src/services/enrollmentService.ts` ✅ **ĐÃ CÓ**
+- `learning-app-fe/src/stores/enrollmentStore.ts` ✅ **ĐÃ CÓ**
+
+### 👨‍🏫 2.3.2 Enrollment Management (Instructor)
+
+| Chức năng | Yêu cầu | Frontend Status | Backend Status | Ghi chú |
+|-----------|---------|-----------------|----------------|---------|
+| **View enrolled students** | List per course | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | `GET /api/v1/instructor/courses/{id}/students` |
+| **Student filtering** | By status | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | active/completed/dropped |
+| **Course analytics** | Enrollment metrics | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | `GET /api/v1/instructor/courses/{id}/analytics` |
+| **Instructor dashboard** | Overview stats | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | `GET /api/v1/instructor/dashboard` |
+| **All students list** | Across all courses | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | `GET /api/v1/instructor/students` |
+| **Enrollment count** | Display on course | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | Auto-updated count |
+| **Completion rate** | % completed | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | Analytics endpoint |
+| **Average progress** | Student progress avg | ⚠️ **CẦN UI** | ✅ **HOÀN THÀNH** | Calculated metric |
+
+**📍 Backend Routers:**
+- `BEDB/app/routers/student.py` ✅ **281 lines - HOÀN THÀNH**
+- `BEDB/app/routers/instructor.py` ✅ **314 lines - HOÀN THÀNH**
+- `BEDB/app/schemas/enrollment.py` ✅ **11 schemas - HOÀN THÀNH**
 
 ### 📖 2.4 Course Detail Page
 
@@ -183,15 +220,17 @@ Kiểm tra chi tiết từng chức năng theo user flow đã định nghĩa và
 ### ✅ **HOÀN THÀNH TỐT **
 - **Authentication System** - JWT, login/register
 - **Course Management** - CRUD, AI generation
+- **Enrollment System (Backend)** - 9 endpoints, role-based access ✨ **MỚI**
 - **Chat System** - Freestyle + course-specific
 - **Upload System** - File processing
 - **Dashboard** - Statistics and progress
 - **Admin Panel** - User and course management
 - **UI/UX** - Modern design, responsive, animations
-- **Internationalization** - Vi/En support
+- **Internationalization** - Vi/en support
 - **Theme System** - Dark/Light mode
 
 ### ⚠️ **CẦN HOÀN THIỆN **
+- **Enrollment UI Components** - EnrollButton, dashboards, my courses page ✨ **ĐANG LÀM**
 - **Email Verification** - Backend có, thiếu UI
 - **Forgot Password** - Backend có, thiếu UI  
 - **Chapter System** - Cơ bản, cần chi tiết hơn
@@ -209,7 +248,14 @@ Kiểm tra chi tiết từng chức năng theo user flow đã định nghĩa và
 - **Achievement System** - Badges/rewards
 - **File Chunking** - Large file processing
 
-### 🎯 **ĐỘ HOÀN THÀNH TỔNG THỂ: **
+### 🎯 **ĐỘ HOÀN THÀNH TỔNG THỂ: ~87%**
+
+**Chi tiết:**
+- ✅ Core Features: 95% (Authentication, Courses, Chat, Quiz, Upload, Admin)
+- ✅ Backend Enrollment: 100% (9 endpoints hoàn chỉnh) ✨ **MỚI**
+- ⚠️ Frontend Enrollment UI: 30% (Services + Stores có, thiếu UI components) ✨ **ĐANG TRIỂN KHAI**
+- ⚠️ Advanced Features: 60% (Email verify, forgot password có backend)
+- ❌ Future Features: 0% (OAuth, subscriptions, achievements)
 
 
 

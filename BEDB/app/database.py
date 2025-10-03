@@ -7,6 +7,7 @@ from app.models import (
     User, Course, Upload, Quiz, QuizQuestion, Chapter,
     QuizHistory, DashboardProgress, ChatSession, ChatMessage
 )
+from app.models.enrollment import CourseEnrollment, ChapterProgress
 
 
 async def init_db():
@@ -17,7 +18,8 @@ async def init_db():
         database=client[settings.database_name],
         document_models=[
             User, Course, Upload, Quiz, QuizQuestion, Chapter,
-            QuizHistory, DashboardProgress, ChatSession, ChatMessage
+            QuizHistory, DashboardProgress, ChatSession, ChatMessage,
+            CourseEnrollment, ChapterProgress
         ]
     )
 

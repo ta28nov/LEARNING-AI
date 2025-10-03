@@ -16,6 +16,8 @@ from app.routers.users import router as users_router
 from app.routers.search import router as search_router
 from app.routers.admin import router as admin_router
 from app.routers.leaderboard import router as leaderboard_router
+from app.routers.student import router as student_router
+from app.routers.instructor import router as instructor_router
 
 
 @asynccontextmanager
@@ -56,6 +58,8 @@ app.include_router(dashboard_router, prefix="/api/v1")
 app.include_router(search_router, prefix="/api/v1")
 app.include_router(admin_router, prefix="/api/v1")
 app.include_router(leaderboard_router, prefix="/api/v1")
+app.include_router(student_router, prefix="/api/v1")
+app.include_router(instructor_router, prefix="/api/v1")
 
 
 @app.get("/")

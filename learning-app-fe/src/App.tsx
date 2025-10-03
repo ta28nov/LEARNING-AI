@@ -25,6 +25,11 @@ import { ProgressPage } from '@/pages/ProgressPage';
 import { AdminPage } from '@/pages/admin/AdminPage';
 import { ProfilePage } from '@/pages/ProfilePage';
 
+// Enrollment pages
+import { StudentEnrollmentPage } from '@/pages/enrollment/StudentEnrollmentPage';
+import { InstructorDashboardPage } from '@/pages/enrollment/InstructorDashboardPage';
+import { MyCoursesPage } from '@/pages/enrollment/MyCoursesPage';
+
 function App() {
   const { isAuthenticated, token, getCurrentUser } = useAuthStore();
 
@@ -165,6 +170,39 @@ function App() {
           <ProtectedRoute>
             <DashboardLayout>
               <ProgressPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/my-learning"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <DashboardLayout>
+              <StudentEnrollmentPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/my-courses"
+        element={
+          <ProtectedRoute requiredRole="student">
+            <DashboardLayout>
+              <MyCoursesPage />
+            </DashboardLayout>
+          </ProtectedRoute>
+        }
+      />
+      
+      <Route
+        path="/instructor/dashboard"
+        element={
+          <ProtectedRoute requiredRole="instructor">
+            <DashboardLayout>
+              <InstructorDashboardPage />
             </DashboardLayout>
           </ProtectedRoute>
         }

@@ -2,6 +2,7 @@
 from typing import Optional, List
 from enum import Enum
 from pydantic import Field
+from datetime import datetime
 from app.models.base import BaseDocument, PyObjectId
 
 
@@ -10,6 +11,13 @@ class CourseLevel(str, Enum):
     BEGINNER = "beginner"
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
+
+
+class CourseVisibility(str, Enum):
+    """Course visibility types."""
+    PUBLIC = "public"
+    PRIVATE = "private"
+    DRAFT = "draft"
 
 
 class Course(BaseDocument):
@@ -22,6 +30,11 @@ class Course(BaseDocument):
     source: Optional[str] = None
     level: CourseLevel = CourseLevel.BEGINNER
     tags: List[str] = Field(default_factory=list)
+    visibility: CourseVisibility = CourseVisibility.DRAFT
+    is_approved: bool = False
+    approved_by: Optional[PyObjectId] = None
+    approved_at: Optional[datetime] = None
+    enrollment_count: int = 0
     
     class Settings:
         name = "courses"
@@ -30,6 +43,8 @@ class Course(BaseDocument):
             "title",
             "level",
             "tags",
+            "visibility",
+            "is_approved",
             "created_at"
         ]
     

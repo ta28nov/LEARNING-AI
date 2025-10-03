@@ -624,6 +624,322 @@ const response = await fetch('http://localhost:8000/courses/', {
 });
 ```
 
+### Student Endpoints
+
+#### Enroll in Course
+```http
+POST /student/courses/{course_id}/enroll
+```
+
+**Description:** Enroll current student in a public course.
+
+**Headers:**
+```
+Authorization: Bearer <student-token>
+```
+
+**Response:**
+```json
+{
+  "id": "64f1a2b3c4d5e6f7g8h9i0j5",
+  "student_id": "64f1a2b3c4d5e6f7g8h9i0j1",
+  "course_id": "64f1a2b3c4d5e6f7g8h9i0j2",
+  "status": "active",
+  "progress": 0.0,
+  "enrolled_at": "2023-09-01T10:00:00Z",
+  "last_accessed": "2023-09-01T10:00:00Z"
+}
+```
+
+**Error Responses:**
+- `400`: Already enrolled or course not available
+- `404`: Course not found
+- `403`: Only students can enroll
+
+#### Unenroll from Course
+```http
+DELETE /student/courses/{course_id}/enroll
+```
+
+**Description:** Unenroll current student from a course.
+
+**Headers:**
+```
+Authorization: Bearer <student-token>
+```
+
+**Response:**
+```json
+{
+  "message": "Successfully unenrolled from course"
+}
+```
+
+**Error Responses:**
+- `404`: Not enrolled in this course
+
+#### Get Enrolled Courses
+```http
+GET /student/enrolled-courses?status=active&skip=0&limit=10
+```
+
+**Description:** Get list of courses the student is enrolled in.
+
+**Query Parameters:**
+- `status` (optional): Filter by enrollment status (active, completed, dropped)
+- `skip` (optional): Pagination offset (default: 0)
+- `limit` (optional): Results per page (default: 10)
+
+**Headers:**
+```
+Authorization: Bearer <student-token>
+```
+
+**Response:**
+```json
+[
+  {
+    "id": "64f1a2b3c4d5e6f7g8h9i0j5",
+    "student_id": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "course_id": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "status": "active",
+    "progress": 45.5,
+    "enrolled_at": "2023-09-01T10:00:00Z",
+    "last_accessed": "2023-09-02T14:30:00Z",
+    "course_details": {
+      "title": "Introduction to Python",
+      "description": "Learn Python programming from scratch",
+      "level": "beginner",
+      "tags": ["python", "programming"]
+    }
+  }
+]
+```
+
+#### Get Student Dashboard
+```http
+GET /student/dashboard
+```
+
+**Description:** Get student dashboard statistics and recent activity.
+
+**Headers:**
+```
+Authorization: Bearer <student-token>
+```
+
+**Response:**
+```json
+{
+  "total_enrollments": 5,
+  "active_enrollments": 3,
+  "completed_courses": 2,
+  "total_progress": 62.5,
+  "recent_courses": [
+    {
+      "id": "64f1a2b3c4d5e6f7g8h9i0j5",
+      "course_id": "64f1a2b3c4d5e6f7g8h9i0j2",
+      "course_title": "Introduction to Python",
+      "progress": 45.5,
+      "last_accessed": "2023-09-02T14:30:00Z",
+      "status": "active"
+    }
+  ],
+  "achievements": {
+    "courses_completed": 2,
+    "total_time_spent": 1250
+  }
+}
+```
+
+### Instructor Endpoints
+
+#### Get Instructor Courses
+```http
+GET /instructor/courses?skip=0&limit=10
+```
+
+**Description:** Get list of courses created by the instructor.
+
+**Query Parameters:**
+- `skip` (optional): Pagination offset (default: 0)
+- `limit` (optional): Results per page (default: 10)
+
+**Headers:**
+```
+Authorization: Bearer <instructor-token>
+```
+
+**Response:**
+```json
+[
+  {
+    "id": "64f1a2b3c4d5e6f7g8h9i0j2",
+    "owner_id": "64f1a2b3c4d5e6f7g8h9i0j1",
+    "title": "Introduction to Python",
+    "description": "Learn Python programming from scratch",
+    "visibility": "public",
+    "is_approved": true,
+    "enrollment_count": 15,
+    "level": "beginner",
+    "created_at": "2023-09-01T10:00:00Z"
+  }
+]
+```
+
+#### Get Course Students
+```http
+GET /instructor/courses/{course_id}/students
+```
+
+**Description:** Get list of students enrolled in instructor's course.
+
+**Headers:**
+```
+Authorization: Bearer <instructor-token>
+```
+
+**Response:**
+```json
+[
+  {
+    "id": "64f1a2b3c4d5e6f7g8h9i0j5",
+    "student_id": "64f1a2b3c4d5e6f7g8h9i0j3",
+    "student_name": "Jane Student",
+    "student_email": "student@example.com",
+    "status": "active",
+    "progress": 45.5,
+    "enrolled_at": "2023-09-01T10:00:00Z",
+    "last_accessed": "2023-09-02T14:30:00Z"
+  }
+]
+```
+
+**Error Responses:**
+- `403`: Not the course owner
+- `404`: Course not found
+
+#### Get Course Analytics
+```http
+GET /instructor/courses/{course_id}/analytics
+```
+
+**Description:** Get detailed analytics for instructor's course.
+
+**Headers:**
+```
+Authorization: Bearer <instructor-token>
+```
+
+**Response:**
+```json
+{
+  "course_id": "64f1a2b3c4d5e6f7g8h9i0j2",
+  "course_title": "Introduction to Python",
+  "total_students": 15,
+  "active_students": 12,
+  "completed_students": 3,
+  "average_progress": 62.8,
+  "completion_rate": 20.0,
+  "average_time_spent": 450,
+  "enrollment_trend": [
+    {"date": "2023-09-01", "count": 5},
+    {"date": "2023-09-02", "count": 8},
+    {"date": "2023-09-03", "count": 2}
+  ],
+  "chapter_completion": [
+    {"chapter_id": "...", "completion_rate": 85.0},
+    {"chapter_id": "...", "completion_rate": 60.0}
+  ]
+}
+```
+
+#### Get All Students (Instructor View)
+```http
+GET /instructor/all-students
+```
+
+**Description:** Get all students enrolled in any of instructor's courses.
+
+**Headers:**
+```
+Authorization: Bearer <instructor-token>
+```
+
+**Response:**
+```json
+[
+  {
+    "student_id": "64f1a2b3c4d5e6f7g8h9i0j3",
+    "student_name": "Jane Student",
+    "student_email": "student@example.com",
+    "enrolled_courses_count": 2,
+    "courses": [
+      {
+        "course_id": "64f1a2b3c4d5e6f7g8h9i0j2",
+        "course_title": "Introduction to Python",
+        "progress": 45.5,
+        "status": "active"
+      }
+    ]
+  }
+]
+```
+
+#### Get Instructor Dashboard
+```http
+GET /instructor/dashboard
+```
+
+**Description:** Get instructor dashboard with overall statistics.
+
+**Headers:**
+```
+Authorization: Bearer <instructor-token>
+```
+
+**Response:**
+```json
+{
+  "total_courses": 8,
+  "published_courses": 6,
+  "draft_courses": 2,
+  "total_students": 45,
+  "total_enrollments": 120,
+  "average_course_rating": 4.5,
+  "recent_enrollments": [
+    {
+      "student_name": "Jane Student",
+      "course_title": "Introduction to Python",
+      "enrolled_at": "2023-09-02T14:30:00Z"
+    }
+  ],
+  "top_courses": [
+    {
+      "course_id": "64f1a2b3c4d5e6f7g8h9i0j2",
+      "title": "Introduction to Python",
+      "enrollment_count": 35,
+      "average_progress": 65.5
+    }
+  ]
+}
+```
+
+## Course Visibility
+
+Courses can have three visibility levels:
+
+- **public**: Available to all users, can be enrolled by any student
+- **private**: Only visible to owner and explicitly shared users
+- **draft**: Work in progress, not visible to students
+
+### Enrollment Rules
+
+1. Students can only enroll in **public** courses that are **approved**
+2. Instructors can see their own courses regardless of visibility
+3. Admins can see all courses
+4. Enrollment count updates automatically on enroll/unenroll
+
 ## Testing
 
 Use the interactive API documentation at `/docs` to test endpoints directly in your browser.

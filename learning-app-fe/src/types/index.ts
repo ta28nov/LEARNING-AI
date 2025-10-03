@@ -25,6 +25,8 @@ export interface Course {
   source?: string;
   level: 'beginner' | 'intermediate' | 'advanced';
   tags: string[];
+  visibility?: 'PUBLIC' | 'PRIVATE' | 'DRAFT';
+  enrollment_count?: number;
   created_at: string;
   updated_at: string;
 }
@@ -37,6 +39,85 @@ export interface Chapter {
   order: number;
   created_at: string;
   updated_at: string;
+}
+
+// Enrollment types
+export type EnrollmentStatus = 'active' | 'completed' | 'dropped';
+
+export interface CourseEnrollment {
+  id: string;
+  student_id: string;
+  course_id: string;
+  status: EnrollmentStatus;
+  progress: number;
+  enrolled_at: string;
+  last_accessed?: string;
+  completed_at?: string;
+}
+
+// Alias for backend response compatibility
+export type CourseEnrollmentResponse = CourseEnrollment;
+
+export interface EnrolledCourseInfo {
+  course_id: string;
+  title: string;
+  description: string;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  enrollment_status: EnrollmentStatus;
+  progress: number;
+  enrolled_at: string;
+  last_accessed?: string;
+}
+
+export interface ChapterProgress {
+  id: string;
+  user_id: string;
+  course_id: string;
+  chapter_id: string;
+  status: 'not_started' | 'in_progress' | 'completed';
+  progress: number;
+  time_spent: number;
+  last_position?: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface StudentDashboardResponse {
+  total_enrolled_courses: number;
+  completed_courses: number;
+  in_progress_courses: number;
+  total_time_spent: number;
+  average_progress: number;
+  recent_courses: EnrolledCourseInfo[];
+}
+
+export interface CourseAnalytics {
+  course_id: string;
+  title: string;
+  total_enrollments: number;
+  active_students: number;
+  completed_students: number;
+  average_progress: number;
+  average_time_spent: number;
+  completion_rate: number;
+}
+
+export interface InstructorDashboardResponse {
+  total_courses: number;
+  total_students: number;
+  total_enrollments: number;
+  average_course_rating: number;
+  recent_analytics: CourseAnalytics[];
+}
+
+export interface StudentEnrollmentInfo {
+  student_id: string;
+  student_name: string;
+  student_email: string;
+  enrolled_at: string;
+  progress: number;
+  status: EnrollmentStatus;
+  last_accessed?: string;
 }
 
 // Upload types

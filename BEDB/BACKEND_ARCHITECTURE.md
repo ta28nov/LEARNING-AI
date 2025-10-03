@@ -192,6 +192,11 @@ class UserProfile(Document):
 
 #### course.py - Course Models
 ```python
+class CourseVisibility(str, Enum):
+    PUBLIC = "public"    # Available to all students
+    PRIVATE = "private"  # Only visible to owner
+    DRAFT = "draft"      # Work in progress
+
 class Course(Document):
     title: str
     description: str
@@ -201,6 +206,14 @@ class Course(Document):
     owner_id: PydanticObjectId
     source: str = "manual"  # manual, ai_generated, from_upload
     is_public: bool = False
+    
+    # NEW: Enrollment system fields
+    visibility: CourseVisibility = CourseVisibility.DRAFT
+    is_approved: bool = False
+    approved_by: Optional[PydanticObjectId] = None
+    approved_at: Optional[datetime] = None
+    enrollment_count: int = 0
+    
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: Optional[datetime] = None
     
@@ -210,6 +223,8 @@ class Course(Document):
             [("owner_id", 1)],
             [("level", 1)],
             [("tags", 1)],
+            [("visibility", 1)],  # NEW
+            [("is_approved", 1)],  # NEW
             [("created_at", -1)]
         ]
 
@@ -224,6 +239,66 @@ class Chapter(Document):
         name = "chapters"
         indexes = [
             [("course_id", 1), ("order", 1)]
+        ]
+```
+
+#### enrollment.py - Enrollment Models (NEW)
+```python
+from enum import Enum
+from beanie import Document, Indexed
+from pydantic import Field
+from datetime import datetime
+from typing import Optional
+
+class EnrollmentStatus(str, Enum):
+    ACTIVE = "active"
+    COMPLETED = "completed"
+    DROPPED = "dropped"
+
+class CourseEnrollment(Document):
+    """Tracks student enrollment in courses"""
+    student_id: Indexed(PydanticObjectId)
+    course_id: Indexed(PydanticObjectId)
+    status: EnrollmentStatus = EnrollmentStatus.ACTIVE
+    progress: float = 0.0  # 0-100 percentage
+    enrolled_at: datetime = Field(default_factory=datetime.utcnow)
+    last_accessed: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
+    
+    class Settings:
+        name = "course_enrollments"
+        indexes = [
+            [("student_id", 1)],
+            [("course_id", 1)],
+            [("student_id", 1), ("course_id", 1)],  # Compound unique index
+            [("status", 1)],
+            [("enrolled_at", -1)]
+        ]
+
+class ChapterProgressStatus(str, Enum):
+    NOT_STARTED = "not_started"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+
+class ChapterProgress(Document):
+    """Tracks individual chapter progress"""
+    user_id: Indexed(PydanticObjectId)
+    course_id: Indexed(PydanticObjectId)
+    chapter_id: Indexed(PydanticObjectId)
+    status: ChapterProgressStatus = ChapterProgressStatus.NOT_STARTED
+    time_spent: int = 0  # Minutes
+    last_accessed: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
+    
+    class Settings:
+        name = "chapter_progress"
+        indexes = [
+            [("user_id", 1)],
+            [("course_id", 1)],
+            [("chapter_id", 1)],
+            [("user_id", 1), ("chapter_id", 1)],  # Compound unique index
+            [("status", 1)],
+            [("last_accessed", -1)]
         ]
 ```
 
@@ -313,6 +388,8 @@ graph TB
     subgraph "routers/"
         AUTH_ROUTER[auth.py - Authentication]
         COURSE_ROUTER[courses.py - Course Management]
+        STUDENT_ROUTER[student.py - Student Operations] 
+        INSTRUCTOR_ROUTER[instructor.py - Instructor Dashboard]
         UPLOAD_ROUTER[uploads.py - File Upload]
         CHAT_ROUTER[chat.py - AI Chat]
         QUIZ_ROUTER[quiz.py - Quiz System]
@@ -446,6 +523,324 @@ async def create_course_from_ai(
     await course.insert()
     
     return CourseResponse.from_orm(course)
+```
+
+#### student.py - Student Operations Router (NEW)
+```python
+from fastapi import APIRouter, Depends, HTTPException
+from app.auth import get_current_user, get_student_user
+from app.models.user import User
+from app.models.enrollment import CourseEnrollment, EnrollmentStatus
+from app.models.course import Course, CourseVisibility
+from app.schemas.enrollment import (
+    CourseEnrollmentResponse, 
+    StudentDashboardResponse,
+    EnrolledCourseResponse
+)
+
+router = APIRouter()
+
+@router.post("/courses/{course_id}/enroll", response_model=CourseEnrollmentResponse)
+async def enroll_in_course(
+    course_id: str,
+    student: User = Depends(get_student_user)
+):
+    """Enroll student in a public course"""
+    # Check if course exists and is public
+    course = await Course.get(course_id)
+    if not course:
+        raise HTTPException(status_code=404, detail="Course not found")
+    
+    if course.visibility != CourseVisibility.PUBLIC or not course.is_approved:
+        raise HTTPException(
+            status_code=400, 
+            detail="Cannot enroll in non-public or unapproved courses"
+        )
+    
+    # Check if already enrolled
+    existing = await CourseEnrollment.find_one(
+        CourseEnrollment.student_id == student.id,
+        CourseEnrollment.course_id == course.id
+    )
+    if existing:
+        raise HTTPException(status_code=400, detail="Already enrolled in this course")
+    
+    # Create enrollment
+    enrollment = CourseEnrollment(
+        student_id=student.id,
+        course_id=course.id,
+        status=EnrollmentStatus.ACTIVE
+    )
+    await enrollment.insert()
+    
+    # Update course enrollment count
+    course.enrollment_count += 1
+    await course.save()
+    
+    return CourseEnrollmentResponse.from_orm(enrollment)
+
+@router.delete("/courses/{course_id}/enroll")
+async def unenroll_from_course(
+    course_id: str,
+    student: User = Depends(get_student_user)
+):
+    """Unenroll student from a course"""
+    enrollment = await CourseEnrollment.find_one(
+        CourseEnrollment.student_id == student.id,
+        CourseEnrollment.course_id == course_id
+    )
+    
+    if not enrollment:
+        raise HTTPException(status_code=404, detail="Not enrolled in this course")
+    
+    # Delete enrollment
+    await enrollment.delete()
+    
+    # Update course enrollment count
+    course = await Course.get(course_id)
+    if course and course.enrollment_count > 0:
+        course.enrollment_count -= 1
+        await course.save()
+    
+    return {"message": "Successfully unenrolled from course"}
+
+@router.get("/enrolled-courses", response_model=List[EnrolledCourseResponse])
+async def get_enrolled_courses(
+    status: Optional[str] = None,
+    skip: int = 0,
+    limit: int = 20,
+    student: User = Depends(get_student_user)
+):
+    """Get list of courses student is enrolled in"""
+    query = {CourseEnrollment.student_id: student.id}
+    
+    if status:
+        query[CourseEnrollment.status] = EnrollmentStatus(status)
+    
+    enrollments = await CourseEnrollment.find(
+        query
+    ).skip(skip).limit(limit).to_list()
+    
+    # Fetch course details for each enrollment
+    result = []
+    for enrollment in enrollments:
+        course = await Course.get(enrollment.course_id)
+        if course:
+            result.append({
+                **enrollment.dict(),
+                "course_details": course.dict()
+            })
+    
+    return result
+
+@router.get("/dashboard", response_model=StudentDashboardResponse)
+async def get_student_dashboard(student: User = Depends(get_student_user)):
+    """Get student dashboard with statistics"""
+    # Get all enrollments
+    enrollments = await CourseEnrollment.find(
+        CourseEnrollment.student_id == student.id
+    ).to_list()
+    
+    # Calculate statistics
+    total_enrollments = len(enrollments)
+    active_enrollments = len([e for e in enrollments if e.status == EnrollmentStatus.ACTIVE])
+    completed_courses = len([e for e in enrollments if e.status == EnrollmentStatus.COMPLETED])
+    
+    # Calculate average progress
+    total_progress = sum(e.progress for e in enrollments)
+    avg_progress = total_progress / total_enrollments if total_enrollments > 0 else 0
+    
+    # Get recent courses (last 5)
+    recent_enrollments = sorted(enrollments, key=lambda x: x.last_accessed or x.enrolled_at, reverse=True)[:5]
+    recent_courses = []
+    for enrollment in recent_enrollments:
+        course = await Course.get(enrollment.course_id)
+        if course:
+            recent_courses.append({
+                "enrollment_id": str(enrollment.id),
+                "course_id": str(course.id),
+                "course_title": course.title,
+                "progress": enrollment.progress,
+                "last_accessed": enrollment.last_accessed,
+                "status": enrollment.status
+            })
+    
+    return StudentDashboardResponse(
+        total_enrollments=total_enrollments,
+        active_enrollments=active_enrollments,
+        completed_courses=completed_courses,
+        total_progress=avg_progress,
+        recent_courses=recent_courses,
+        achievements={
+            "courses_completed": completed_courses,
+            "total_time_spent": 0  # Calculate from ChapterProgress
+        }
+    )
+```
+
+#### instructor.py - Instructor Dashboard Router (NEW)
+```python
+from fastapi import APIRouter, Depends, HTTPException
+from app.auth import get_current_user, get_instructor_user
+from app.models.user import User
+from app.models.enrollment import CourseEnrollment
+from app.models.course import Course
+from app.schemas.enrollment import (
+    InstructorDashboardResponse,
+    CourseAnalytics,
+    CourseStudentResponse
+)
+
+router = APIRouter()
+
+@router.get("/courses", response_model=List[CourseResponse])
+async def get_instructor_courses(
+    skip: int = 0,
+    limit: int = 20,
+    instructor: User = Depends(get_instructor_user)
+):
+    """Get courses created by instructor"""
+    courses = await Course.find(
+        Course.owner_id == instructor.id
+    ).skip(skip).limit(limit).to_list()
+    
+    return [CourseResponse.from_orm(course) for course in courses]
+
+@router.get("/courses/{course_id}/students", response_model=List[CourseStudentResponse])
+async def get_course_students(
+    course_id: str,
+    instructor: User = Depends(get_instructor_user)
+):
+    """Get students enrolled in instructor's course"""
+    # Verify course ownership
+    course = await Course.get(course_id)
+    if not course or course.owner_id != instructor.id:
+        raise HTTPException(status_code=403, detail="Not authorized to view this course")
+    
+    # Get enrollments
+    enrollments = await CourseEnrollment.find(
+        CourseEnrollment.course_id == course.id
+    ).to_list()
+    
+    # Fetch student details
+    result = []
+    for enrollment in enrollments:
+        student = await User.get(enrollment.student_id)
+        if student:
+            result.append({
+                "enrollment_id": str(enrollment.id),
+                "student_id": str(student.id),
+                "student_name": student.name,
+                "student_email": student.email,
+                "status": enrollment.status,
+                "progress": enrollment.progress,
+                "enrolled_at": enrollment.enrolled_at,
+                "last_accessed": enrollment.last_accessed
+            })
+    
+    return result
+
+@router.get("/courses/{course_id}/analytics", response_model=CourseAnalytics)
+async def get_course_analytics(
+    course_id: str,
+    instructor: User = Depends(get_instructor_user)
+):
+    """Get detailed analytics for instructor's course"""
+    # Verify ownership
+    course = await Course.get(course_id)
+    if not course or course.owner_id != instructor.id:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Get enrollments
+    enrollments = await CourseEnrollment.find(
+        CourseEnrollment.course_id == course.id
+    ).to_list()
+    
+    total_students = len(enrollments)
+    active_students = len([e for e in enrollments if e.status == EnrollmentStatus.ACTIVE])
+    completed_students = len([e for e in enrollments if e.status == EnrollmentStatus.COMPLETED])
+    
+    # Calculate average progress
+    avg_progress = sum(e.progress for e in enrollments) / total_students if total_students > 0 else 0
+    
+    # Calculate completion rate
+    completion_rate = (completed_students / total_students * 100) if total_students > 0 else 0
+    
+    return CourseAnalytics(
+        course_id=str(course.id),
+        course_title=course.title,
+        total_students=total_students,
+        active_students=active_students,
+        completed_students=completed_students,
+        average_progress=avg_progress,
+        completion_rate=completion_rate,
+        average_time_spent=0,  # Calculate from ChapterProgress
+        enrollment_trend=[],
+        chapter_completion=[]
+    )
+
+@router.get("/dashboard", response_model=InstructorDashboardResponse)
+async def get_instructor_dashboard(instructor: User = Depends(get_instructor_user)):
+    """Get instructor dashboard with overall statistics"""
+    # Get all instructor's courses
+    courses = await Course.find(Course.owner_id == instructor.id).to_list()
+    
+    total_courses = len(courses)
+    published_courses = len([c for c in courses if c.visibility == CourseVisibility.PUBLIC])
+    draft_courses = len([c for c in courses if c.visibility == CourseVisibility.DRAFT])
+    
+    # Get total students (unique across all courses)
+    all_enrollments = []
+    for course in courses:
+        enrollments = await CourseEnrollment.find(
+            CourseEnrollment.course_id == course.id
+        ).to_list()
+        all_enrollments.extend(enrollments)
+    
+    unique_students = len(set(str(e.student_id) for e in all_enrollments))
+    total_enrollments = len(all_enrollments)
+    
+    # Get recent enrollments
+    recent_enrollments = sorted(all_enrollments, key=lambda x: x.enrolled_at, reverse=True)[:10]
+    recent_enrollment_data = []
+    for enrollment in recent_enrollments:
+        student = await User.get(enrollment.student_id)
+        course = await Course.get(enrollment.course_id)
+        if student and course:
+            recent_enrollment_data.append({
+                "student_name": student.name,
+                "course_title": course.title,
+                "enrolled_at": enrollment.enrolled_at
+            })
+    
+    # Get top courses
+    course_stats = []
+    for course in courses:
+        enrollments = await CourseEnrollment.find(
+            CourseEnrollment.course_id == course.id
+        ).to_list()
+        
+        avg_progress = sum(e.progress for e in enrollments) / len(enrollments) if enrollments else 0
+        
+        course_stats.append({
+            "course_id": str(course.id),
+            "title": course.title,
+            "enrollment_count": len(enrollments),
+            "average_progress": avg_progress
+        })
+    
+    top_courses = sorted(course_stats, key=lambda x: x["enrollment_count"], reverse=True)[:5]
+    
+    return InstructorDashboardResponse(
+        total_courses=total_courses,
+        published_courses=published_courses,
+        draft_courses=draft_courses,
+        total_students=unique_students,
+        total_enrollments=total_enrollments,
+        average_course_rating=4.5,  # Placeholder
+        recent_enrollments=recent_enrollment_data,
+        top_courses=top_courses
+    )
 ```
 
 ### 🔧 Services Layer (Business Logic)
@@ -755,10 +1150,15 @@ erDiagram
     users ||--o{ chat_sessions : starts
     users ||--o{ quiz_history : takes
     users ||--o{ progress : tracks
+    users ||--o{ course_enrollments : enrolls
+    users ||--o{ chapter_progress : tracks
     
     courses ||--o{ chapters : contains
     courses ||--o{ quizzes : generates
     courses ||--o{ chat_sessions : discusses
+    courses ||--o{ course_enrollments : has
+    
+    chapters ||--o{ chapter_progress : tracks
     
     uploads ||--o{ embeddings : indexes
     uploads ||--o{ quizzes : generates
@@ -787,8 +1187,35 @@ erDiagram
         ObjectId owner_id FK
         string source
         boolean is_public
+        string visibility
+        boolean is_approved
+        ObjectId approved_by FK
+        datetime approved_at
+        int enrollment_count
         datetime created_at
         datetime updated_at
+    }
+    
+    course_enrollments {
+        ObjectId _id PK
+        ObjectId student_id FK
+        ObjectId course_id FK
+        string status
+        float progress
+        datetime enrolled_at
+        datetime last_accessed
+        datetime completed_at
+    }
+    
+    chapter_progress {
+        ObjectId _id PK
+        ObjectId user_id FK
+        ObjectId course_id FK
+        ObjectId chapter_id FK
+        string status
+        int time_spent
+        datetime last_accessed
+        datetime completed_at
     }
     
     uploads {
@@ -828,7 +1255,24 @@ courses.create_index([("owner_id", 1)])
 courses.create_index([("level", 1)])
 courses.create_index([("tags", 1)])
 courses.create_index([("is_public", 1)])
+courses.create_index([("visibility", 1)])
+courses.create_index([("is_approved", 1)])
 courses.create_index([("created_at", -1)])
+
+# Course enrollment indexes
+course_enrollments.create_index([("student_id", 1)])
+course_enrollments.create_index([("course_id", 1)])
+course_enrollments.create_index([("student_id", 1), ("course_id", 1)], unique=True)
+course_enrollments.create_index([("status", 1)])
+course_enrollments.create_index([("enrolled_at", -1)])
+
+# Chapter progress indexes
+chapter_progress.create_index([("user_id", 1)])
+chapter_progress.create_index([("course_id", 1)])
+chapter_progress.create_index([("chapter_id", 1)])
+chapter_progress.create_index([("user_id", 1), ("chapter_id", 1)], unique=True)
+chapter_progress.create_index([("status", 1)])
+chapter_progress.create_index([("last_accessed", -1)])
 
 # Upload indexes
 uploads.create_index([("user_id", 1)])

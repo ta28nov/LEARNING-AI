@@ -37,6 +37,7 @@ graph TB
             API_CLIENT[Axios Client]
             AUTH_SERVICE[Auth Service]
             COURSE_SERVICE[Course Service]
+            ENROLLMENT_SERVICE[Enrollment Service]
             CHAT_SERVICE[Chat Service]
             QUIZ_SERVICE[Quiz Service]
             UPLOAD_SERVICE[Upload Service]
@@ -49,6 +50,8 @@ graph TB
         subgraph "🛣️ API Routes"
             AUTH_ROUTER[Auth Router]
             COURSE_ROUTER[Course Router]
+            STUDENT_ROUTER[Student Router]
+            INSTRUCTOR_ROUTER[Instructor Router]
             CHAT_ROUTER[Chat Router]
             QUIZ_ROUTER[Quiz Router]
             UPLOAD_ROUTER[Upload Router]
@@ -66,6 +69,7 @@ graph TB
         subgraph "🗄️ Data Models"
             USER_MODEL[User Model]
             COURSE_MODEL[Course Model]
+            ENROLLMENT_MODEL[Enrollment Model]
             CHAT_MODEL[Chat Model]
             QUIZ_MODEL[Quiz Model]
             UPLOAD_MODEL[Upload Model]
@@ -106,6 +110,7 @@ graph TB
     STORES --> API_CLIENT
     API_CLIENT --> AUTH_SERVICE
     API_CLIENT --> COURSE_SERVICE
+    API_CLIENT --> ENROLLMENT_SERVICE
     API_CLIENT --> CHAT_SERVICE
     API_CLIENT --> QUIZ_SERVICE
     API_CLIENT --> UPLOAD_SERVICE
@@ -115,6 +120,8 @@ graph TB
     %% API Layer to Backend
     AUTH_SERVICE -.->|HTTP/JSON| AUTH_ROUTER
     COURSE_SERVICE -.->|HTTP/JSON| COURSE_ROUTER
+    ENROLLMENT_SERVICE -.->|HTTP/JSON| STUDENT_ROUTER
+    ENROLLMENT_SERVICE -.->|HTTP/JSON| INSTRUCTOR_ROUTER
     CHAT_SERVICE -.->|HTTP/JSON| CHAT_ROUTER
     QUIZ_SERVICE -.->|HTTP/JSON| QUIZ_ROUTER
     UPLOAD_SERVICE -.->|HTTP/JSON| UPLOAD_ROUTER
@@ -125,6 +132,10 @@ graph TB
     AUTH_ROUTER --> USER_MODEL
     COURSE_ROUTER --> COURSE_MODEL
     COURSE_ROUTER --> GENAI_SERVICE
+    STUDENT_ROUTER --> ENROLLMENT_MODEL
+    STUDENT_ROUTER --> COURSE_MODEL
+    INSTRUCTOR_ROUTER --> ENROLLMENT_MODEL
+    INSTRUCTOR_ROUTER --> COURSE_MODEL
     CHAT_ROUTER --> CHAT_MODEL
     CHAT_ROUTER --> GENAI_SERVICE
     QUIZ_ROUTER --> QUIZ_MODEL
@@ -390,6 +401,16 @@ graph LR
 | `search()` | `POST /api/v1/search` | Vector search |
 | `reindexEmbeddings()` | `POST /api/v1/embeddings` | Reindex content |
 | `reindexCourse()` | `POST /api/v1/courses/{id}/reindex` | Reindex course |
+| **enrollmentService.ts** | **student.py / instructor.py** | | |
+| `enrollInCourse()` | `POST /api/v1/student/courses/{id}/enroll` | Student enrollment |
+| `unenrollFromCourse()` | `DELETE /api/v1/student/courses/{id}/enroll` | Student unenrollment |
+| `getEnrolledCourses()` | `GET /api/v1/student/enrolled-courses` | List enrolled courses |
+| `getStudentDashboard()` | `GET /api/v1/student/dashboard` | Student statistics |
+| `getInstructorCourses()` | `GET /api/v1/instructor/courses` | Instructor's courses |
+| `getCourseStudents()` | `GET /api/v1/instructor/courses/{id}/students` | Enrolled students |
+| `getCourseAnalytics()` | `GET /api/v1/instructor/courses/{id}/analytics` | Course analytics |
+| `getInstructorDashboard()` | `GET /api/v1/instructor/dashboard` | Instructor statistics |
+| `getAllInstructorStudents()` | `GET /api/v1/instructor/students` | All instructor students |
 | **leaderboardService.ts** | **leaderboard.py** | | |
 | `getLeaderboard()` | `GET /api/v1/leaderboard` | User rankings |
 
@@ -752,6 +773,162 @@ graph TD
 
 ---
 
+## 📚 Course Enrollment System Flow
+
+### 🔄 Enrollment Workflow
+
+```mermaid
+graph TB
+    subgraph "Student Enrollment Flow"
+        BROWSE[Browse Public Courses]
+        VIEW[View Course Details]
+        CHECK{Course Available?}
+        ENROLL[Click Enroll Button]
+        CREATE[Create Enrollment]
+        UPDATE[Update Course Count]
+        ACCESS[Access Course Content]
+        TRACK[Track Progress]
+    end
+    
+    subgraph "Instructor Course Management"
+        CREATE_COURSE[Create Course]
+        SET_VISIBILITY[Set Visibility]
+        DRAFT{Visibility Type}
+        PUBLISH[Publish as Public]
+        MONITOR[Monitor Enrollments]
+        ANALYTICS[View Analytics]
+    end
+    
+    subgraph "Visibility Control"
+        PUBLIC[PUBLIC - All students can enroll]
+        PRIVATE[PRIVATE - Invitation only]
+        DRAFT_STATE[DRAFT - Work in progress]
+    end
+    
+    BROWSE --> VIEW
+    VIEW --> CHECK
+    CHECK -->|Public & Approved| ENROLL
+    CHECK -->|Private/Draft| ACCESS_DENIED[Access Denied]
+    ENROLL --> CREATE
+    CREATE --> UPDATE
+    UPDATE --> ACCESS
+    ACCESS --> TRACK
+    
+    CREATE_COURSE --> SET_VISIBILITY
+    SET_VISIBILITY --> DRAFT
+    DRAFT -->|Public| PUBLISH
+    DRAFT -->|Private| PRIVATE
+    DRAFT -->|Draft| DRAFT_STATE
+    PUBLISH --> MONITOR
+    MONITOR --> ANALYTICS
+```
+
+### 🎯 Enrollment States
+
+```mermaid
+stateDiagram-v2
+    [*] --> NotEnrolled
+    NotEnrolled --> Active: Enroll in Course
+    Active --> InProgress: Start Learning
+    InProgress --> Active: Continue Learning
+    Active --> Completed: Complete Course
+    Active --> Dropped: Unenroll
+    Dropped --> NotEnrolled: Re-enroll Allowed
+    Completed --> [*]
+    
+    state Active {
+        [*] --> Chapter1
+        Chapter1 --> Chapter2
+        Chapter2 --> Chapter3
+        Chapter3 --> [*]
+    }
+```
+
+### 📊 Chapter Progress Tracking
+
+```mermaid
+graph LR
+    subgraph "Chapter Progress Flow"
+        START[Start Chapter]
+        READ[Read Content]
+        QUIZ[Take Quiz]
+        COMPLETE[Complete Chapter]
+        NEXT[Next Chapter]
+    end
+    
+    subgraph "Progress Calculation"
+        TRACK_TIME[Track Time Spent]
+        UPDATE_PROGRESS[Update Progress %]
+        CALCULATE[Calculate Overall Progress]
+    end
+    
+    START --> READ
+    READ --> TRACK_TIME
+    READ --> QUIZ
+    QUIZ --> COMPLETE
+    COMPLETE --> UPDATE_PROGRESS
+    UPDATE_PROGRESS --> CALCULATE
+    COMPLETE --> NEXT
+    NEXT --> START
+```
+
+### 🔐 Role-Based Enrollment Permissions
+
+| Role | Can Enroll | Can Create Course | Can View Students | Can Approve Course |
+|------|------------|------------------|-------------------|-------------------|
+| **Student** | ✅ Public courses only | ❌ | ❌ | ❌ |
+| **Instructor** | ✅ All courses | ✅ Own courses | ✅ Own courses | ❌ |
+| **Admin** | ✅ All courses | ✅ All courses | ✅ All courses | ✅ |
+
+### 📈 Instructor Analytics
+
+```mermaid
+graph TB
+    subgraph "Instructor Dashboard Metrics"
+        TOTAL[Total Courses]
+        PUBLISHED[Published Courses]
+        STUDENTS[Total Students]
+        ENROLLMENTS[Total Enrollments]
+        
+        COURSE_STATS[Course Statistics]
+        ENROLLMENT_TREND[Enrollment Trend]
+        COMPLETION_RATE[Completion Rate]
+        AVG_PROGRESS[Average Progress]
+        TIME_SPENT[Time Spent per Chapter]
+    end
+    
+    subgraph "Per-Course Analytics"
+        COURSE_DETAIL[Course Details]
+        STUDENT_LIST[Enrolled Students]
+        PROGRESS_DIST[Progress Distribution]
+        CHAPTER_COMPLETION[Chapter Completion Rates]
+        DROPOUT_RATE[Dropout Analysis]
+    end
+    
+    TOTAL --> COURSE_STATS
+    PUBLISHED --> ENROLLMENT_TREND
+    STUDENTS --> COURSE_DETAIL
+    ENROLLMENTS --> STUDENT_LIST
+    
+    COURSE_STATS --> COMPLETION_RATE
+    ENROLLMENT_TREND --> AVG_PROGRESS
+    COURSE_DETAIL --> PROGRESS_DIST
+    STUDENT_LIST --> CHAPTER_COMPLETION
+    PROGRESS_DIST --> DROPOUT_RATE
+```
+
+### 🎓 Student Dashboard Metrics
+
+- **Total Enrollments**: Number of courses enrolled
+- **Active Courses**: Currently studying
+- **Completed Courses**: Finished courses
+- **Average Progress**: Overall progress percentage
+- **Recent Activity**: Last accessed courses
+- **Time Spent**: Total learning time
+- **Achievements**: Completed milestones
+
+---
+
 ## 🎯 Tổng kết System Overview
 
 ### ✅ **Hoàn thành **
@@ -763,6 +940,7 @@ graph TD
 - ✅ Responsive design
 - ✅ State management (Zustand)
 - ✅ Complete API integration
+- ✅ Enrollment system integration (NEW)
 
 **🚀 Backend (FastAPI + Python)**
 - ✅ RESTful API với OpenAPI docs
@@ -771,6 +949,8 @@ graph TD
 - ✅ Google GenAI integration
 - ✅ Vector search capabilities
 - ✅ File upload & processing
+- ✅ Course enrollment system (NEW)
+- ✅ Student/Instructor dashboards (NEW)
 
 **🔗 Integration**
 - ✅ 100% API endpoints connected
@@ -778,6 +958,7 @@ graph TD
 - ✅ Error handling & recovery
 - ✅ Security & authentication
 - ✅ Performance optimization
+- ✅ Role-based access control (NEW)
 
 **🚀 Production Ready**
 - ✅ Docker containerization
@@ -785,3 +966,4 @@ graph TD
 - ✅ Monitoring & logging
 - ✅ Health checks
 - ✅ Deployment guides
+- ✅ Database migration scripts (NEW)

@@ -18,6 +18,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from pymongo import IndexModel, ASCENDING, DESCENDING, TEXT
 import google.generativeai as genai
 from app.config import settings
+from bson import ObjectId
 
 # MongoDB Atlas connection string template
 ATLAS_CONNECTION_TEMPLATE = """
@@ -46,7 +47,8 @@ class DatabaseInitializer:
         collections = [
             'users', 'courses', 'uploads', 'quizzes', 'quiz_history',
             'chat_sessions', 'chat_messages', 'dashboard_progress',
-            'embeddings', 'chapters', 'system_stats'
+            'embeddings', 'chapters', 'system_stats',
+            'course_enrollments', 'chapter_progress'
         ]
         
         existing_collections = await self.db.list_collection_names()
@@ -77,8 +79,29 @@ class DatabaseInitializer:
             IndexModel([("level", ASCENDING)]),
             IndexModel([("tags", ASCENDING)]),
             IndexModel([("is_public", ASCENDING)]),
+            IndexModel([("visibility", ASCENDING)]),
+            IndexModel([("is_approved", ASCENDING)]),
             IndexModel([("source", ASCENDING)]),
             IndexModel([("created_at", DESCENDING)])
+        ])
+        
+        # Course enrollments indexes
+        await self.db.course_enrollments.create_indexes([
+            IndexModel([("student_id", ASCENDING)]),
+            IndexModel([("course_id", ASCENDING)]),
+            IndexModel([("student_id", ASCENDING), ("course_id", ASCENDING)], unique=True),
+            IndexModel([("status", ASCENDING)]),
+            IndexModel([("enrolled_at", DESCENDING)])
+        ])
+        
+        # Chapter progress indexes
+        await self.db.chapter_progress.create_indexes([
+            IndexModel([("user_id", ASCENDING)]),
+            IndexModel([("course_id", ASCENDING)]),
+            IndexModel([("chapter_id", ASCENDING)]),
+            IndexModel([("user_id", ASCENDING), ("chapter_id", ASCENDING)], unique=True),
+            IndexModel([("status", ASCENDING)]),
+            IndexModel([("last_accessed", DESCENDING)])
         ])
         
         # Uploads indexes
@@ -181,37 +204,62 @@ class DatabaseInitializer:
         except Exception as e:
             print(f"⚠️  Vector search index creation: {e}")
             
-    async def create_sample_admin_user(self):
-        """Tạo admin user mẫu"""
-        print("👤 Creating sample admin user...")
+    async def create_sample_users(self):
+        """Tạo sample users (admin, instructor, student)"""
+        print("👤 Creating sample users...")
         
-        admin_email = "admin@ailearning.com"
-        admin_password = "admin123456"
+        sample_users = [
+            {
+                "email": "admin@ailearning.com",
+                "password": "admin123456",
+                "name": "System Administrator",
+                "role": "admin"
+            },
+            {
+                "email": "instructor@ailearning.com",
+                "password": "instructor123",
+                "name": "John Instructor",
+                "role": "instructor"
+            },
+            {
+                "email": "student@ailearning.com",
+                "password": "student123",
+                "name": "Jane Student",
+                "role": "student"
+            }
+        ]
         
-        # Check if admin exists
-        existing_admin = await self.db.users.find_one({"email": admin_email})
-        if existing_admin:
-            print("ℹ️  Admin user already exists")
-            return
+        created_users = {}
+        
+        for user_data in sample_users:
+            email = user_data["email"]
+            existing = await self.db.users.find_one({"email": email})
             
-        # Hash password
-        password_hash = hashlib.sha256(admin_password.encode()).hexdigest()
+            if existing:
+                print(f"ℹ️  User exists: {email}")
+                created_users[user_data["role"]] = existing["_id"]
+                continue
+                
+            # Hash password
+            password_hash = hashlib.sha256(user_data["password"].encode()).hexdigest()
+            
+            user_doc = {
+                "email": email,
+                "password_hash": password_hash,
+                "name": user_data["name"],
+                "role": user_data["role"],
+                "is_active": True,
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            }
+            
+            result = await self.db.users.insert_one(user_doc)
+            created_users[user_data["role"]] = result.inserted_id
+            print(f"✅ Created {user_data['role']}: {email} / {user_data['password']}")
+            
+        return created_users
         
-        admin_user = {
-            "email": admin_email,
-            "password_hash": password_hash,
-            "name": "System Administrator",
-            "role": "admin",
-            "is_active": True,
-            "created_at": datetime.utcnow(),
-            "updated_at": datetime.utcnow()
-        }
-        
-        result = await self.db.users.insert_one(admin_user)
-        print(f"✅ Admin user created: {admin_email} / {admin_password}")
-        print(f"   User ID: {result.inserted_id}")
-        
-    async def create_sample_courses(self):
+    async def create_sample_courses(self, instructor_id: ObjectId):
         """Tạo sample courses cho demo"""
         print("📚 Creating sample courses...")
         
@@ -228,8 +276,12 @@ class DatabaseInitializer:
                 """,
                 "level": "beginner",
                 "tags": ["machine-learning", "ai", "python", "data-science"],
-                "source": "system",
+                "source": "manual",
                 "is_public": True,
+                "visibility": "public",
+                "is_approved": True,
+                "enrollment_count": 0,
+                "owner_id": instructor_id,
                 "created_at": datetime.utcnow()
             },
             {
@@ -244,8 +296,12 @@ class DatabaseInitializer:
                 """,
                 "level": "intermediate",
                 "tags": ["react", "javascript", "web-development", "frontend"],
-                "source": "system", 
+                "source": "manual",
                 "is_public": True,
+                "visibility": "public",
+                "is_approved": True,
+                "enrollment_count": 0,
+                "owner_id": instructor_id,
                 "created_at": datetime.utcnow()
             },
             {
@@ -260,33 +316,88 @@ class DatabaseInitializer:
                 """,
                 "level": "beginner",
                 "tags": ["python", "programming", "basics", "coding"],
-                "source": "system",
+                "source": "manual",
                 "is_public": True,
+                "visibility": "public",
+                "is_approved": True,
+                "enrollment_count": 0,
+                "owner_id": instructor_id,
+                "created_at": datetime.utcnow()
+            },
+            {
+                "title": "Advanced Python Techniques (Draft)",
+                "description": "Advanced Python programming concepts for experienced developers.",
+                "outline": "Chapter 1: Decorators\nChapter 2: Metaclasses\nChapter 3: Async Programming",
+                "level": "advanced",
+                "tags": ["python", "advanced", "programming"],
+                "source": "manual",
+                "is_public": False,
+                "visibility": "draft",
+                "is_approved": False,
+                "enrollment_count": 0,
+                "owner_id": instructor_id,
                 "created_at": datetime.utcnow()
             }
         ]
         
+        created_courses = []
         for course in sample_courses:
             existing = await self.db.courses.find_one({"title": course["title"]})
             if not existing:
                 result = await self.db.courses.insert_one(course)
+                created_courses.append(result.inserted_id)
                 print(f"✅ Created course: {course['title']}")
             else:
+                created_courses.append(existing["_id"])
                 print(f"ℹ️  Course exists: {course['title']}")
                 
-    async def create_sample_quizzes(self):
+        return created_courses
+                
+    async def create_sample_enrollments(self, student_id: ObjectId, course_ids: list):
+        """Tạo sample enrollments"""
+        print("📝 Creating sample enrollments...")
+        
+        # Student enrolls in first 2 public courses
+        for i, course_id in enumerate(course_ids[:2]):
+            existing = await self.db.course_enrollments.find_one({
+                "student_id": student_id,
+                "course_id": course_id
+            })
+            
+            if existing:
+                print(f"ℹ️  Enrollment exists for course {i+1}")
+                continue
+                
+            enrollment = {
+                "student_id": student_id,
+                "course_id": course_id,
+                "status": "active",
+                "progress": 25.0 + (i * 15),  # 25%, 40%
+                "enrolled_at": datetime.utcnow(),
+                "last_accessed": datetime.utcnow()
+            }
+            
+            await self.db.course_enrollments.insert_one(enrollment)
+            
+            # Update course enrollment count
+            await self.db.courses.update_one(
+                {"_id": course_id},
+                {"$inc": {"enrollment_count": 1}}
+            )
+            
+            print(f"✅ Created enrollment for course {i+1}")
+            
+    async def create_sample_quizzes(self, course_ids: list):
         """Tạo sample quizzes"""
         print("🧠 Creating sample quizzes...")
         
-        # Get a sample course
-        course = await self.db.courses.find_one({"title": "Python Programming Basics"})
-        if not course:
-            print("⚠️  No course found for quiz creation")
+        if not course_ids:
+            print("⚠️  No courses found for quiz creation")
             return
             
         sample_quiz = {
             "title": "Python Basics Quiz",
-            "course_id": course["_id"],
+            "course_id": course_ids[2] if len(course_ids) > 2 else course_ids[0],
             "questions": [
                 {
                     "question": "What is the correct way to create a list in Python?",
@@ -426,9 +537,10 @@ async def main():
         await db_init.create_vector_search_index()
         
         # Create sample data
-        await db_init.create_sample_admin_user()
-        await db_init.create_sample_courses()
-        await db_init.create_sample_quizzes()
+        users = await db_init.create_sample_users()
+        course_ids = await db_init.create_sample_courses(users.get("instructor"))
+        await db_init.create_sample_enrollments(users.get("student"), course_ids)
+        await db_init.create_sample_quizzes(course_ids)
         await db_init.setup_embedding_system()
         await db_init.create_system_stats()
         
@@ -441,9 +553,10 @@ async def main():
         print("2. Set up Google GenAI API key")
         print("3. Configure environment variables")
         print("4. Start the FastAPI backend")
-        print("\n🔐 Default admin credentials:")
-        print("   Email: admin@ailearning.com")
-        print("   Password: admin123456")
+        print("\n🔐 Default user credentials:")
+        print("   Admin:      admin@ailearning.com / admin123456")
+        print("   Instructor: instructor@ailearning.com / instructor123")
+        print("   Student:    student@ailearning.com / student123")
         
     except Exception as e:
         print(f"❌ Error during initialization: {e}")

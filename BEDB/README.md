@@ -7,6 +7,7 @@ A comprehensive AI-powered learning platform built with FastAPI, MongoDB, and Go
 ### 🎯 Core Features
 - **User Authentication**: JWT-based authentication with user registration and login
 - **Course Management**: Create, manage, and organize courses with chapters
+- **Enrollment System**: Student enrollment with instructor dashboard and analytics
 - **AI-Powered Content Generation**: Generate courses from prompts using Google GenAI
 - **File Upload & Processing**: Upload PDF, DOCX, and text files with automatic text extraction
 - **Intelligent Chat**: AI tutor with strict and hybrid modes for contextual learning
@@ -55,6 +56,7 @@ app/
 │   ├── __init__.py
 │   ├── user.py           # User model
 │   ├── course.py         # Course and Chapter models
+│   ├── enrollment.py     # Enrollment model
 │   ├── upload.py         # Upload model
 │   ├── quiz.py           # Quiz, QuizQuestion, QuizHistory models
 │   ├── chat.py           # ChatSession, ChatMessage models
@@ -63,6 +65,7 @@ app/
 │   ├── __init__.py
 │   ├── auth.py           # Authentication schemas
 │   ├── course.py         # Course schemas
+│   ├── enrollment.py     # Enrollment schemas
 │   ├── upload.py         # Upload schemas
 │   ├── quiz.py           # Quiz schemas
 │   ├── chat.py           # Chat schemas
@@ -76,6 +79,8 @@ app/
     ├── __init__.py
     ├── auth.py           # Authentication endpoints
     ├── courses.py        # Course management endpoints
+    ├── student.py        # Student enrollment endpoints
+    ├── instructor.py     # Instructor management endpoints
     ├── uploads.py        # File upload endpoints
     ├── quiz.py           # Quiz endpoints
     ├── chat.py           # Chat endpoints

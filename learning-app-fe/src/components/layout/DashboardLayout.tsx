@@ -39,6 +39,19 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     { name: t('navigation.progress'), href: '/progress', icon: TrendingUp },
   ];
 
+  // Add student-specific links
+  if (user?.role === 'student') {
+    navigation.push(
+      { name: t('navigation.myLearning'), href: '/my-learning', icon: TrendingUp },
+      { name: t('navigation.myCourses'), href: '/my-courses', icon: BookOpen }
+    );
+  }
+
+  // Add instructor-specific links
+  if (user?.role === 'instructor' || user?.role === 'admin') {
+    navigation.push({ name: t('navigation.instructorDashboard'), href: '/instructor/dashboard', icon: TrendingUp });
+  }
+
   // Add admin link for admin users
   if (user?.role === 'admin') {
     navigation.push({ name: t('navigation.admin'), href: '/admin', icon: Shield });

@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/Progress';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
+import { EnrollButton } from '@/components/ui/EnrollButton';
 import { useCourseStore } from '@/stores/courseStore';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -98,6 +99,14 @@ export function CourseDetailPage() {
           </div>
           <h1 className="text-3xl font-bold text-gray-900">{currentCourse.title}</h1>
         </div>
+        <EnrollButton 
+          course={currentCourse} 
+          onEnrollmentChange={() => {
+            if (courseId) {
+              fetchCourse(courseId);
+            }
+          }} 
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
