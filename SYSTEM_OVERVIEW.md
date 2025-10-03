@@ -1081,7 +1081,16 @@ erDiagram
         datetime updated_at "Auto"
     }
     
-    Embedding {\n        PyObjectId id PK\n        PyObjectId source_id FK \"Course or Upload ID\"\n        string source_type \"course|upload\"\n        int chunk_index \"Sequence number\"\n        string text \"Text content\"\n        array embedding \"Vector embedding\"\n        datetime created_at \"Auto\"\n    }\n```\n\n### 🔍 Database Collections & Indexes Summary\n\n| Collection | Primary Indexes | Compound Indexes | Special Features |\n|------------|----------------|------------------|------------------|\n| **users** | email, created_at, is_active | - | Unique email constraint |\n| **courses** | title, owner_id, is_public | - | Full-text search ready |\n| **course_enrollments** | student_id, course_id, status | (student_id, course_id) | Unique enrollment per course |\n| **chapter_progress** | user_id, chapter_id, course_id | (user_id, chapter_id), (user_id, course_id) | Progress tracking |\n| **dashboard_progress** | user_id, course_id, chapter_id | - | Dashboard analytics |\n| **chats** | user_id, course_id, status | - | Conversation history |\n| **quizzes** | created_by, course_id | - | AI-generated quizzes |\n| **uploads** | user_id, status | - | File processing pipeline |\n| **embeddings** | source_id, source_type | - | **Vector Search Index** |\n\n### 🚀 Key Database Features\n\n- **MongoDB Atlas**: Cloud-native database with auto-scaling\n- **Beanie ODM**: Modern async Python ODM with Pydantic integration\n- **Vector Search**: Native MongoDB vector search for AI features\n- **Compound Indexes**: Optimized for common query patterns\n- **Automatic Timestamps**: created_at/updated_at handled by BaseDocument\n- **Type Safety**: PyObjectId for proper ObjectId handling\n```
+    Embedding {
+        PyObjectId id PK
+        PyObjectId source_id FK "Course or Upload ID"
+        string source_type "course|upload"
+        int chunk_index "Sequence number"
+        string text "Text content"
+        array embedding "Vector embedding"
+        datetime created_at "Auto"
+    }
+```\n\n### 🔍 Database Collections & Indexes Summary\n\n| Collection | Primary Indexes | Compound Indexes | Special Features |\n|------------|----------------|------------------|------------------|\n| **users** | email, created_at, is_active | - | Unique email constraint |\n| **courses** | title, owner_id, is_public | - | Full-text search ready |\n| **course_enrollments** | student_id, course_id, status | (student_id, course_id) | Unique enrollment per course |\n| **chapter_progress** | user_id, chapter_id, course_id | (user_id, chapter_id), (user_id, course_id) | Progress tracking |\n| **dashboard_progress** | user_id, course_id, chapter_id | - | Dashboard analytics |\n| **chats** | user_id, course_id, status | - | Conversation history |\n| **quizzes** | created_by, course_id | - | AI-generated quizzes |\n| **uploads** | user_id, status | - | File processing pipeline |\n| **embeddings** | source_id, source_type | - | **Vector Search Index** |\n\n### 🚀 Key Database Features\n\n- **MongoDB Atlas**: Cloud-native database with auto-scaling\n- **Beanie ODM**: Modern async Python ODM with Pydantic integration\n- **Vector Search**: Native MongoDB vector search for AI features\n- **Compound Indexes**: Optimized for common query patterns\n- **Automatic Timestamps**: created_at/updated_at handled by BaseDocument\n- **Type Safety**: PyObjectId for proper ObjectId handling\n```
 
 ## 🚀 Deployment Architecture
 
@@ -1356,47 +1365,6 @@ graph TB
 - **Recent Activity**: Last accessed courses
 - **Time Spent**: Total learning time
 - **Achievements**: Completed milestones
-
----
-
-## 🎯 Tổng kết System Overview
-
-### ✅ **Hoàn thành **
-
-**🎨 Frontend (React + TypeScript)**
-- ✅ Modern UI với Dark/Light mode
-- ✅ Đa ngôn ngữ (Tiếng Việt/English)
-- ✅ Smooth animations (Framer Motion)
-- ✅ Responsive design
-- ✅ State management (Zustand)
-- ✅ Complete API integration
-- ✅ Enrollment system integration (NEW)
-
-**🚀 Backend (FastAPI + Python)**
-- ✅ RESTful API với OpenAPI docs
-- ✅ JWT authentication
-- ✅ MongoDB với Beanie ODM
-- ✅ Google GenAI integration
-- ✅ Vector search capabilities
-- ✅ File upload & processing
-- ✅ Course enrollment system (NEW)
-- ✅ Student/Instructor dashboards (NEW)
-
-**🔗 Integration**
-- ✅ 100% API endpoints connected
-- ✅ Real-time data synchronization
-- ✅ Error handling & recovery
-- ✅ Security & authentication
-- ✅ Performance optimization
-- ✅ Role-based access control (NEW)
-
-**🚀 Sẵn Sàng Production**
-- ✅ Docker containerization
-- ✅ Cấu hình môi trường
-- ✅ Giám sát & logging
-- ✅ Health checks
-- ✅ Hướng dẫn deployment
-- ✅ Scripts migration database (MỚI)
 
 ---
 
