@@ -202,7 +202,7 @@ const roleHierarchy = {
 
 ```mermaid
 graph TB
-    DASHBOARD[/dashboard Route] --> LAYOUT[DashboardLayout Wrapper]
+    DASHBOARD[Dashboard Route] --> LAYOUT[DashboardLayout Wrapper]
     LAYOUT --> SIDEBAR[Navigation Sidebar]
     LAYOUT --> MAIN[Main Content Area]
     
@@ -258,15 +258,15 @@ graph TB
 
 ```mermaid
 graph TB
-    COURSES[/courses Route] --> LOAD[Load Course Data]
+    COURSES[Courses Route] --> LOAD[Load Course Data]
     LOAD --> API_ALL[GET /api/v1/courses - My + Public]
     LOAD --> API_PUBLIC[GET /api/v1/courses/public - Public only]
     
     COURSES --> FILTERS[Advanced Filtering]
-    FILTERS --> LEVEL_FILTER[Level: beginner/intermediate/advanced]
-    FILTERS --> SEARCH_FILTER[Search: title/description]
-    FILTERS --> OWNER_FILTER[Owner: me/others/all]
-    FILTERS --> VISIBILITY_FILTER[Visibility: public/private/draft]
+    FILTERS --> LEVEL_FILTER[Level - beginner/intermediate/advanced]
+    FILTERS --> SEARCH_FILTER[Search - title/description]
+    FILTERS --> OWNER_FILTER[Owner - me/others/all]
+    FILTERS --> VISIBILITY_FILTER[Visibility - public/private/draft]
     
     COURSES --> CREATE_OPTIONS[Create Course Options]
     CREATE_OPTIONS --> MANUAL[POST /courses - Manual Creation]
@@ -275,13 +275,13 @@ graph TB
     
     COURSES --> COURSE_GRID[Course Cards Display]
     COURSE_GRID --> COURSE_CARD[Individual Course Card]
-    COURSE_CARD --> VIEW_DETAIL[Navigate to /courses/:id]
+    COURSE_CARD --> VIEW_DETAIL[Navigate to /courses/ID]
     COURSE_CARD --> QUICK_ACTIONS[Owner Actions]
     
-    QUICK_ACTIONS --> EDIT_BTN[PUT /courses/:id - Edit]
-    QUICK_ACTIONS --> DELETE_BTN[DELETE /courses/:id - Delete]
-    QUICK_ACTIONS --> DUPLICATE_BTN[POST /courses/:id/duplicate]
-    QUICK_ACTIONS --> VISIBILITY_BTN[PATCH /courses/:id/visibility]
+    QUICK_ACTIONS --> EDIT_BTN[PUT /courses/ID - Edit]
+    QUICK_ACTIONS --> DELETE_BTN[DELETE /courses/ID - Delete]
+    QUICK_ACTIONS --> DUPLICATE_BTN[POST /courses/ID/duplicate]
+    QUICK_ACTIONS --> VISIBILITY_BTN[PATCH /courses/ID/visibility]
 ```
 
 **Route Protection:**
@@ -376,9 +376,9 @@ sequenceDiagram
 
 ```mermaid
 graph TB
-    DETAIL[/courses/:courseId Route] --> LOAD_DATA[Load Course Data]
-    LOAD_DATA --> API_COURSE[GET /api/v1/courses/:id]
-    LOAD_DATA --> API_CHAPTERS[GET /api/v1/courses/:id/chapters]
+    DETAIL[Course Detail Route] --> LOAD_DATA[Load Course Data]
+    LOAD_DATA --> API_COURSE[GET /api/v1/courses/ID]
+    LOAD_DATA --> API_CHAPTERS[GET /api/v1/courses/ID/chapters]
     LOAD_DATA --> API_ENROLLMENT[Check Enrollment Status]
     
     DETAIL --> INFO_SECTION[Course Information]
@@ -407,7 +407,7 @@ graph TB
     
     DETAIL --> CHAPTER_LIST[Chapter Navigation]
     CHAPTER_LIST --> CHAPTER_CARD[Individual Chapter]
-    CHAPTER_CARD --> CHAPTER_DETAIL[Navigate to /courses/:id/chapters/:chapterId]
+    CHAPTER_CARD --> CHAPTER_DETAIL[Navigate to /courses/ID/chapters/CHAPTER_ID]
 ```
 
 **Route Protection:**
@@ -476,25 +476,25 @@ graph TB
     CHECK_COURSE -->|DRAFT| DISABLE_ENROLL[Enroll Disabled]
     
     SHOW_ENROLL --> CLICK_ENROLL[Click Enroll Button]
-    CLICK_ENROLL --> API_ENROLL[POST /api/v1/student/courses/{course_id}/enroll]
+    CLICK_ENROLL --> API_ENROLL[POST /api/v1/student/courses/ID/enroll]
     API_ENROLL --> DB_CHECK{Check Existing Enrollment}
     
     DB_CHECK -->|New User| CREATE_NEW[Create CourseEnrollment]
-    DB_CHECK -->|Previously Dropped| REACTIVATE[Update status: active]
+    DB_CHECK -->|Previously Dropped| REACTIVATE[Update status - active]
     
     CREATE_NEW --> UPDATE_COURSE[Increment course.enrollment_count]
     REACTIVATE --> UPDATE_COURSE
     UPDATE_COURSE --> INIT_PROGRESS[Create DashboardProgress]
     INIT_PROGRESS --> SUCCESS_TOAST[Show Success Message]
     
-    SUCCESS_TOAST --> ENROLLED_STATE[Status: ACTIVE]
+    SUCCESS_TOAST --> ENROLLED_STATE[Status - ACTIVE]
     ENROLLED_STATE --> ACCESS_CONTENT[Access Course Chapters]
     ENROLLED_STATE --> TRACK_PROGRESS[Progress Tracking]
     ENROLLED_STATE --> UNENROLL_OPTION[Unenroll Option Available]
     
     UNENROLL_OPTION --> CONFIRM_UNENROLL{Confirm Unenroll?}
-    CONFIRM_UNENROLL -->|Yes| API_UNENROLL[DELETE /api/v1/student/courses/{course_id}/enroll]
-    API_UNENROLL --> UPDATE_STATUS[Status: DROPPED]
+    CONFIRM_UNENROLL -->|Yes| API_UNENROLL[DELETE /api/v1/student/courses/ID/enroll]
+    API_UNENROLL --> UPDATE_STATUS[Status - DROPPED]
     UPDATE_STATUS --> DECREMENT_COUNT[Decrement enrollment_count]
     DECREMENT_COUNT --> CAN_REENROLL[Can Re-enroll Later]
 ```
@@ -568,19 +568,19 @@ NOT_ENROLLED → [POST /enroll] → ACTIVE → [Mark Complete] → COMPLETED
 graph TB
     INSTRUCTOR[Instructor/Admin User] --> ACCESS[Access Instructor Routes]
     ACCESS --> DASHBOARD_ROUTE[GET /instructor/dashboard]
-    ACCESS --> COURSE_ANALYTICS[GET /instructor/courses/{id}/analytics]
+    ACCESS --> COURSE_ANALYTICS[GET /instructor/courses/ID/analytics]
     
-    DASHBOARD_ROUTE --> OVERVIEW_API[API: GET /api/v1/instructor/dashboard]
+    DASHBOARD_ROUTE --> OVERVIEW_API[API - GET /api/v1/instructor/dashboard]
     OVERVIEW_API --> FETCH_STATS[Fetch Overall Statistics]
     FETCH_STATS --> INSTRUCTOR_STATS[Total Courses, Students, Enrollments]
     
-    COURSE_ANALYTICS --> COURSE_API[API: GET /api/v1/instructor/courses/{id}/analytics]
+    COURSE_ANALYTICS --> COURSE_API[API - GET /api/v1/instructor/courses/ID/analytics]
     COURSE_API --> ENROLLMENT_DATA[Enrollment Statistics]
     COURSE_API --> PROGRESS_DATA[Student Progress Data]
     COURSE_API --> TIME_DATA[Learning Time Analytics]
     
     INSTRUCTOR --> STUDENT_MGMT[Student Management]
-    STUDENT_MGMT --> LIST_STUDENTS[GET /instructor/courses/{id}/students]
+    STUDENT_MGMT --> LIST_STUDENTS[GET /instructor/courses/ID/students]
     STUDENT_MGMT --> FILTER_STATUS[Filter by Enrollment Status]
     
     FILTER_STATUS --> ACTIVE_FILTER[Active Students]
@@ -588,7 +588,7 @@ graph TB
     FILTER_STATUS --> DROPPED_FILTER[Dropped Students]
     
     INSTRUCTOR --> PROGRESS_TRACKING[Progress Monitoring]
-    PROGRESS_TRACKING --> INDIVIDUAL_PROGRESS[GET /instructor/courses/{id}/progress]
+    PROGRESS_TRACKING --> INDIVIDUAL_PROGRESS[GET /instructor/courses/ID/progress]
     PROGRESS_TRACKING --> COMPLETION_RATES[Calculate Completion Rates]
     PROGRESS_TRACKING --> TIME_ANALYSIS[Analyze Learning Times]
 ```
@@ -689,15 +689,15 @@ NOT_ENROLLED → [Enroll] → ACTIVE → [Complete] → COMPLETED
 
 ```mermaid
 graph TB
-    CHAT[/chat Route] --> LOAD_SESSIONS[Load Chat Sessions]
+    CHAT[Chat Route] --> LOAD_SESSIONS[Load Chat Sessions]
     LOAD_SESSIONS --> API_SESSIONS[GET /api/v1/chat/sessions]
     
     CHAT --> CREATE_SESSION[Create New Chat]
     CREATE_SESSION --> SESSION_TYPE{Choose Chat Type}
     
     SESSION_TYPE -->|Freestyle| FREESTYLE[POST /api/v1/chat/freestyle]
-    SESSION_TYPE -->|Course-based| COURSE_CHAT[POST /api/v1/chat/course/{course_id}]
-    SESSION_TYPE -->|Upload-based| UPLOAD_CHAT[POST /api/v1/chat/upload/{upload_id}]
+    SESSION_TYPE -->|Course-based| COURSE_CHAT[POST /api/v1/chat/course/ID]
+    SESSION_TYPE -->|Upload-based| UPLOAD_CHAT[POST /api/v1/chat/upload/ID]
     
     FREESTYLE --> MODE_SELECT{Response Mode}
     MODE_SELECT -->|Hybrid| HYBRID_AI[AI + General Knowledge]
@@ -707,9 +707,9 @@ graph TB
     UPLOAD_CHAT --> UPLOAD_CONTEXT[Use File Content as Context]
     
     CHAT --> SESSION_MGMT[Session Management]
-    SESSION_MGMT --> UPDATE_SESSION[PUT /api/v1/chat/sessions/{session_id}]
-    SESSION_MGMT --> DELETE_SESSION[DELETE /api/v1/chat/sessions/{session_id}]
-    SESSION_MGMT --> GET_MESSAGES[GET /api/v1/chat/sessions/{session_id}/messages]
+    SESSION_MGMT --> UPDATE_SESSION[PUT /api/v1/chat/sessions/ID]
+    SESSION_MGMT --> DELETE_SESSION[DELETE /api/v1/chat/sessions/ID]
+    SESSION_MGMT --> GET_MESSAGES[GET /api/v1/chat/sessions/ID/messages]
     
     CHAT --> AI_INTEGRATION[Google GenAI Integration]
     AI_INTEGRATION --> GENERATE_RESPONSE[AI Response Generation]
@@ -717,8 +717,8 @@ graph TB
     AI_INTEGRATION --> SAVE_RESPONSE[Save to Chat History]
     
     CHAT --> ADVANCED_FEATURES[Advanced Features]
-    ADVANCED_FEATURES --> SAVE_AS_COURSE[POST /api/v1/chat/sessions/{session_id}/save-as-course]
-    ADVANCED_FEATURES --> EXPORT_CHAT[GET /api/v1/chat/sessions/{session_id}/export]
+    ADVANCED_FEATURES --> SAVE_AS_COURSE[POST /api/v1/chat/sessions/ID/save-as-course]
+    ADVANCED_FEATURES --> EXPORT_CHAT[GET /api/v1/chat/sessions/ID/export]
     ADVANCED_FEATURES --> SEARCH_HISTORY[GET /api/v1/chat/search]
 ```
 
@@ -875,14 +875,14 @@ sequenceDiagram
 
 ```mermaid
 graph TB
-    QUIZ[/quiz Route] --> LOAD_QUIZZES[Load User Quizzes]
+    QUIZ[Quiz Route] --> LOAD_QUIZZES[Load User Quizzes]
     LOAD_QUIZZES --> API_LIST[GET /api/v1/quiz]
     
     QUIZ --> CREATE_QUIZ[Create New Quiz]
     CREATE_QUIZ --> QUIZ_TYPE{Choose Source}
     
-    QUIZ_TYPE -->|Course| COURSE_QUIZ[POST /api/v1/quiz/from-course/{course_id}]
-    QUIZ_TYPE -->|Upload| UPLOAD_QUIZ[POST /api/v1/quiz/from-upload/{upload_id}]
+    QUIZ_TYPE -->|Course| COURSE_QUIZ[POST /api/v1/quiz/from-course/ID]
+    QUIZ_TYPE -->|Upload| UPLOAD_QUIZ[POST /api/v1/quiz/from-upload/ID]
     QUIZ_TYPE -->|Manual| MANUAL_QUIZ[POST /api/v1/quiz]
     
     COURSE_QUIZ --> AI_GENERATION[Google GenAI Quiz Generation]
@@ -890,25 +890,25 @@ graph TB
     AI_GENERATION --> QUESTIONS[Generate Multiple Choice Questions]
     
     QUIZ --> QUIZ_MANAGEMENT[Quiz Management]
-    QUIZ_MANAGEMENT --> GET_QUIZ[GET /api/v1/quiz/{quiz_id}]
-    QUIZ_MANAGEMENT --> UPDATE_QUIZ[PUT /api/v1/quiz/{quiz_id}]
-    QUIZ_MANAGEMENT --> DELETE_QUIZ[DELETE /api/v1/quiz/{quiz_id}]
-    QUIZ_MANAGEMENT --> DUPLICATE_QUIZ[POST /api/v1/quiz/{quiz_id}/duplicate]
+    QUIZ_MANAGEMENT --> GET_QUIZ[GET /api/v1/quiz/ID]
+    QUIZ_MANAGEMENT --> UPDATE_QUIZ[PUT /api/v1/quiz/ID]
+    QUIZ_MANAGEMENT --> DELETE_QUIZ[DELETE /api/v1/quiz/ID]
+    QUIZ_MANAGEMENT --> DUPLICATE_QUIZ[POST /api/v1/quiz/ID/duplicate]
     
     QUIZ --> ATTEMPT_SYSTEM[Quiz Attempt System]
-    ATTEMPT_SYSTEM --> START_ATTEMPT[POST /api/v1/quiz/{quiz_id}/attempts]
-    ATTEMPT_SYSTEM --> GET_ATTEMPT[GET /api/v1/quiz/attempts/{attempt_id}]
-    ATTEMPT_SYSTEM --> SUBMIT_ATTEMPT[POST /api/v1/quiz/attempts/{attempt_id}/submit]
-    ATTEMPT_SYSTEM --> UPDATE_ATTEMPT[PUT /api/v1/quiz/attempts/{attempt_id}]
+    ATTEMPT_SYSTEM --> START_ATTEMPT[POST /api/v1/quiz/ID/attempts]
+    ATTEMPT_SYSTEM --> GET_ATTEMPT[GET /api/v1/quiz/attempts/ID]
+    ATTEMPT_SYSTEM --> SUBMIT_ATTEMPT[POST /api/v1/quiz/attempts/ID/submit]
+    ATTEMPT_SYSTEM --> UPDATE_ATTEMPT[PUT /api/v1/quiz/attempts/ID]
     
     QUIZ --> ANALYTICS[Quiz Analytics]
-    ANALYTICS --> QUIZ_STATS[GET /api/v1/quiz/{quiz_id}/stats]
-    ANALYTICS --> USER_ATTEMPTS[GET /api/v1/quiz/{quiz_id}/attempts]
-    ANALYTICS --> LEADERBOARD[GET /api/v1/quiz/{quiz_id}/leaderboard]
+    ANALYTICS --> QUIZ_STATS[GET /api/v1/quiz/ID/stats]
+    ANALYTICS --> USER_ATTEMPTS[GET /api/v1/quiz/ID/attempts]
+    ANALYTICS --> LEADERBOARD[GET /api/v1/quiz/ID/leaderboard]
     
     QUIZ --> QUESTION_MGMT[Question Management]
-    QUESTION_MGMT --> ADD_QUESTION[POST /api/v1/quiz/{quiz_id}/questions]
-    QUESTION_MGMT --> UPDATE_QUESTION[PUT /api/v1/quiz/{quiz_id}/questions/{question_id}]
+    QUESTION_MGMT --> ADD_QUESTION[POST /api/v1/quiz/ID/questions]
+    QUESTION_MGMT --> UPDATE_QUESTION[PUT /api/v1/quiz/ID/questions/QID]
 ```
 
 **Quiz Route Protection:**
@@ -996,7 +996,7 @@ interface QuizAttempt {
 
 ```mermaid
 graph TB
-    UPLOAD[/uploads Route] --> UPLOAD_FILE[Upload New File]
+    UPLOAD[Uploads Route] --> UPLOAD_FILE[Upload New File]
     UPLOAD_FILE --> API_UPLOAD[POST /api/v1/uploads]
     API_UPLOAD --> VALIDATE[File Validation]
     VALIDATE --> SUPPORT_CHECK{File Type Check}
@@ -1012,14 +1012,14 @@ graph TB
     
     AI_CLEAN --> VECTOR_INDEX[Generate Vector Embeddings]
     VECTOR_INDEX --> SAVE_DB[Save to Database]
-    SAVE_DB --> STATUS_COMPLETE[Status: COMPLETED]
+    SAVE_DB --> STATUS_COMPLETE[Status - COMPLETED]
     
     UPLOAD --> MANAGEMENT[File Management]
     MANAGEMENT --> LIST_FILES[GET /api/v1/uploads]
-    MANAGEMENT --> GET_FILE[GET /api/v1/uploads/{upload_id}]
-    MANAGEMENT --> DELETE_FILE[DELETE /api/v1/uploads/{upload_id}]
-    MANAGEMENT --> CHECK_STATUS[GET /api/v1/uploads/{upload_id}/status]
-    MANAGEMENT --> REPROCESS[POST /api/v1/uploads/{upload_id}/reprocess]
+    MANAGEMENT --> GET_FILE[GET /api/v1/uploads/ID]
+    MANAGEMENT --> DELETE_FILE[DELETE /api/v1/uploads/ID]
+    MANAGEMENT --> CHECK_STATUS[GET /api/v1/uploads/ID/status]
+    MANAGEMENT --> REPROCESS[POST /api/v1/uploads/ID/reprocess]
     
     UPLOAD --> FILE_USAGE[File Usage]
     FILE_USAGE --> CHAT_INTEGRATION[Upload-based Chat]
@@ -1110,7 +1110,7 @@ enum UploadStatus {
 
 ```mermaid
 graph TB
-    SEARCH[/search System] --> VECTOR_SEARCH[Vector Similarity Search]
+    SEARCH[Search System] --> VECTOR_SEARCH[Vector Similarity Search]
     VECTOR_SEARCH --> API_SEARCH[POST /api/v1/search]
     API_SEARCH --> QUERY_EMBEDDING[Generate Query Embedding]
     QUERY_EMBEDDING --> SIMILARITY_SEARCH[Find Similar Documents]
@@ -1120,7 +1120,7 @@ graph TB
     
     SEARCH --> REINDEXING[Content Reindexing]
     REINDEXING --> REINDEX_EMBEDDINGS[POST /api/v1/search/embeddings]
-    REINDEXING --> REINDEX_COURSE[POST /api/v1/search/courses/{course_id}/reindex]
+    REINDEXING --> REINDEX_COURSE[POST /api/v1/search/courses/ID/reindex]
     
     SEARCH --> INTEGRATIONS[Search Integration]
     INTEGRATIONS --> CHAT_CONTEXT[Provide Chat Context]
@@ -1186,7 +1186,7 @@ sequenceDiagram
 graph TB
     ADMIN[Admin Dashboard] --> USER_MGMT[User Management]
     USER_MGMT --> GET_USERS[GET /api/v1/admin/users]
-    USER_MGMT --> UPDATE_ROLE[PATCH /api/v1/admin/users/{user_id}/role]
+    USER_MGMT --> UPDATE_ROLE[PATCH /api/v1/admin/users/ID/role]
     
     ADMIN --> SYSTEM_STATS[System Statistics]
     SYSTEM_STATS --> GET_STATS[GET /api/v1/admin/stats]
@@ -1194,7 +1194,7 @@ graph TB
     ADMIN --> COURSE_MGMT[Course Management]
     COURSE_MGMT --> GET_ALL_COURSES[GET /api/v1/admin/courses]
     COURSE_MGMT --> CREATE_SAMPLE[POST /api/v1/admin/courses]
-    COURSE_MGMT --> DELETE_ANY[DELETE /api/v1/admin/courses/{course_id}]
+    COURSE_MGMT --> DELETE_ANY[DELETE /api/v1/admin/courses/ID]
     COURSE_MGMT --> IMPORT_COURSE[POST /api/v1/admin/courses/import]
     
     ADMIN --> PROTECTION[Admin Protection]
@@ -1271,7 +1271,7 @@ async def get_admin_user(current_user: User = Depends(get_current_active_user)) 
 
 ```mermaid
 graph TB
-    DASHBOARD[/dashboard Route] --> OVERVIEW[Dashboard Overview]
+    DASHBOARD[Dashboard Route] --> OVERVIEW[Dashboard Overview]
     OVERVIEW --> GET_OVERVIEW[GET /api/v1/dashboard/overview]
     
     DASHBOARD --> DETAILED_STATS[Detailed Statistics]
@@ -1280,11 +1280,11 @@ graph TB
     DASHBOARD --> PROGRESS_MGMT[Progress Management]
     PROGRESS_MGMT --> GET_PROGRESS[GET /api/v1/dashboard/progress]
     PROGRESS_MGMT --> UPDATE_PROGRESS[POST /api/v1/dashboard/progress]
-    PROGRESS_MGMT --> COURSE_PROGRESS[GET /api/v1/dashboard/progress/{course_id}]
+    PROGRESS_MGMT --> COURSE_PROGRESS[GET /api/v1/dashboard/progress/ID]
     
     DASHBOARD --> ANALYTICS[Advanced Analytics]
     ANALYTICS --> RECOMMENDATIONS[GET /api/v1/dashboard/recommendations]
-    ANALYTICS --> COURSE_STATS[GET /api/v1/dashboard/course-stats/{course_id}]
+    ANALYTICS --> COURSE_STATS[GET /api/v1/dashboard/course-stats/ID]
     
     DASHBOARD --> DATA_AGGREGATION[Data Aggregation]
     DATA_AGGREGATION --> USER_COURSES[Calculate Course Stats]
@@ -1840,10 +1840,10 @@ graph TB
     
     I18N --> COMPONENTS[Component Usage]
     COMPONENTS --> USE_TRANSLATION[useTranslation hook]
-    COMPONENTS --> T_FUNCTION[t('key') translation]
+    COMPONENTS --> T_FUNCTION[t key translation]
     
     I18N --> FALLBACK[Fallback System]
-    FALLBACK --> DEFAULT_EN[Default: English]
+    FALLBACK --> DEFAULT_EN[Default - English]
     FALLBACK --> MISSING_KEYS[Missing Key Handling]
 ```
 
@@ -1896,7 +1896,7 @@ graph TB
     CSS_VARIABLES --> DARK_THEME[Dark Theme Variables]
     
     THEME --> COMPONENT_SUPPORT[Component Support]
-    COMPONENT_SUPPORT --> DARK_CLASSES[dark: prefix classes]
+    COMPONENT_SUPPORT --> DARK_CLASSES[dark - prefix classes]
     COMPONENT_SUPPORT --> ADAPTIVE_COLORS[Context-aware colors]
 ```
 
