@@ -121,15 +121,15 @@ graph TB
 
 #### 2.3.1 Student Journey
 ```
-1. Landing → Register → Email Verify → Role: Student
-2. Profile Setup → Skill Assessment → AI Analysis → Course Recommendations
-3. Browse Courses → Course Details → Enroll (Free/Paid) → Payment (if paid)
-4. Learning Dashboard → Select Course → Chapter Navigation → Content Consumption
-5. Interactive Learning → Quiz → AI Chat → Progress Tracking → Completion
-6. Personal Course Creation → AI Assistance → Custom Learning Path
-7. Achievement System → Badges → Certificates → Leaderboard
+1. Trang chủ → Đăng ký → Xác thực email → Chọn vai trò: Học viên  
+2. Thiết lập hồ sơ → Kiểm tra năng lực → Phân tích bởi AI → Gợi ý khóa học  
+3. Duyệt danh sách khóa học → Xem chi tiết → Đăng ký (Miễn phí / Trả phí) → Thanh toán (nếu có)  
+4. Bảng điều khiển học tập → Chọn khóa học → Duyệt chương → Học nội dung  
+5. Học tương tác → Làm quiz → Trò chuyện với AI → Theo dõi tiến độ → Hoàn thành khóa học  
+6. Tự tạo khóa học cá nhân → Hỗ trợ AI → Sinh lộ trình học tập riêng  
+7. Hệ thống thành tích → Huy hiệu → Chứng chỉ → Bảng xếp hạng
+ 
 ```
-
 #### 2.3.2 Instructor Journey
 ```
 1. Landing → Register → Email Verify → Role: Instructor
@@ -143,12 +143,14 @@ graph TB
 
 #### 2.3.3 Admin Journey
 ```
-1. System Access → Admin Dashboard → System Overview → Health Monitoring
-2. User Management → Role Assignment → Account Moderation → Activity Monitoring
-3. Content Moderation → Course Reviews → Quality Control → Policy Enforcement
-4. Analytics & Reporting → Platform Metrics → Revenue Analysis → User Insights
-5. System Configuration → Feature Management → Payment Settings → AI Parameters
-6. Support Management → Ticket Resolution → User Communication → Issue Escalation
+1. Truy cập hệ thống → Bảng điều khiển Admin → Tổng quan hệ thống → Theo dõi tình trạng  
+2. Quản lý người dùng → Gán vai trò → Kiểm duyệt tài khoản → Theo dõi hoạt động  
+3. Kiểm duyệt nội dung → Duyệt khóa học (có thể bỏ) 
+4. Phân tích & Báo cáo → Chỉ số nền tảng → Phân tích doanh thu → Thống kê người dùng  
+5. Cấu hình hệ thống → Quản lý tính năng → Cài đặt thanh toán → Tham số AI  (có thể bỏ)
+6. Hỗ trợ người dùng → Xử lý khiếu nại → Liên hệ hỗ trợ → Chuyển cấp xử lý (có thể bỏ
+
+
 ```
 
 ---
@@ -261,20 +263,19 @@ sequenceDiagram
     FE-->>User: Updated UI
 ```
 
-### 3.3 Microservices Architecture
+### 3.3 Microservices Architecture (kiến trúc)
 
-| Service | Responsibility | Database | AI Integration |
-|---------|---------------|----------|----------------|
-| **User Service** | Authentication, Profile, Roles | MongoDB | Profile optimization |
-| **Assessment Service** | Skill tests, AI evaluation | MongoDB | Question generation, Analysis |
-| **Course Service** | Content management, CRUD | MongoDB | Content generation, Translation |
-| **Enrollment Service** | Registration, Progress tracking | MongoDB | Learning path optimization |
-| **Payment Service** | Transactions, Billing | MongoDB | Fraud detection |
-| **Chat Service** | AI conversations, Context | MongoDB + Vector | Conversational AI |
-| **Analytics Service** | Metrics, Reporting | MongoDB | Insights generation |
-| **Notification Service** | Emails, Push notifications | Redis | Smart notification timing |
+| Dịch vụ (Service) | Chức năng chính (Responsibility) | Cơ sở dữ liệu (Database) | Tích hợp AI (AI Integration) |
+|--------------------|----------------------------------|---------------------------|-------------------------------|
+| **User Service** | Xác thực người dùng, quản lý hồ sơ cá nhân và phân quyền (học viên, giảng viên, quản trị viên). | MongoDB | Tối ưu hồ sơ người dùng (đề xuất cải thiện thông tin cá nhân hoặc hồ sơ chuyên môn). |
+| **Assessment Service** | Tổ chức và đánh giá bài kiểm tra năng lực, quiz hoặc bài thi tự động. | MongoDB | Tạo câu hỏi tự động và phân tích kết quả đánh giá. |
+| **Course Service** | Quản lý nội dung khóa học, bao gồm các thao tác tạo, đọc, cập nhật và xóa (CRUD). | MongoDB | Sinh nội dung khóa học và dịch tự động sang nhiều ngôn ngữ. |
+| **Enrollment Service** | Quản lý đăng ký khóa học và theo dõi tiến độ học tập của học viên. | MongoDB | Tối ưu lộ trình học tập cá nhân dựa trên kết quả và hành vi học. |
+| **Payment Service** | Xử lý giao dịch thanh toán và quản lý hóa đơn, gói học. | MongoDB | Phát hiện và ngăn chặn gian lận trong thanh toán. |
+| **Chat Service** | Cung cấp tính năng trò chuyện với AI và quản lý ngữ cảnh hội thoại. | MongoDB + Vector | Hỗ trợ hội thoại thông minh, trợ lý học tập dựa trên AI. |
+| **Analytics Service** | Thu thập, tổng hợp và báo cáo dữ liệu thống kê về người dùng, khóa học và hệ thống. | MongoDB | Phân tích dữ liệu và tạo ra các báo cáo, thông tin chi tiết (insights). |
+| **Notification Service** | Gửi email, thông báo đẩy và nhắc nhở tự động cho người dùng. | Redis | Dự đoán thời điểm gửi thông báo tối ưu nhằm tăng khả năng tương tác. |
 
-### 3.4 Security Architecture
 
 ```mermaid
 graph LR
