@@ -21,34 +21,307 @@
 ## 1. TỔNG QUAN HỆ THỐNG
 
 ### 1.1 Mô tả hệ thống
-AI Learning Platform là hệ thống học tập thông minh với 3 vai trò chính:
-- **Student**: Học viên có thể đăng ký khóa học, tạo khóa học cá nhân, làm test năng lực
-- **Instructor**: Giảng viên tạo và quản lý khóa học, theo dõi học viên, thu phí
-- **Admin**: Quản trị viên quản lý toàn bộ hệ thống, người dùng, nội dung
+**AI Learning Platform** là nền tảng học tập thông minh được xây dựng để cung cấp trải nghiệm học tập cá nhân hóa thông qua công nghệ AI. Hệ thống hỗ trợ 3 vai trò chính với các chức năng riêng biệt:
 
-### 1.2 Các chức năng chính được mở rộng
-- **Test năng lực đầu vào**: Đánh giá trình độ học viên và gợi ý khóa học phù hợp
-- **Hệ thống thanh toán**: Tích hợp cổng thanh toán cho khóa học trả phí
-- **Khóa học cá nhân**: Học viên tự tạo khóa học riêng với AI hỗ trợ
-- **Analytics nâng cao**: Theo dõi chi tiết tiến độ và hiệu suất học tập
-- **AI Chatbot**: Hỗ trợ học tập cá nhân hóa theo từng ngữ cảnh
+- **Student (Học viên)**: 
+  - Tham gia học các khóa học từ giảng viên hoặc khóa học công khai
+  - Tự tạo khóa học cá nhân với sự hỗ trợ của AI
+  - Làm bài test đánh giá năng lực để nhận gợi ý khóa học phù hợp
+  - Theo dõi tiến độ học tập và đạt được các thành tích
+  
+- **Instructor (Giảng viên)**: 
+  - Tạo lớp học và mời học viên tham gia
+  - Sử dụng khóa học có sẵn để giảng dạy
+  - Tạo quiz và assignments để đánh giá học viên
+  - Theo dõi tiến độ và quản lý học viên trong lớp
+  
+- **Admin (Quản trị viên)**: 
+  - Quản lý toàn bộ người dùng và phân quyền
+  - Tạo, sửa, xóa tất cả khóa học trong hệ thống
+  - Xem và quản lý khóa học cá nhân của học viên
+  - Giám sát hoạt động và thống kê hệ thống
 
-### 1.3 Kiến trúc tổng thể
+### 1.2 Mục tiêu hệ thống
+
+#### 1.2.1 Mục tiêu chính
+- **Cá nhân hóa học tập**: Sử dụng AI để đánh giá năng lực và đề xuất lộ trình học phù hợp với từng học viên
+- **Linh hoạt tạo nội dung**: Học viên có thể tự tạo khóa học cá nhân, giảng viên tạo lớp học từ khóa học có sẵn
+- **Hỗ trợ thông minh**: AI chatbot hỗ trợ giải đáp thắc mắc trong quá trình học tập
+- **Theo dõi tiến độ**: Hệ thống analytics chi tiết giúp theo dõi quá trình học tập và giảng dạy
+- **Quản lý tập trung**: Admin có toàn quyền quản lý nội dung và người dùng
+
+#### 1.2.2 Giá trị cốt lõi
+- **Học tập thông minh**: AI phân tích và gợi ý nội dung phù hợp
+- **Tự chủ học tập**: Học viên chủ động tạo và quản lý khóa học riêng
+- **Quản lý hiệu quả**: Giảng viên và admin có công cụ quản lý mạnh mẽ
+- **Trải nghiệm liền mạch**: Giao diện thân thiện, responsive trên mọi thiết bị
+
+### 1.3 Đối tượng sử dụng
+
+#### 1.3.1 Học viên (Students)
+- **Đặc điểm**: Người học muốn nâng cao kiến thức, kỹ năng trong các lĩnh vực khác nhau
+- **Nhu cầu**: 
+  - Tìm kiếm khóa học phù hợp với trình độ
+  - Học theo tốc độ và lịch trình cá nhân
+  - Nhận hỗ trợ khi gặp khó khăn
+  - Tự tạo nội dung học tập riêng
+- **Lợi ích**: Học tập linh hoạt, được hỗ trợ AI, theo dõi tiến độ rõ ràng
+
+#### 1.3.2 Giảng viên (Instructors)
+- **Đặc điểm**: Người có kiến thức chuyên môn, muốn chia sẻ và giảng dạy
+- **Nhu cầu**:
+  - Tạo lớp học và quản lý học viên
+  - Sử dụng nội dung khóa học có sẵn
+  - Theo dõi tiến độ và đánh giá học viên
+  - Giao tiếp với học viên hiệu quả
+- **Lợi ích**: Công cụ quản lý lớp học mạnh mẽ, tiết kiệm thời gian tạo nội dung
+
+#### 1.3.3 Quản trị viên (Admins)
+- **Đặc điểm**: Người quản lý và vận hành nền tảng
+- **Nhu cầu**:
+  - Kiểm soát toàn bộ nội dung và người dùng
+  - Đảm bảo chất lượng khóa học
+  - Giám sát hoạt động hệ thống
+  - Xử lý các vấn đề phát sinh
+- **Lợi ích**: Quyền quản lý tối đa, dashboard tổng quan chi tiết
+
+### 1.4 Phạm vi hệ thống
+
+#### 1.4.1 Phạm vi chức năng
+**Trong phạm vi (In-scope):**
+- ✅ Quản lý người dùng (đăng ký, đăng nhập, phân quyền)
+- ✅ Quản lý khóa học (tạo, sửa, xóa, xem)
+- ✅ Hệ thống lớp học (giảng viên tạo lớp, mời học viên)
+- ✅ Khóa học cá nhân (học viên tự tạo)
+- ✅ Đánh giá năng lực (skill assessment)
+- ✅ Quiz và bài tập
+- ✅ AI chatbot hỗ trợ học tập
+- ✅ Theo dõi tiến độ và analytics
+- ✅ Upload và xử lý tài liệu
+- ✅ Hệ thống thông báo
+
+**Ngoài phạm vi (Out-of-scope):**
+- ❌ Video conferencing trực tiếp
+- ❌ Marketplace thanh toán cho khóa học (giai đoạn đầu)
+- ❌ Mobile app native (chỉ web responsive)
+- ❌ Gamification nâng cao (badges, leaderboard)
+- ❌ Certificate chính thức được công nhận
+- ❌ Tích hợp hệ thống LMS của bên thứ ba
+
+#### 1.4.2 Phạm vi kỹ thuật
+- **Frontend**: Web application (React + TypeScript)
+- **Backend**: REST API (FastAPI + Python)
+- **Database**: MongoDB Atlas (NoSQL)
+- **AI Services**: Google GenAI (Gemini)
+- **Storage**: Cloud storage cho files/media
+- **Deployment**: Cloud hosting (DigitalOcean/AWS/Vercel)
+
+### 1.5 Các chức năng chính
+
+#### 1.5.1 Chức năng học viên (Student Features)
+- **Test năng lực đầu vào**: 
+  - Đánh giá trình độ theo từng lĩnh vực (Programming, Design, Business...)
+  - AI phân tích kết quả và đưa ra điểm mạnh/yếu
+  - Gợi ý khóa học phù hợp với level hiện tại
+  
+- **Học tập linh hoạt**:
+  - Đăng ký khóa học từ giảng viên hoặc khóa học công khai
+  - Học theo tiến độ cá nhân
+  - Làm quiz và nhận feedback tức thì
+  - Chat với AI để giải đáp thắc mắc
+  
+- **Khóa học cá nhân**:
+  - Tự tạo khóa học với AI hỗ trợ sinh nội dung
+  - Upload tài liệu và AI tự động tạo outline
+  - Quản lý và theo dõi tiến độ học riêng
+
+#### 1.5.2 Chức năng giảng viên (Instructor Features)
+- **Quản lý lớp học**:
+  - Tạo lớp học và gắn khóa học có sẵn
+  - Mời học viên qua email hoặc mã lớp
+  - Thêm, sửa, xóa học viên trong lớp
+  
+- **Đánh giá học viên**:
+  - Tạo quiz và assignments
+  - Xem kết quả và tiến độ từng học viên
+  - Gửi thông báo và phản hồi
+  
+- **Thống kê và báo cáo**:
+  - Dashboard tổng quan lớp học
+  - Theo dõi hoạt động học viên
+  - Phân tích hiệu quả giảng dạy
+
+#### 1.5.3 Chức năng quản trị (Admin Features)
+- **Quản lý người dùng**:
+  - Xem danh sách tất cả users
+  - Phân quyền (student/instructor/admin)
+  - Kích hoạt/vô hiệu hóa tài khoản
+  
+- **Quản lý nội dung**:
+  - CRUD tất cả khóa học (kể cả khóa học cá nhân)
+  - Xem và quản lý lớp học của giảng viên
+  - Kiểm duyệt nội dung nếu cần
+  
+- **Giám sát hệ thống**:
+  - Dashboard thống kê tổng thể
+  - Báo cáo hoạt động người dùng
+  - Cảnh báo và xử lý sự cố
+
+### 1.6 Kiến trúc tổng thể
+
+#### 1.6.1 Sơ đồ kiến trúc cấp cao (High-Level Architecture)
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   FRONTEND      │    │    BACKEND      │    │    DATABASE     │
-│   React 18      │◄──►│   FastAPI       │◄──►│   MongoDB       │
-│   TypeScript    │    │   Python 3.11   │    │   Atlas         │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  STATE MGMT     │    │   AI SERVICES   │    │  VECTOR STORE   │
-│  Zustand        │    │  Google GenAI   │    │  Embeddings     │
-│  React Query    │    │  Gemini API     │    │  Collections    │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│                         CLIENT LAYER                                 │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
+│  │   Browser    │  │    Mobile    │  │    Tablet    │              │
+│  │  (Desktop)   │  │   (Webapp)   │  │   (Webapp)   │              │
+│  └──────────────┘  └──────────────┘  └──────────────┘              │
+└─────────────────────────────────────────────────────────────────────┘
+                              │
+                    HTTPS/WebSocket
+                              │
+┌─────────────────────────────────────────────────────────────────────┐
+│                      FRONTEND APPLICATION                            │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │  React 18 + TypeScript + Vite                                │  │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │  │
+│  │  │   Zustand   │  │ TanStack    │  │  React      │          │  │
+│  │  │   (State)   │  │   Query     │  │   Router    │          │  │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘          │  │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │  │
+│  │  │  Tailwind   │  │   Axios     │  │  Framer     │          │  │
+│  │  │    CSS      │  │  (HTTP)     │  │   Motion    │          │  │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘          │  │
+│  └──────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+                              │
+                         REST API
+                              │
+┌─────────────────────────────────────────────────────────────────────┐
+│                       BACKEND APPLICATION                            │
+│  ┌──────────────────────────────────────────────────────────────┐  │
+│  │  FastAPI + Python 3.11 + Uvicorn                             │  │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │  │
+│  │  │   Routers   │  │  Services   │  │   Models    │          │  │
+│  │  │  (API       │  │  (Business  │  │  (Beanie    │          │  │
+│  │  │ Endpoints)  │  │   Logic)    │  │    ODM)     │          │  │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘          │  │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │  │
+│  │  │   Schemas   │  │    Auth     │  │  Middleware │          │  │
+│  │  │ (Pydantic)  │  │    (JWT)    │  │   (CORS)    │          │  │
+│  │  └─────────────┘  └─────────────┘  └─────────────┘          │  │
+│  └──────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────┘
+                              │
+              ┌───────────────┼───────────────┐
+              │               │               │
+┌─────────────────────┐ ┌────────────────┐ ┌─────────────────────┐
+│   AI SERVICES       │ │   DATA LAYER   │ │  STORAGE SERVICES   │
+│                     │ │                │ │                     │
+│  ┌───────────────┐  │ │ ┌────────────┐ │ │  ┌──────────────┐  │
+│  │  Google       │  │ │ │  MongoDB   │ │ │  │  File        │  │
+│  │  GenAI API    │  │ │ │  Atlas     │ │ │  │  Storage     │  │
+│  │  (Gemini)     │  │ │ │ (Primary)  │ │ │  │  (S3/R2)     │  │
+│  └───────────────┘  │ │ └────────────┘ │ │  └──────────────┘  │
+│  ┌───────────────┐  │ │ ┌────────────┐ │ │                     │
+│  │  Embeddings   │  │ │ │   Redis    │ │ │                     │
+│  │  Generation   │  │ │ │  (Cache)   │ │ │                     │
+│  └───────────────┘  │ │ └────────────┘ │ │                     │
+│  ┌───────────────┐  │ │ ┌────────────┐ │ │                     │
+│  │  Content      │  │ │ │  Vector    │ │ │                     │
+│  │  Generation   │  │ │ │    DB      │ │ │                     │
+│  └───────────────┘  │ │ └────────────┘ │ │                     │
+└─────────────────────┘ └────────────────┘ └─────────────────────┘
+```
+
+#### 1.6.2 Luồng dữ liệu chính (Data Flow)
+
+**1. Authentication Flow (Luồng xác thực):**
+```
+User → Frontend → POST /api/v1/auth/login 
+    → Backend validates credentials 
+    → Generate JWT tokens (access + refresh)
+    → Store in localStorage/httpOnly cookie
+    → Return user data + tokens to Frontend
+```
+
+**2. Course Learning Flow (Luồng học khóa học):**
+```
+User clicks course → Frontend → GET /api/v1/courses/{id}
+    → Backend retrieves from MongoDB
+    → Return course data (chapters, materials, quizzes)
+    → Frontend renders learning interface
+    → User progresses → PATCH /api/v1/enrollments/{id}/progress
+    → Backend updates progress in MongoDB
+```
+
+**3. AI Interaction Flow (Luồng tương tác AI):**
+```
+User asks question → Frontend → POST /api/v1/chat/course/{id}
+    → Backend retrieves course context from Vector DB
+    → Call Google GenAI API with context + question
+    → AI generates response
+    → Save to MongoDB (chat history)
+    → Return response to Frontend
+```
+
+**4. Content Creation Flow (Luồng tạo nội dung):**
+```
+User provides prompt → Frontend → POST /api/v1/courses/from-prompt
+    → Backend calls GenAI service
+    → AI generates course outline + chapters
+    → Save to MongoDB
+    → Create embeddings → Store in Vector DB
+    → Return course data to Frontend
+```
+
+#### 1.6.3 Các lớp kiến trúc (Architecture Layers)
+
+| Lớp (Layer) | Công nghệ | Trách nhiệm | Giao tiếp |
+|-------------|-----------|-------------|-----------|
+| **Presentation Layer** | React, TypeScript | Giao diện người dùng, xử lý tương tác | REST API calls |
+| **API Layer** | FastAPI routers | Xử lý HTTP requests, validation | Routers → Services |
+| **Business Logic Layer** | Python services | Xử lý logic nghiệp vụ, AI integration | Services → Models/AI |
+| **Data Access Layer** | Beanie ODM | Truy xuất và lưu trữ dữ liệu | Models → Database |
+| **Database Layer** | MongoDB Atlas | Lưu trữ dữ liệu persistent | - |
+| **AI Services Layer** | Google GenAI | Xử lý AI tasks | API calls |
+| **Cache Layer** | Redis | Cache dữ liệu tạm thời | Key-value storage |
+
+#### 1.6.4 Deployment Architecture (Kiến trúc triển khai)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      PRODUCTION ENVIRONMENT                  │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌─────────────────┐         ┌─────────────────┐           │
+│  │   CDN           │         │  Load Balancer  │           │
+│  │  (CloudFlare)   │◄────────│   (Nginx)       │           │
+│  └─────────────────┘         └─────────────────┘           │
+│           │                           │                     │
+│           ▼                           ▼                     │
+│  ┌─────────────────┐         ┌─────────────────┐           │
+│  │  Frontend       │         │  Backend API    │           │
+│  │  (Vercel/       │         │  (DigitalOcean/ │           │
+│  │   Netlify)      │         │     AWS EC2)    │           │
+│  └─────────────────┘         └─────────────────┘           │
+│                                       │                     │
+│                    ┌──────────────────┼──────────────┐      │
+│                    ▼                  ▼              ▼      │
+│           ┌─────────────┐    ┌─────────────┐  ┌─────────┐ │
+│           │  MongoDB    │    │   Redis     │  │   S3    │ │
+│           │   Atlas     │    │   Cloud     │  │  /R2    │ │
+│           └─────────────┘    └─────────────┘  └─────────┘ │
+│                                                              │
+│  ┌──────────────────────────────────────────────────────┐  │
+│  │         Monitoring & Logging                         │  │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐           │  │
+│  │  │  Sentry  │  │   Logs   │  │ Analytics│           │  │
+│  │  └──────────┘  └──────────┘  └──────────┘           │  │
+│  └──────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -640,7 +913,7 @@ Frontend Optimization:
 #### 5.1.1 Onboarding và Test Năng lực
 
 ```
-Đăng ký → Xác thực email → Điền thông tin cơ bản → Test năng lực → Gợi ý khóa học → Dashboard
+Đăng ký (gmail/gg) → Điền thông tin cơ bản → Test năng lực → Gợi ý khóa học → Dashboard
 ```
 
 **Chi tiết test năng lực:**
@@ -653,283 +926,1071 @@ Frontend Optimization:
    - Gợi ý 5-10 khóa học phù hợp
    - Lộ trình học tập cá nhân hóa
 
-#### 5.1.2 Dashboard Student
+#### 5.1.2 Dashboard Student - Chi tiết giao diện
 
-**Các section chính:**
-- **Tổng quan**: Tiến độ tổng thể, thời gian học, điểm số
-- **Khóa học đã đăng ký**: Danh sách với tiến độ từng khóa
-- **Khóa học cá nhân**: Khóa học tự tạo
-- **Gợi ý học tập**: Dựa trên AI và lịch sử học tập
-- **Thành tích**: Badges, certificates, leaderboard
-- **Lịch học**: Calendar view của các bài học
+**Layout tổng thể:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Header: Logo | Navigation | User Profile | Notifications      │
+├─────────────────────────────────────────────────────────────────┤
+│ Sidebar         │             Main Content Area               │
+│ - Dashboard     │  ┌─────────────────────────────────────┐   │
+│ - My Courses    │  │        Welcome Back, [Name]!        │   │
+│ - Browse        │  │      Today's Learning Goals         │   │
+│ - AI Chat       │  └─────────────────────────────────────┘   │
+│ - Progress      │  ┌─────────────┐ ┌─────────────────────┐   │
+│ - Settings      │  │  Continue   │ │   Recommended       │   │
+│                 │  │  Learning   │ │     Courses         │   │
+│                 │  └─────────────┘ └─────────────────────┘   │
+│                 │  ┌─────────────────────────────────────┐   │
+│                 │  │        Recent Activities           │   │
+│                 │  └─────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-#### 5.1.3 Quản lý khóa học
+**Các section chi tiết:**
 
-**Đăng ký khóa học:**
-- Duyệt khóa học công khai
-- Tìm kiếm theo categories, tags, level
-- Preview nội dung khóa học
-- Đăng ký miễn phí hoặc thanh toán cho khóa trả phí
-- Nhận invitation cho khóa học private
+**1. Tổng quan (Overview Widget):**
+- **Metrics hiển thị**:
+  - Tổng thời gian học trong tuần: 12h 30m
+  - Số khóa học đã hoàn thành: 3/8
+  - Điểm trung bình quiz: 87.5%
+  - Streak learning: 7 ngày liên tiếp
+- **Biểu đồ**: Progress chart theo thời gian
+- **Quick actions**: "Tiếp tục học", "Tạo khóa học mới", "Chat với AI"
 
-**Tạo khóa học cá nhân:**
-- Nhập topic và mục tiêu
-- AI tạo outline tự động
-- Chỉnh sửa và tùy chỉnh nội dung
-- Thêm materials, quizzes
-- Theo dõi tiến độ cá nhân
+**2. Khóa học đã đăng ký (Enrolled Courses):**
+- **Card format** cho mỗi khóa học:
+  ```
+  ┌─────────────────────────────────────┐
+  │ [Thumbnail] | Course Title         │
+  │             | Progress: [██████▒▒▒] 70% │
+  │             | Next: Chapter 8      │
+  │             | Time spent: 4h 20m   │
+  │ [Continue] [Chat AI] [Quiz]        │
+  └─────────────────────────────────────┘
+  ```
+- **Filters**: All, In Progress, Completed, Bookmarked
+- **Sort**: Recent, Progress, Alphabetical
+
+**3. Khóa học cá nhân (Personal Courses):**
+- **Danh sách khóa học tự tạo**
+- **Status indicators**: Draft, Published, Private
+- **Quick edit** và **AI suggestions** cho nội dung
+- **Template library** để tạo khóa học nhanh
+
+**4. Gợi ý học tập AI (AI Recommendations):**
+- **Dựa trên**:
+  - Skill assessment results
+  - Learning history và preferences
+  - Industry trends và job market
+  - Peer learning paths (anonymized)
+- **Hiển thị**: Carousel với 5-6 khóa học được gợi ý
+- **Lý do gợi ý**: "Based on your interest in Python..."
+
+**5. Thành tích & Gamification:**
+- **Badges earned**: Beginner, Fast Learner, Quiz Master, etc.
+- **Learning streaks**: Calendar heatmap
+- **Leaderboard**: Top learners in similar fields (opt-in)
+- **Points system**: Để unlock features hoặc certificates
+
+**6. Lịch học & Planning:**
+- **Calendar view**: Học gì, khi nào
+- **Study reminders**: Smart notifications
+- **Goal setting**: Daily/weekly learning targets
+- **Time tracking**: Automatic và manual logging
+
+#### 5.1.3 Quản lý khóa học - Chi tiết workflow
+
+**A. Đăng ký khóa học (Course Enrollment):**
+
+**Bước 1: Duyệt và tìm kiếm**
+- **Browse interface**: Grid view hoặc list view
+- **Advanced filters**:
+  - Categories: Programming, Design, Business, Marketing...
+  - Level: Beginner, Intermediate, Advanced
+  - Duration: < 5h, 5-20h, 20h+
+  - Language: Vietnamese, English
+  - Price: Free, Paid
+- **Search functionality**: Full-text search với auto-suggestions
+- **Sorting options**: Popularity, Rating, Recent, A-Z
+
+**Bước 2: Preview khóa học**
+- **Course landing page** với:
+  - Video trailer (nếu có)
+  - Curriculum outline (có thể expand/collapse)
+  - Instructor profile và credentials
+  - Student reviews và ratings
+  - Prerequisites và learning outcomes
+  - Estimated completion time
+- **Free preview**: 1-2 chapters đầu miễn phí
+- **Sample quiz**: Để đánh giá độ khó
+
+**Bước 3: Enrollment process**
+- **One-click enrollment** cho khóa học miễn phí
+- **Payment flow** cho khóa học trả phí (tích hợp Stripe/PayPal)
+- **Join via invitation link** từ giảng viên
+- **Bulk enrollment** cho enterprise users
+
+**B. Tạo khóa học cá nhân (Personal Course Creation):**
+
+**Workflow tạo khóa học với AI:**
+
+```mermaid
+flowchart TD
+    A[Bắt đầu tạo khóa học] --> B[Nhập topic & mục tiêu]
+    B --> C[AI phân tích và đề xuất]
+    C --> D[User review & approve outline]
+    D --> E[AI generate nội dung chi tiết]
+    E --> F[User customize & edit]
+    F --> G[Add materials & quizzes]
+    G --> H[Preview & test]
+    H --> I[Publish hoặc keep private]
+```
+
+**Chi tiết từng bước:**
+
+**Bước 1: Khởi tạo (Course Initialization)**
+- **Input form**:
+  ```
+  Course Title: [________________]
+  Description: [________________]
+  Target Level: [Beginner ▼]
+  Category: [Programming ▼]
+  Learning Goals: 
+  - [Goal 1________________]
+  - [Goal 2________________]
+  Estimated Duration: [Auto-calculated]
+  ```
+- **AI prompt engineering**: System sẽ tự động tạo prompt tối ưu
+
+**Bước 2: AI Content Generation**
+- **Course outline generation**: AI tạo cấu trúc chương, bài học
+- **Content suggestions**: 
+  - Learning objectives cho từng chapter
+  - Key concepts cần cover
+  - Practical exercises
+  - Assessment points
+- **Customization options**: User có thể adjust, add, remove
+
+**Bước 3: Content Development**
+- **Rich text editor** với:
+  - Markdown support
+  - Code syntax highlighting
+  - Image/video embedding
+  - Interactive elements
+- **AI writing assistant**: Giúp expand ideas, check grammar
+- **Version control**: Track changes, rollback nếu cần
+
+**Bước 4: Assessment Integration**
+- **Quiz builder**: Drag-drop interface
+- **AI quiz generation**: Tự động tạo câu hỏi từ nội dung
+- **Multiple question types**: MCQ, True/False, Fill-in-blank, Code
+- **Adaptive difficulty**: Câu hỏi adjust theo performance
+
+**Bước 5: Publishing & Sharing**
+- **Visibility settings**: Private, Shared with link, Public
+- **Export options**: PDF, SCORM package
+- **Analytics**: Track engagement nếu share public
 
 ### 5.2 INSTRUCTOR WORKFLOW (Giảng viên)
 
-#### 5.2.1 Dashboard Instructor
+#### 5.2.1 Dashboard Instructor - Giao diện tổng quan
 
-**Metrics chính:**
-- Tổng số khóa học đã tạo
-- Tổng số học viên
-- Doanh thu từ khóa học trả phí
-- Rating trung bình
-- Engagement metrics
+**Layout chính:**
+```
+┌────────────────────────────────────────────────────────────────────┐
+│ Header: AI Learning Platform | Instructor Portal | [Profile] [🔔] │
+├────────────────────────────────────────────────────────────────────┤
+│ ┌───────────────┐ ┌─────────────────────────────────────────────┐ │
+│ │   Quick Stats │ │              Weekly Overview               │ │
+│ │ 📊 3 Classes  │ │    Mon  Tue  Wed  Thu  Fri  Sat  Sun     │ │
+│ │ 👥 45 Students│ │  ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐           │ │
+│ │ 📈 89% Avg    │ │  │5│ │8│ │3│ │12││7│ │0│ │0│           │ │
+│ │ ⭐ 4.7 Rating │ │  └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘           │ │
+│ └───────────────┘ └─────────────────────────────────────────────┘ │
+│ ┌──────────────────────────────┐ ┌──────────────────────────────┐ │
+│ │      My Classes              │ │    Student Activities         │ │
+│ │ ┌─────────────────────────┐  │ │ • Mai completed Chapter 3     │ │
+│ │ │ Python Basics (15👥)    │  │ │ • Tuấn asked question in... │ │
+│ │ │ Progress: ████████▒▒ 80%│  │ │ • New enrollment: Linh       │ │
+│ │ │ [Manage] [Analytics]    │  │ │ • Quiz submitted by Hùng     │ │
+│ │ └─────────────────────────┘  │ │ [View All Activities]        │ │
+│ └──────────────────────────────┘ └──────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────┘
+```
 
-**Các section:**
-- **Course Management**: Tạo, chỉnh sửa, xóa khóa học
-- **Student Analytics**: Theo dõi tiến độ học viên
-- **Revenue Tracking**: Thống kê doanh thu, payouts
-- **Content Creation**: AI-assisted content generation
-- **Communication**: Tin nhắn với học viên
+**Metrics chính hiển thị:**
+- **Tổng số lớp đang giảng dạy**: Active vs Inactive classes
+- **Tổng số học viên**: Across all classes với breakdown theo class
+- **Engagement rates**: Average completion rate, time spent
+- **Performance metrics**: Average quiz scores, assignment submissions  
+- **Rating & Feedback**: Student ratings và recent feedback
+- **Revenue tracking**: Nếu có khóa học trả phí (tương lai)
 
-#### 5.2.2 Tạo và quản lý khóa học
+**Quick Actions Panel:**
+- 🎯 **Tạo lớp học mới**
+- 📊 **Xem analytics chi tiết** 
+- 💬 **Trả lời câu hỏi đang chờ**
+- 📝 **Tạo announcement**
+- 🏆 **Tạo quiz/assignment mới**
 
-**Tạo khóa học:**
-- Nhập thông tin cơ bản (title, description, category)
-- Chọn loại khóa học: Public/Private/Paid
-- Tạo nội dung: Manual hoặc AI-generated
-- Thiết lập pricing (cho khóa trả phí)
-- Upload materials, videos
-- Tạo quizzes và assignments
+#### 5.2.2 Tạo lớp và quản lý khóa học - Chi tiết workflow
 
-**Quản lý học viên:**
-- Xem danh sách enrolled students
-- Theo dõi progress từng học viên
-- Gửi thông báo, announcements
-- Quản lý discussions/Q&A
+**A. Quy trình tạo lớp học:**
+
+**Bước 1: Thiết lập cơ bản**
+```
+┌─ Thông tin lớp học ─────────────────────────────────┐
+│ Tên lớp: [_________________________________]       │
+│ Mô tả: [___________________________________]       │
+│ Chọn khóa học gốc: [Select Course ▼]              │
+│ Thời gian bắt đầu: [Date picker]                  │
+│ Thời gian kết thúc: [Date picker]                 │
+│ Giới hạn học viên: [Number input] (optional)       │
+│ Visibility: [🔒Private] [🔗Link] [🌐Public]        │
+│ [Advanced Settings ▼]                              │
+└────────────────────────────────────────────────────┘
+```
+
+**Bước 2: Cấu hình khóa học cho lớp**
+- **Chọn từ khóa học có sẵn**: Browse library hoặc search
+- **Customize curriculum**: Enable/disable chapters, reorder
+- **Set pacing**: Tự học vs guided với deadlines
+- **Assessment settings**: Quiz frequency, passing score
+- **AI tutor configuration**: Enable/disable cho lớp học
+
+**Bước 3: Quản lý thành viên**
+- **Invitation methods**:
+  - Email invitations (bulk import CSV)
+  - Share invitation link 
+  - QR code cho classroom
+  - Integration với Google Classroom, Microsoft Teams
+- **Enrollment controls**: Auto-approve vs manual review
+- **Waitlist management**: Cho lớp có giới hạn
+
+**B. Quản lý học viên chi tiết:**
+
+**Student Management Dashboard:**
+```
+┌─ Class: Python Basics ─────────────────────────────────┐
+│ 📊 Students: 23 | 📈 Avg Progress: 67% | ⭐ Satisfaction: 4.2│
+├────────────────────────────────────────────────────────┤
+│ 🔍 [Search students] [Filter▼] [Sort▼] [Export CSV]   │
+├────────────────────────────────────────────────────────┤
+│ Name          Progress    Last Active   Quiz Avg  Action│
+│ 👤 Mai Nguyen   [████████▒▒] 80%  2h ago      85%   [👁️] │
+│ 👤 Tuấn Anh     [████▒▒▒▒▒▒] 40%  1d ago      92%   [👁️] │
+│ 👤 Linh Dao     [██████████] 100% 5m ago      78%   [👁️] │
+│ ... (Show 10 per page)                              │
+│ [< Previous] [1] [2] [3] [Next >]                    │
+└────────────────────────────────────────────────────────┘
+```
+
+**Tính năng theo dõi chi tiết:**
+- **Individual student profiles**: 
+  - Learning path & progress timeline
+  - Quiz performance analysis
+  - Time spent in each chapter
+  - Engagement patterns (active hours, frequency)
+- **Communication tools**:
+  - Direct messaging
+  - Group announcements  
+  - Email notifications
+  - In-app discussion threads
+- **Intervention alerts**: Students at risk of dropping out
+
+**C. Tạo và quản lý assessments:**
+
+**Quiz Builder Interface:**
+```
+┌─ Tạo Quiz Mới ─────────────────────────────────────────┐
+│ Quiz Title: [________________________]                 │
+│ Chapter: [Chapter 3: Functions ▼]                     │
+│ Question Type: [Multiple Choice ▼] [+ Add Question]    │
+├────────────────────────────────────────────────────────┤
+│ Question 1: What is a function in Python?             │
+│ A) [_____________________] ○                          │
+│ B) [_____________________] ●  (Correct)               │
+│ C) [_____________________] ○                          │
+│ D) [_____________________] ○                          │
+│ Explanation: [Optional feedback for students]          │
+│ [🤖 Generate with AI] [⚙️ Settings] [🗑️ Delete]        │
+└────────────────────────────────────────────────────────┘
+```
+
+**Assessment features:**
+- **Question types**: MCQ, True/False, Fill-in-blank, Code challenges
+- **AI-generated questions**: Từ nội dung chapter tự động
+- **Adaptive difficulty**: Câu hỏi khó dần theo performance
+- **Auto-grading**: Với detailed feedback
+- **Plagiarism detection**: Cho assignments
+- **Time limits**: Và multiple attempts settings
 
 ### 5.3 ADMIN WORKFLOW (Quản trị viên)
 
-#### 5.3.1 Dashboard Admin
+#### 5.3.1 Dashboard Admin - Tổng quan hệ thống
 
-**System Overview:**
-- Tổng số users (Students/Instructors)
-- Tổng số khóa học và enrollment
-- Revenue tổng thể
-- System performance metrics
-- Content moderation queue
+**Master Dashboard Layout:**
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│ 🔧 AI Learning Platform - Admin Portal            [Settings] [🔔]   │
+├─────────────────────────────────────────────────────────────────────┤
+│ ┌───────────────┐ ┌───────────────┐ ┌───────────────┐ ┌──────────┐ │
+│ │📊 Total Users │ │📚 Courses     │ │💰 Revenue     │ │⚡System  │ │
+│ │   1,247       │ │   89 Active   │ │  $12,450      │ │ 99.8%   │ │
+│ │ (+23 today)   │ │  156 Total    │ │  This Month   │ │ Uptime  │ │
+│ └───────────────┘ └───────────────┘ └───────────────┘ └──────────┘ │
+│ ┌─────────────────────────────────┐ ┌─────────────────────────────┐ │
+│ │     User Activity Trends        │ │      System Health          │ │
+│ │  ┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐┌─┐         │ │ CPU: ████████▒▒ 80%        │ │
+│ │  │▓││▓││▓││▓││▓││▓││▓│         │ │ Memory: ██████▒▒▒▒ 60%     │ │
+│ │  └─┘└─┘└─┘└─┘└─┘└─┘└─┘         │ │ Storage: ████▒▒▒▒▒▒ 40%    │ │
+│ └─────────────────────────────────┘ └─────────────────────────────┘ │
+│ ┌─────────────────────────────────────────────────────────────────┐ │
+│ │                    Recent Activities                             │ │
+│ │ • New user registration: minh.nv@example.com                    │ │
+│ │ • Course published: "Advanced React" by instructor_123          │ │
+│ │ • System alert: High memory usage on server-2                  │ │
+│ │ • Payment processed: $49.99 from user_456                      │ │
+│ │ [View All Activities] [Export Report]                          │ │
+│ └─────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────┘
+```
 
-**Quản lý người dùng:**
-- User list với filters và search
-- Assign/change roles
-- Suspend/activate accounts
-- View user activity logs
+**System Overview - Metrics chi tiết:**
 
-**Quản lý nội dung:**
-- Review và approve courses
-- Content moderation
-- System announcements
-- Platform policies management
+**A. User Management Metrics:**
+- **Total Users**: 1,247 (Students: 1,089 | Instructors: 145 | Admins: 13)
+- **Growth Rate**: +23 users today, +156 this week
+- **User Activity**: DAU (Daily Active Users), WAU, MAU
+- **Retention Rate**: 30-day, 90-day retention
+- **Geographic Distribution**: By country/region
+- **User Segmentation**: Active vs Inactive, Paid vs Free
 
----
+**B. Course & Content Metrics:**
+- **Total Courses**: 156 (Active: 89, Draft: 34, Archived: 33)
+- **Course Categories**: Distribution by subject
+- **Engagement**: Average completion rate, time spent
+- **Quality Scores**: Average ratings, completion rates
+- **Content Creation**: New courses per month trend
+- **Popular Courses**: Top 10 by enrollment và engagement
+
+**C. System Performance:**
+- **Uptime**: 99.8% (Target: 99.9%)
+- **Response Times**: API response times, page load speeds
+- **Error Rates**: 4xx và 5xx error percentages
+- **Database Performance**: Query times, connection pools
+- **AI Service Usage**: GenAI API calls, costs
+- **Storage Usage**: Files, images, videos storage
+
+#### 5.3.2 User Management - Quản lý người dùng
+
+**Advanced User Management Interface:**
+```
+┌─ User Management Portal ───────────────────────────────────────────┐
+│ 🔍 [Search users...] [🔽Advanced Filters] [+ Add User] [📤Export]  │
+├────────────────────────────────────────────────────────────────────┤
+│ Filters: [All Roles ▼] [All Status ▼] [Registration Date ▼]       │
+├────────────────────────────────────────────────────────────────────┤
+│ Avatar | Name           | Role       | Status  | Last Active | Actions│
+│ 👤     | Mai Nguyen     | Student    | ✅Active | 2h ago     | [👁️][✏️]│
+│ 👨‍🏫    | Dr. Tuấn Anh  | Instructor | ✅Active | 5m ago     | [👁️][✏️]│
+│ 👤     | Linh Dao      | Student    | ⏸️Suspended| 2d ago   | [👁️][✏️]│
+│ 🔧     | Admin User    | Admin      | ✅Active | Now       | [👁️][✏️]│
+│ ... (Pagination: 50 per page)                                     │
+│ [< Previous] [1] [2] [3] ... [15] [Next >]                       │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+**User Management Features:**
+
+**A. User Profile Management:**
+- **View detailed profiles**: Personal info, learning history, statistics
+- **Role assignment và changes**: Student ↔ Instructor ↔ Admin
+- **Account status management**: Active, Suspended, Deleted
+- **Permission customization**: Granular permissions per admin role
+- **Bulk operations**: Mass role changes, status updates
+- **User impersonation**: For support purposes (với audit log)
+
+**B. Advanced Filtering & Search:**
+- **Text search**: Name, email, user ID
+- **Role filters**: Multiple role selection
+- **Status filters**: Active, Inactive, Suspended
+- **Registration date**: Range picker
+- **Activity filters**: Last login, course enrollment
+- **Performance filters**: Course completion rate, quiz scores
+
+**C. User Analytics & Reports:**
+- **User behavior analysis**: Learning patterns, engagement metrics
+- **Cohort analysis**: User groups performance over time
+- **Churn prediction**: AI-based risk scoring
+- **Export capabilities**: CSV, Excel, PDF reports
+- **Custom reports**: Drag-drop report builder
+
+#### 5.3.3 Content Management - Quản lý nội dung
+
+**Content Moderation Dashboard:**
+```
+┌─ Content Management ───────────────────────────────────────────────┐
+│ 📚 Courses: [All ▼] | 📝 Status: [Pending Review ▼] | 🏷️ Category: [All ▼]│
+├────────────────────────────────────────────────────────────────────┤
+│ Course Title               | Creator      | Status      | Actions   │
+│ "Python for Data Science"  | dr_tuananh   | ✅Published | [👁️][✏️][🗑️]│
+│ "Web Design Fundamentals"  | designer_mai | 📝Review    | [✅][❌][👁️]│
+│ "Machine Learning Basics"  | ai_expert    | 📝Draft     | [👁️][✏️]   │
+│ "Digital Marketing 101"    | marketer_x   | ⏸️Suspended | [👁️][🔄]   │
+├────────────────────────────────────────────────────────────────────┤
+│ 📊 Bulk Actions: [Select All] [Approve Selected] [Reject Selected]  │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+**Content Management Capabilities:**
+
+**A. Course Lifecycle Management:**
+- **Review workflow**: Draft → Review → Published/Rejected
+- **Content quality checks**: Automated quality scoring
+- **Plagiarism detection**: For course content và assignments
+- **Version control**: Track changes, rollback capabilities  
+- **Bulk operations**: Mass approve, reject, categorize
+- **Content archival**: Soft delete với recovery options
+
+**B. System Configuration:**
+- **Platform settings**: Global configurations
+- **Feature flags**: Enable/disable features for testing
+- **AI parameters**: GenAI model settings, rate limits
+- **Email templates**: Notification templates management
+- **Payment settings**: Stripe/PayPal configuration (future)
+- **Security policies**: Password requirements, session timeouts
+
+**C. Analytics & Reporting:**
+- **Content performance**: Course popularity, completion rates
+- **Revenue analytics**: Course sales, instructor payouts (future)
+- **System usage**: Feature adoption, user engagement
+- **Custom dashboards**: Drag-drop dashboard builder
+- **Automated reports**: Scheduled email reports
+- **Data export**: API access for external analytics tools
 
 ## 6. KIẾN TRÚC DATABASE
 
-### 6.1 Collections chính
+### 6.1 Sơ đồ quan hệ dữ liệu (ERD - Entity Relationship Diagram)
 
-#### 6.1.1 Users Collection
+```mermaid
+erDiagram
+    Users ||--o{ Courses : "tạo/sở_hữu"
+    Users ||--o{ Enrollments : "đăng_ký"
+    Users ||--o{ ChatMessages : "gửi_tin_nhắn"
+    Users ||--o{ QuizAttempts : "làm_bài"
+    Users ||--o{ Progress : "theo_dõi_tiến_độ"
+    Users ||--o{ Assessments : "đánh_giá_năng_lực"
+    
+    Courses ||--o{ Chapters : "chứa"
+    Courses ||--o{ Enrollments : "được_đăng_ký"
+    Courses ||--o{ Quizzes : "có_bài_kiểm_tra"
+    Courses ||--o{ Uploads : "tài_liệu_đính_kèm"
+    
+    Chapters ||--o{ Progress : "tiến_độ_học"
+    
+    Quizzes ||--o{ QuizAttempts : "lần_thử"
+    
+    Instructors ||--o{ Classes : "tạo_lớp_học"
+    Classes ||--o{ Enrollments : "học_viên_tham_gia"
+    
+    Users {
+        ObjectId _id PK
+        string email UK "Email đăng nhập"
+        string password_hash "Mật khẩu đã mã hóa"
+        string name "Họ và tên"
+        string role "Vai trò: student/instructor/admin"
+        string status "Trạng thái: active/inactive/suspended"
+        object profile "Thông tin cá nhân"
+        object preferences "Tùy chọn cá nhân"
+        datetime created_at "Ngày tạo tài khoản"
+        datetime updated_at "Ngày cập nhật cuối"
+        datetime last_login "Lần đăng nhập cuối"
+    }
+    
+    Courses {
+        ObjectId _id PK
+        string title "Tên khóa học"
+        string description "Mô tả khóa học"
+        ObjectId owner_id FK "ID người tạo"
+        string source "Nguồn: manual/ai_generated/from_upload"
+        string category "Danh mục: programming/design/business"
+        string level "Cấp độ: beginner/intermediate/advanced"
+        string language "Ngôn ngữ: vi/en"
+        string visibility "Hiển thị: public/private/draft"
+        array chapters "Danh sách chương học"
+        object metadata "Thông tin bổ sung"
+        datetime created_at "Ngày tạo"
+        datetime updated_at "Ngày cập nhật"
+    }
+    
+    Classes {
+        ObjectId _id PK
+        string name "Tên lớp học"
+        string description "Mô tả lớp học"
+        ObjectId instructor_id FK "ID giảng viên"
+        ObjectId course_id FK "ID khóa học gốc"
+        array student_ids "Danh sách học viên"
+        string status "Trạng thái: active/completed/archived"
+        datetime start_date "Ngày bắt đầu"
+        datetime end_date "Ngày kết thúc"
+        datetime created_at "Ngày tạo lớp"
+    }
+```
+
+### 6.2 Collections chính và cấu trúc dữ liệu
+
+#### 6.2.1 Users Collection (Bảng người dùng)
 ```javascript
 {
-  _id: ObjectId,
-  email: String,
-  password_hash: String,
-  name: String,
-  avatar: String,
-  role: String, // "student", "instructor", "admin"
-  status: String, // "active", "suspended", "pending"
+  _id: ObjectId,                    // ID duy nhất của người dùng
+  email: String,                    // Email đăng nhập (duy nhất)
+  password_hash: String,            // Mật khẩu đã được mã hóa
+  name: String,                     // Họ và tên người dùng
+  avatar: String,                   // URL ảnh đại diện
+  role: String,                     // Vai trò: "student", "instructor", "admin"
+  status: String,                   // Trạng thái: "active", "suspended", "pending"
+  
+  // Thông tin hồ sơ cá nhân chi tiết
   profile: {
-    bio: String,
-    location: String,
-    education: String,
-    interests: [String],
-    social_links: Object
+    bio: String,                    // Mô tả bản thân
+    location: String,               // Địa điểm
+    education: String,              // Trình độ học vấn
+    interests: [String],            // Sở thích, lĩnh vực quan tâm
+    learning_goals: [String],       // Mục tiêu học tập cụ thể
+    skills: [String],               // Kỹ năng hiện có
+    experience_level: String,       // Trình độ kinh nghiệm tổng thể
+    social_links: {                 // Liên kết mạng xã hội
+      linkedin: String,
+      github: String,
+      website: String,
+      facebook: String
+    }
   },
+  
+  // Tùy chọn và cài đặt cá nhân
   preferences: {
-    language: String,
-    timezone: String,
-    notifications: Object
+    language: String,               // Ngôn ngữ giao diện: "vi", "en"
+    timezone: String,               // Múi giờ người dùng
+    theme: String,                  // Giao diện: "light", "dark", "auto"
+    notifications: {                // Cài đặt thông báo
+      email: Boolean,               // Nhận thông báo qua email
+      push: Boolean,                // Thông báo đẩy trên web
+      study_reminders: Boolean,     // Nhắc nhở học tập hàng ngày
+      class_updates: Boolean,       // Thông báo cập nhật lớp học
+      achievement: Boolean          // Thông báo khi đạt thành tích
+    },
+    learning_preferences: {         // Tùy chọn học tập
+      auto_play_next: Boolean,      // Tự động chuyển bài tiếp theo
+      show_hints: Boolean,          // Hiển thị gợi ý khi làm quiz
+      difficulty_preference: String  // Độ khó ưa thích
+    }
   },
-  created_at: Date,
-  updated_at: Date,
-  last_login: Date
+  
+  // Thống kê học tập (chủ yếu cho học viên)
+  learning_stats: {
+    total_courses: Number,          // Tổng số khóa học đã tham gia
+    completed_courses: Number,      // Số khóa học đã hoàn thành
+    total_study_time: Number,       // Tổng thời gian học (phút)
+    streak_days: Number,            // Số ngày học liên tiếp
+    last_activity: Date,            // Hoạt động gần nhất
+    favorite_categories: [String],   // Danh mục yêu thích
+    avg_quiz_score: Number          // Điểm trung bình các bài quiz
+  },
+  
+  created_at: Date,                 // Ngày tạo tài khoản
+  updated_at: Date,                 // Ngày cập nhật thông tin gần nhất
+  last_login: Date                  // Lần đăng nhập gần nhất
 }
 ```
 
-#### 6.1.2 Assessment Collection 
+#### 6.2.2 Assessment Collection (Bảng đánh giá năng lực)
 ```javascript
 {
-  _id: ObjectId,
-  user_id: ObjectId,
-  assessment_type: String, // "skill_assessment", "placement_test"
-  category: String, // "programming", "design", "business"
+  _id: ObjectId,                    // ID duy nhất của bài đánh giá
+  user_id: ObjectId,                // ID người thực hiện đánh giá
+  assessment_type: String,          // Loại đánh giá: "skill_assessment", "placement_test"
+  category: String,                 // Danh mục: "programming", "design", "business", "marketing"
+  
+  // Danh sách câu hỏi và câu trả lời
   questions: [{
-    question_id: ObjectId,
-    question_text: String,
-    options: [String],
-    correct_answer: Number,
-    user_answer: Number,
-    is_correct: Boolean
+    question_id: ObjectId,          // ID câu hỏi
+    question_text: String,          // Nội dung câu hỏi
+    question_type: String,          // Loại câu hỏi: "multiple_choice", "true_false"
+    options: [String],              // Các lựa chọn (cho câu hỏi trắc nghiệm)
+    correct_answer: Number,         // Đáp án đúng (index của options)
+    user_answer: Number,            // Câu trả lời của người dùng
+    is_correct: Boolean,            // Người dùng trả lời đúng hay sai
+    difficulty: String,             // Độ khó: "easy", "medium", "hard"
+    time_spent_seconds: Number      // Thời gian làm câu hỏi này (giây)
   }],
+  
+  // Kết quả đánh giá
   result: {
-    score: Number, // 0-100
-    level: String, // "beginner", "intermediate", "advanced"
-    strengths: [String],
-    weaknesses: [String],
-    recommendations: [ObjectId] // course_ids
+    total_questions: Number,        // Tổng số câu hỏi
+    correct_answers: Number,        // Số câu trả lời đúng
+    score: Number,                  // Điểm số (0-100)
+    percentage: Number,             // Phần trăm đúng
+    level: String,                  // Trình độ: "beginner", "intermediate", "advanced"
+    strengths: [String],            // Điểm mạnh được xác định
+    weaknesses: [String],           // Điểm yếu cần cải thiện
+    recommendations: [ObjectId],    // ID các khóa học được gợi ý
+    time_taken_minutes: Number      // Tổng thời gian làm bài (phút)
   },
-  completed_at: Date,
-  created_at: Date
+  
+  // Phân tích chi tiết theo từng chủ đề
+  topic_analysis: [{
+    topic: String,                  // Chủ đề cụ thể (VD: "Variables", "Functions")
+    questions_count: Number,        // Số câu hỏi trong chủ đề này
+    correct_count: Number,          // Số câu trả lời đúng
+    mastery_level: String          // Mức độ thành thạo: "poor", "fair", "good", "excellent"
+  }],
+  
+  completed_at: Date,               // Thời điểm hoàn thành đánh giá
+  created_at: Date                  // Thời điểm bắt đầu đánh giá
 }
 ```
 
-#### 6.1.3 Courses Collection 
+#### 6.2.3 Courses Collection (Bảng khóa học)
 ```javascript
 {
-  _id: ObjectId,
-  title: String,
-  description: String,
-  instructor_id: ObjectId,
-  category: String,
-  tags: [String],
-  level: String, // "beginner", "intermediate", "advanced"
-  visibility: String, // "public", "private", "draft"
-  type: String, // "free", "paid", "personal"
-  pricing: {
-    price: Number,
-    currency: String,
-    payment_type: String // "one_time", "subscription"
-  },
+  _id: ObjectId,                    // ID duy nhất của khóa học
+  title: String,                    // Tên khóa học
+  description: String,              // Mô tả chi tiết khóa học
+  owner_id: ObjectId,               // ID người tạo khóa học (student hoặc instructor)
+  category: String,                 // Danh mục: "programming", "design", "business", "marketing"
+  tags: [String],                   // Các thẻ tag để tìm kiếm
+  level: String,                    // Cấp độ: "beginner", "intermediate", "advanced"
+  language: String,                 // Ngôn ngữ nội dung: "vi", "en"
+  
+  // Cài đặt hiển thị và truy cập
+  visibility: String,               // Hiển thị: "public", "private", "draft"
+  source: String,                   // Nguồn tạo: "manual", "ai_generated", "from_upload"
+  
+  // Nội dung khóa học
   content: {
-    chapters: [{
-      title: String,
-      content: String,
-      order: Number,
-      materials: [String], // file URLs
-      quizzes: [ObjectId]
+    chapters: [{                    // Danh sách các chương
+      _id: ObjectId,                // ID chương
+      title: String,                // Tiêu đề chương
+      description: String,          // Mô tả chương
+      content: String,              // Nội dung chương (HTML/Markdown)
+      order: Number,                // Thứ tự chương (1, 2, 3...)
+      duration_minutes: Number,     // Thời gian dự kiến học (phút)
+      
+      // Tài liệu và bài tập
+      materials: [{                 // Tài liệu đính kèm
+        name: String,               // Tên file
+        url: String,                // Đường dẫn file
+        type: String,               // Loại file: "pdf", "video", "image", "link"
+        size_mb: Number             // Kích thước file (MB)
+      }],
+      
+      quizzes: [ObjectId],          // ID các bài quiz trong chương
+      exercises: [{                 // Bài tập thực hành
+        title: String,              // Tiêu đề bài tập
+        instruction: String,        // Hướng dẫn làm bài
+        solution: String            // Lời giải (optional)
+      }]
+    }],
+    
+    // Thông tin tổng quan
+    total_chapters: Number,         // Tổng số chương
+    estimated_duration: Number,     // Thời gian hoàn thành dự kiến (giờ)
+    learning_path: [String]         // Lộ trình học tập được đề xuất
+  },
+  
+  // Metadata và yêu cầu
+  metadata: {
+    difficulty_score: Number,       // Điểm độ khó (1-10)
+    prerequisites: [String],        // Kiến thức cần có trước
+    learning_outcomes: [String],    // Kết quả đạt được sau khóa học
+    target_audience: [String],      // Đối tượng học viên phù hợp
+    industry: String,               // Lĩnh vực áp dụng
+    skills_gained: [String]         // Kỹ năng đạt được
+  },
+  
+  // Thống kê và đánh giá
+  stats: {
+    enrolled_count: Number,         // Số học viên đã đăng ký
+    completion_rate: Number,        // Tỷ lệ hoàn thành (%)
+    average_rating: Number,         // Điểm đánh giá trung bình (1-5)
+    total_ratings: Number,          // Tổng số đánh giá
+    total_views: Number,            // Lượt xem khóa học
+    last_activity: Date             // Hoạt động gần nhất
+  },
+  
+  // Thông tin AI và nguồn tạo
+  ai_metadata: {
+    is_ai_generated: Boolean,       // Được tạo bởi AI hay không
+    generation_prompt: String,      // Prompt đã sử dụng (nếu AI tạo)
+    ai_model_version: String,       // Phiên bản AI model đã dùng
+    human_edited: Boolean           // Đã được con người chỉnh sửa
+  },
+  
+  created_at: Date,                 // Ngày tạo khóa học
+  updated_at: Date,                 // Ngày cập nhật gần nhất
+  published_at: Date                // Ngày công bố (nếu đã công bố)
+}
+```
+
+#### 6.2.4 Enrollments Collection (Bảng đăng ký khóa học)
+```javascript
+{
+  _id: ObjectId,                    // ID duy nhất của đăng ký
+  student_id: ObjectId,             // ID học viên
+  course_id: ObjectId,              // ID khóa học
+  instructor_id: ObjectId,          // ID giảng viên (nếu là lớp học)
+  class_id: ObjectId,               // ID lớp học (nếu tham gia qua lớp)
+  
+  // Trạng thái và loại đăng ký
+  status: String,                   // Trạng thái: "active", "completed", "dropped", "suspended"
+  enrollment_type: String,          // Loại đăng ký: "self_enrolled", "invited", "assigned"
+  source: String,                   // Nguồn: "direct", "class", "recommendation"
+  
+  // Tiến độ học tập chi tiết
+  progress: {
+    current_chapter: Number,        // Chương hiện tại đang học
+    completed_chapters: [Number],   // Danh sách chương đã hoàn thành
+    overall_progress: Number,       // Tiến độ tổng thể (0-100%)
+    time_spent_minutes: Number,     // Tổng thời gian đã học (phút)
+    last_accessed: Date,            // Lần truy cập gần nhất
+    
+    // Thống kê chi tiết theo chương
+    chapter_progress: [{
+      chapter_id: ObjectId,         // ID chương
+      chapter_number: Number,       // Số thứ tự chương
+      status: String,               // Trạng thái: "not_started", "in_progress", "completed"
+      time_spent: Number,           // Thời gian học chương này (phút)
+      first_access: Date,           // Lần đầu truy cập chương
+      completed_at: Date            // Thời điểm hoàn thành chương
+    }],
+    
+    // Hoạt động học tập
+    learning_sessions: [{
+      session_date: Date,           // Ngày học
+      duration_minutes: Number,     // Thời gian học trong session
+      chapters_studied: [Number],   // Các chương đã học
+      activities: [String]          // Các hoạt động: "reading", "quiz", "exercise"
     }]
   },
-  metadata: {
-    duration_hours: Number,
-    difficulty: Number,
-    prerequisites: [String],
-    learning_outcomes: [String]
-  },
-  stats: {
-    enrolled_count: Number,
-    completion_rate: Number,
-    average_rating: Number,
-    total_revenue: Number
-  },
-  is_ai_generated: Boolean,
-  source_type: String, // "manual", "ai_prompt", "file_upload"
-  created_at: Date,
-  updated_at: Date
-}
-```
-
-#### 6.1.4 Enrollments Collection 
-```javascript
-{
-  _id: ObjectId,
-  student_id: ObjectId,
-  course_id: ObjectId,
-  instructor_id: ObjectId,
-  status: String, // "active", "completed", "dropped", "suspended"
-  enrollment_type: String, // "free", "paid", "invited"
-  payment: {
-    transaction_id: String,
-    amount: Number,
-    currency: String,
-    payment_method: String,
-    payment_date: Date,
-    status: String // "pending", "completed", "failed", "refunded"
-  },
-  progress: {
-    current_chapter: Number,
-    completed_chapters: [Number],
-    overall_progress: Number, // 0-100
-    time_spent_minutes: Number,
-    last_accessed: Date
-  },
-  grades: [{
-    quiz_id: ObjectId,
-    score: Number,
-    max_score: Number,
-    attempt_date: Date
+  
+  // Kết quả đánh giá và điểm số
+  assessments: [{
+    quiz_id: ObjectId,              // ID bài quiz
+    quiz_title: String,             // Tên bài quiz
+    chapter_number: Number,         // Chương chứa quiz
+    attempts: [{                    // Các lần thử làm bài
+      attempt_number: Number,       // Lần thử thứ mấy
+      score: Number,                // Điểm đạt được
+      max_score: Number,            // Điểm tối đa
+      percentage: Number,           // Phần trăm đúng
+      time_taken_minutes: Number,   // Thời gian làm bài
+      attempted_at: Date            // Thời gian làm bài
+    }],
+    best_score: Number,             // Điểm cao nhất
+    latest_attempt: Date            // Lần thử gần nhất
   }],
-  enrolled_at: Date,
-  completed_at: Date
+  
+  // Tương tác và phản hồi
+  interactions: {
+    bookmarked_chapters: [Number],  // Chương đã đánh dấu
+    notes_count: Number,            // Số ghi chú đã tạo
+    questions_asked: Number,        // Số câu hỏi đã hỏi AI
+    ai_chat_sessions: Number,       // Số lần chat với AI
+    rating: {                       // Đánh giá khóa học
+      score: Number,                // Điểm đánh giá (1-5)
+      review: String,               // Nhận xét
+      rated_at: Date                // Thời gian đánh giá
+    }
+  },
+  
+  enrolled_at: Date,                // Thời điểm đăng ký
+  started_at: Date,                 // Thời điểm bắt đầu học
+  completed_at: Date,               // Thời điểm hoàn thành (nếu đã xong)
+  last_activity: Date               // Hoạt động gần nhất
 }
 ```
 
-#### 6.1.5 Payments Collection 
+#### 6.2.5 Quiz Collection (Bảng bài kiểm tra)
 ```javascript
 {
-  _id: ObjectId,
-  user_id: ObjectId,
-  course_id: ObjectId,
-  instructor_id: ObjectId,
-  transaction_id: String,
-  payment_provider: String, // "stripe", "paypal", "vnpay"
-  amount: Number,
-  currency: String,
-  status: String, // "pending", "completed", "failed", "refunded"
-  payment_method: String,
-  provider_response: Object,
-  created_at: Date,
-  updated_at: Date
-}
-```
-
-#### 6.1.6 Quiz Collection 
-```javascript
-{
-  _id: ObjectId,
-  title: String,
-  course_id: ObjectId,
-  chapter_id: ObjectId,
-  creator_id: ObjectId,
-  type: String, // "chapter_quiz", "assessment", "practice"
+  _id: ObjectId,                    // ID duy nhất của bài quiz
+  title: String,                    // Tiêu đề bài quiz
+  description: String,              // Mô tả về bài quiz
+  course_id: ObjectId,              // ID khóa học chứa quiz
+  chapter_id: ObjectId,             // ID chương chứa quiz (nếu có)
+  creator_id: ObjectId,             // ID người tạo quiz
+  
+  // Phân loại và cấu hình
+  type: String,                     // Loại quiz: "chapter_quiz", "assessment", "practice", "final_exam"
+  category: String,                 // Danh mục kiến thức được kiểm tra
+  difficulty: String,               // Độ khó: "easy", "medium", "hard"
+  
+  // Câu hỏi và nội dung
   questions: [{
-    question_text: String,
-    type: String, // "multiple_choice", "true_false", "essay"
-    options: [String],
-    correct_answer: Number,
-    explanation: String,
-    points: Number
+    question_id: ObjectId,          // ID câu hỏi
+    question_text: String,          // Nội dung câu hỏi
+    question_type: String,          // Loại: "multiple_choice", "true_false", "essay", "fill_blank"
+    
+    // Đối với câu hỏi trắc nghiệm
+    options: [String],              // Các lựa chọn
+    correct_answer: Number,         // Index của đáp án đúng
+    
+    // Đối với câu hỏi tự luận
+    sample_answer: String,          // Câu trả lời mẫu
+    grading_criteria: [String],     // Tiêu chí chấm điểm
+    
+    // Thông tin bổ sung
+    explanation: String,            // Giải thích đáp án
+    points: Number,                 // Điểm số của câu hỏi
+    difficulty: String,             // Độ khó riêng của câu hỏi
+    tags: [String],                 // Thẻ phân loại
+    estimated_time: Number,         // Thời gian ước tính (giây)
+    
+    // Media đính kèm
+    media: [{
+      type: String,                 // Loại: "image", "audio", "video"
+      url: String,                  // Đường dẫn file
+      alt_text: String              // Mô tả thay thế
+    }]
   }],
+  
+  // Cài đặt bài kiểm tra
   settings: {
-    time_limit_minutes: Number,
-    max_attempts: Number,
-    shuffle_questions: Boolean,
-    show_correct_answers: Boolean
+    time_limit_minutes: Number,     // Giới hạn thời gian làm bài (phút)
+    max_attempts: Number,           // Số lần làm bài tối đa
+    shuffle_questions: Boolean,     // Có trộn thứ tự câu hỏi không
+    shuffle_options: Boolean,       // Có trộn thứ tự đáp án không
+    show_correct_answers: Boolean,  // Hiển thị đáp án sau khi làm
+    show_explanation: Boolean,      // Hiển thị giải thích
+    immediate_feedback: Boolean,    // Phản hồi ngay sau mỗi câu
+    passing_score: Number,          // Điểm tối thiểu để đạt (%)
+    retake_delay_hours: Number,     // Thời gian chờ giữa các lần làm
+    randomize_from_pool: Boolean,   // Lấy ngẫu nhiên từ pool câu hỏi
+    questions_per_attempt: Number   // Số câu hỏi mỗi lần làm
   },
-  is_ai_generated: Boolean,
-  created_at: Date,
-  updated_at: Date
+  
+  // Thống kê và phân tích
+  statistics: {
+    total_attempts: Number,         // Tổng số lần làm bài
+    unique_participants: Number,    // Số người đã làm bài
+    average_score: Number,          // Điểm trung bình
+    highest_score: Number,          // Điểm cao nhất
+    lowest_score: Number,           // Điểm thấp nhất
+    average_completion_time: Number,// Thời gian làm bài trung bình
+    pass_rate: Number,              // Tỷ lệ đạt (%)
+    
+    // Phân tích từng câu hỏi
+    question_analytics: [{
+      question_id: ObjectId,        // ID câu hỏi
+      correct_rate: Number,         // Tỷ lệ trả lời đúng (%)
+      average_time: Number,         // Thời gian trung bình (giây)
+      most_chosen_option: Number    // Đáp án được chọn nhiều nhất
+    }]
+  },
+  
+  // Thông tin AI và tự động hóa
+  ai_generated: {
+    is_ai_created: Boolean,         // Được AI tạo hay không
+    source_content: String,         // Nội dung nguồn để tạo quiz
+    generation_prompt: String,      // Prompt đã sử dụng
+    ai_model: String,               // Model AI đã dùng
+    human_reviewed: Boolean,        // Đã được review bởi con người
+    quality_score: Number           // Điểm chất lượng (1-10)
+  },
+  
+  // Trạng thái và thời gian
+  status: String,                   // Trạng thái: "draft", "published", "archived"
+  is_active: Boolean,               // Có đang hoạt động không
+  created_at: Date,                 // Ngày tạo
+  updated_at: Date,                 // Ngày cập nhật
+  published_at: Date                // Ngày công bố
 }
 ```
 
-### 6.2 Indexes cần thiết
+### 6.3 Các Collections bổ sung
 
+#### 6.3.1 Classes Collection (Bảng lớp học - dành cho Instructor)
 ```javascript
-// Users
-db.users.createIndex({ "email": 1 }, { unique: true })
+{
+  _id: ObjectId,                    // ID duy nhất của lớp học
+  name: String,                     // Tên lớp học
+  description: String,              // Mô tả lớp học
+  instructor_id: ObjectId,          // ID giảng viên tạo lớp
+  course_id: ObjectId,              // ID khóa học gốc được sử dụng
+  
+  // Thông tin lớp học
+  class_code: String,               // Mã lớp để học viên tham gia
+  max_students: Number,             // Số học viên tối đa
+  current_students: Number,         // Số học viên hiện tại
+  student_ids: [ObjectId],          // Danh sách ID học viên
+  
+  // Thời gian và lịch trình
+  start_date: Date,                 // Ngày bắt đầu lớp
+  end_date: Date,                   // Ngày kết thúc lớp
+  schedule: [{                      // Lịch học
+    day_of_week: Number,            // Thứ trong tuần (0=CN, 1=T2...)
+    start_time: String,             // Giờ bắt đầu
+    end_time: String,               // Giờ kết thúc
+    timezone: String                // Múi giờ
+  }],
+  
+  // Cài đặt và quy định
+  settings: {
+    auto_enroll: Boolean,           // Tự động duyệt đăng ký
+    allow_late_join: Boolean,       // Cho phép tham gia muộn
+    discussion_enabled: Boolean,    // Bật thảo luận
+    ai_tutor_enabled: Boolean,      // Bật AI tutor cho lớp
+    assignment_due_strict: Boolean  // Nghiêm ngặt về deadline
+  },
+  
+  status: String,                   // Trạng thái: "upcoming", "active", "completed", "cancelled"
+  created_at: Date,                 // Ngày tạo lớp
+  updated_at: Date                  // Ngày cập nhật
+}
+```
+
+#### 6.3.2 Chat Messages Collection (Bảng tin nhắn AI)
+```javascript
+{
+  _id: ObjectId,                    // ID tin nhắn
+  session_id: String,               // ID phiên chat
+  user_id: ObjectId,                // ID người dùng
+  course_id: ObjectId,              // ID khóa học (nếu chat trong context khóa học)
+  
+  // Nội dung tin nhắn
+  message_type: String,             // Loại: "user", "ai", "system"
+  content: String,                  // Nội dung tin nhắn
+  
+  // Context và metadata
+  context: {
+    chapter_id: ObjectId,           // Chương đang học
+    current_topic: String,          // Chủ đề hiện tại
+    user_progress: Number,          // Tiến độ học của user
+    difficulty_level: String        // Mức độ hiểu biết của user
+  },
+  
+  // AI response metadata
+  ai_metadata: {
+    model_used: String,             // Model AI đã sử dụng
+    confidence_score: Number,       // Độ tin cậy của câu trả lời
+    response_time_ms: Number,       // Thời gian phản hồi
+    token_count: Number,            // Số token sử dụng
+    sources_used: [ObjectId]        // Nguồn tài liệu được tham khảo
+  },
+  
+  created_at: Date                  // Thời gian tạo tin nhắn
+}
+```
+
+#### 6.3.3 Progress Tracking Collection (Bảng theo dõi tiến độ)
+```javascript
+{
+  _id: ObjectId,                    // ID bản ghi tiến độ
+  user_id: ObjectId,                // ID học viên
+  course_id: ObjectId,              // ID khóa học
+  chapter_id: ObjectId,             // ID chương (nếu track theo chương)
+  
+  // Thông tin tiến độ
+  progress_type: String,            // Loại: "course", "chapter", "quiz", "exercise"
+  status: String,                   // Trạng thái: "not_started", "in_progress", "completed"
+  progress_percentage: Number,      // Phần trăm hoàn thành (0-100)
+  time_spent_minutes: Number,       // Thời gian đã dành (phút)
+  
+  // Dữ liệu chi tiết
+  details: {
+    actions: [{                     // Lịch sử hành động
+      action: String,               // "start", "pause", "resume", "complete"
+      timestamp: Date,              // Thời gian thực hiện
+      data: Object                  // Dữ liệu bổ sung
+    }],
+    milestones: [{                  // Các mốc quan trọng
+      milestone: String,            // Tên mốc
+      achieved_at: Date,            // Thời gian đạt được
+      value: Number                 // Giá trị (nếu có)
+    }]
+  },
+  
+  created_at: Date,                 // Ngày bắt đầu track
+  updated_at: Date                  // Ngày cập nhật gần nhất
+}
+```
+
+#### 6.3.4 Uploads Collection (Bảng file tải lên)
+```javascript
+{
+  _id: ObjectId,                    // ID file upload
+  uploader_id: ObjectId,            // ID người upload
+  course_id: ObjectId,              // ID khóa học liên quan (nếu có)
+  
+  // Thông tin file
+  filename: String,                 // Tên file gốc
+  stored_filename: String,          // Tên file được lưu trữ
+  file_path: String,                // Đường dẫn file
+  file_size: Number,                // Kích thước file (bytes)
+  file_type: String,                // Loại file: "pdf", "docx", "txt", "image", "video"
+  mime_type: String,                // MIME type
+  
+  // Xử lý và trạng thái
+  status: String,                   // Trạng thái: "uploading", "processing", "completed", "failed"
+  processing: {
+    extracted_text: String,         // Text được extract (cho PDF, DOCX)
+    text_length: Number,            // Độ dài text
+    language_detected: String,      // Ngôn ngữ được phát hiện
+    has_embeddings: Boolean,        // Đã tạo embeddings chưa
+    chunk_count: Number,            // Số chunk được tạo
+    processing_time_ms: Number      // Thời gian xử lý
+  },
+  
+  // Metadata bổ sung
+  metadata: {
+    title: String,                  // Tiêu đề (nếu có)
+    description: String,            // Mô tả
+    tags: [String],                 // Tags để tìm kiếm
+    is_public: Boolean,             // Có công khai không
+    download_count: Number          // Số lần download
+  },
+  
+  uploaded_at: Date,                // Thời gian upload
+  processed_at: Date                // Thời gian xử lý xong
+}
+```
+
+### 6.4 Database Indexes và Optimization (Chỉ mục và tối ưu hóa)
+
+#### 6.4.1 Primary Indexes (Chỉ mục chính)
+```javascript
+// Users Collection - Chỉ mục cho bảng người dùng
+db.users.createIndex({ "email": 1 }, { unique: true, name: "unique_email" })
+db.users.createIndex({ "role": 1, "status": 1 }, { name: "role_status" })
+db.users.createIndex({ "created_at": -1 }, { name: "newest_users" })
+db.users.createIndex({ "last_login": -1 }, { name: "recent_activity" })
+
+// Courses Collection - Chỉ mục cho bảng khóa học  
+db.courses.createIndex({ "owner_id": 1, "visibility": 1 }, { name: "owner_visibility" })
+db.courses.createIndex({ "category": 1, "level": 1 }, { name: "category_level" })
+db.courses.createIndex({ "visibility": 1, "created_at": -1 }, { name: "public_newest" })
+db.courses.createIndex({ "title": "text", "description": "text" }, { name: "course_search" })
+db.courses.createIndex({ "tags": 1 }, { name: "course_tags" })
+
+// Classes Collection - Chỉ mục cho bảng lớp học
+db.classes.createIndex({ "instructor_id": 1, "status": 1 }, { name: "instructor_classes" })
+db.classes.createIndex({ "student_ids": 1 }, { name: "student_classes" })
+db.classes.createIndex({ "class_code": 1 }, { unique: true, name: "unique_class_code" })
+db.classes.createIndex({ "start_date": 1, "end_date": 1 }, { name: "class_schedule" })
+
+// Enrollments Collection - Chỉ mục cho bảng đăng ký
+db.enrollments.createIndex({ "student_id": 1, "status": 1 }, { name: "student_enrollments" })
+db.enrollments.createIndex({ "course_id": 1, "status": 1 }, { name: "course_enrollments" })
+db.enrollments.createIndex({ "instructor_id": 1 }, { name: "instructor_students" })
+db.enrollments.createIndex({ "enrolled_at": -1 }, { name: "recent_enrollments" })
+
+// Quiz Collection - Chỉ mục cho bảng bài kiểm tra
+db.quizzes.createIndex({ "course_id": 1, "chapter_id": 1 }, { name: "course_chapter_quiz" })
+db.quizzes.createIndex({ "creator_id": 1, "type": 1 }, { name: "creator_quiz_type" })
+db.quizzes.createIndex({ "status": 1, "is_active": 1 }, { name: "active_quizzes" })
 db.users.createIndex({ "role": 1, "status": 1 })
 
 // Assessments
@@ -946,28 +2007,100 @@ db.enrollments.createIndex({ "student_id": 1, "status": 1 })
 db.enrollments.createIndex({ "course_id": 1, "status": 1 })
 db.enrollments.createIndex({ "instructor_id": 1, "status": 1 })
 
-// Payments
-db.payments.createIndex({ "user_id": 1, "status": 1 })
-db.payments.createIndex({ "transaction_id": 1 }, { unique: true })
-db.payments.createIndex({ "created_at": -1 })
+// Assessments, Chat Messages, Progress Collections - Indexes bổ sung
+db.assessments.createIndex({ "user_id": 1, "assessment_type": 1 })
+db.chat_messages.createIndex({ "session_id": 1, "created_at": -1 })
+db.progress.createIndex({ "user_id": 1, "course_id": 1 })
+db.uploads.createIndex({ "uploader_id": 1, "status": 1 })
 ```
 
 ---
 
-## 7. API ENDPOINTS (tham khảo và lọc bớt)
+## 7. API ENDPOINTS - CHI TIẾT CÁC ENDPOINT
 
-### 7.1 Authentication & Users 
+### 7.1 Authentication & User Management (Xác thực và quản lý người dùng)
+
+#### 7.1.1 Authentication Endpoints (Các endpoint xác thực)
 ```
-POST   /api/v1/auth/register
-POST   /api/v1/auth/login
-POST   /api/v1/auth/logout
-POST   /api/v1/auth/refresh
-GET    /api/v1/auth/me
-PATCH  /api/v1/auth/me
-PATCH  /api/v1/auth/me/password
-POST   /api/v1/auth/forgot-password
-POST   /api/v1/auth/reset-password
-POST   /api/v1/auth/verify-email
+POST   /api/v1/auth/register           # Đăng ký tài khoản mới
+POST   /api/v1/auth/login             # Đăng nhập
+POST   /api/v1/auth/logout            # Đăng xuất
+POST   /api/v1/auth/refresh           # Làm mới token
+GET    /api/v1/auth/me                # Lấy thông tin người dùng hiện tại
+PATCH  /api/v1/auth/me                # Cập nhật thông tin cá nhân
+PATCH  /api/v1/auth/me/password       # Đổi mật khẩu
+POST   /api/v1/auth/forgot-password   # Quên mật khẩu
+POST   /api/v1/auth/reset-password    # Reset mật khẩu
+POST   /api/v1/auth/verify-email      # Xác thực email
+```
+
+**Chi tiết ví dụ:**
+
+**POST /api/v1/auth/register - Đăng ký tài khoản**
+```json
+// Request Body
+{
+  "name": "Nguyễn Văn A",
+  "email": "nguyenvana@example.com", 
+  "password": "password123",
+  "role": "student",                    // "student" | "instructor"  
+  "profile": {
+    "interests": ["programming", "design"],
+    "learning_goals": ["Học Python", "Xây dựng website"]
+  }
+}
+
+// Response (201 Created)
+{
+  "success": true,
+  "message": "Đăng ký thành công",
+  "data": {
+    "user": {
+      "id": "674abc123def456789",
+      "name": "Nguyễn Văn A",
+      "email": "nguyenvana@example.com",
+      "role": "student",
+      "status": "pending",              // Chờ xác thực email
+      "created_at": "2025-10-12T10:30:00Z"
+    },
+    "tokens": {
+      "access_token": "eyJhbGciOiJIUzI1NiIs...",
+      "refresh_token": "eyJhbGciOiJIUzI1NiIs...",
+      "expires_in": 3600
+    }
+  }
+}
+```
+
+**POST /api/v1/auth/login - Đăng nhập**
+```json
+// Request Body
+{
+  "email": "nguyenvana@example.com",
+  "password": "password123"
+}
+
+// Response (200 OK)
+{
+  "success": true,
+  "message": "Đăng nhập thành công", 
+  "data": {
+    "user": {
+      "id": "674abc123def456789",
+      "name": "Nguyễn Văn A",
+      "email": "nguyenvana@example.com",
+      "role": "student",
+      "status": "active",
+      "avatar": "https://cdn.example.com/avatars/user123.jpg",
+      "last_login": "2025-10-12T10:30:00Z"
+    },
+    "tokens": {
+      "access_token": "eyJhbGciOiJIUzI1NiIs...",
+      "refresh_token": "eyJhbGciOiJIUzI1NiIs...",
+      "expires_in": 3600
+    }
+  }
+}
 ```
 
 ### 7.2 Assessment System 
@@ -982,48 +2115,109 @@ GET    /api/v1/assessments/history             # Lịch sử các bài test đã
 POST   /api/v1/assessments/{assessment_id}/recommendations # Lấy gợi ý khóa học dựa trên kết quả test
 ```
 
-### 7.3 Courses 
+### 7.2 Course Management (Quản lý khóa học)
 
+#### 7.2.1 Basic CRUD Operations (Các thao tác cơ bản)
 ```
-# Quản lý cơ bản khóa học (CRUD)
 GET    /api/v1/courses                         # Lấy danh sách khóa học của người dùng hiện tại
 POST   /api/v1/courses                         # Tạo khóa học mới (thủ công)
 GET    /api/v1/courses/{course_id}             # Xem chi tiết khóa học, chapters, materials
 PUT    /api/v1/courses/{course_id}             # Cập nhật thông tin khóa học (chỉ chủ sở hữu)
 DELETE /api/v1/courses/{course_id}             # Xóa khóa học (chỉ chủ sở hữu)
+```
 
-# Khám phá và tìm kiếm khóa học
-GET    /api/v1/courses/public                  # Danh sách khóa học công khai (cho học viên duyệt)
-GET    /api/v1/courses/recommended             # Gợi ý khóa học dựa trên AI và lịch sử học tập
-GET    /api/v1/courses/search                  # Tìm kiếm khóa học theo từ khóa, filter
-GET    /api/v1/courses/categories              # Lấy danh sách thể loại khóa học
+**Chi tiết ví dụ GET /api/v1/courses/{course_id}:**
+```json
+// Response (200 OK)
+{
+  "success": true,
+  "data": {
+    "course": {
+      "id": "674abc123def456789",
+      "title": "Lập trình Python từ A-Z",
+      "description": "Khóa học Python toàn diện cho người mới bắt đầu",
+      "owner_id": "674def456789abc123",
+      "owner": {
+        "id": "674def456789abc123",
+        "name": "Nguyễn Văn Giảng",
+        "avatar": "https://cdn.example.com/avatars/instructor1.jpg"
+      },
+      "category": "programming",
+      "level": "beginner",
+      "language": "vi",
+      "visibility": "public",
+      "source": "manual",
+      "stats": {
+        "enrolled_count": 245,
+        "completion_rate": 78.5,
+        "average_rating": 4.3
+      },
+      "content": {
+        "total_chapters": 8,
+        "estimated_duration": 12,
+        "chapters": [
+          {
+            "_id": "674chapter001",
+            "title": "Giới thiệu Python",
+            "order": 1,
+            "duration_minutes": 45,
+            "materials": [
+              {
+                "name": "Python Basics.pdf", 
+                "url": "https://storage.example.com/materials/python-basics.pdf"
+              }
+            ]
+          }
+        ]
+      },
+      "created_at": "2025-09-15T08:00:00Z",
+      "updated_at": "2025-10-01T14:30:00Z"
+    }
+  }
+}
+```
 
-# Tạo khóa học nâng cao
+#### 7.2.2 Discovery & Search (Khám phá và tìm kiếm)
+```
+GET    /api/v1/courses/public                  # Danh sách khóa học công khai
+GET    /api/v1/courses/recommended             # Gợi ý khóa học dựa trên AI
+GET    /api/v1/courses/search                  # Tìm kiếm khóa học
+GET    /api/v1/courses/categories              # Lấy danh sách thể loại
+```
+
+#### 7.2.3 AI-Powered Course Creation (Tạo khóa học với AI)
+```
 POST   /api/v1/courses/from-prompt             # Tạo khóa học từ mô tả bằng AI
-POST   /api/v1/courses/from-upload             # Tạo khóa học từ file tài liệu đã upload
-POST   /api/v1/courses/{course_id}/duplicate   # Sao chép khóa học thành khóa học mới
-PATCH  /api/v1/courses/{course_id}/visibility  # Thay đổi trạng thái: public/private/draft
-POST   /api/v1/courses/{course_id}/pricing     # Thiết lập giá và loại thanh toán
-
-# Quản lý chương học (Chapters)
-GET    /api/v1/courses/{course_id}/chapters    # Lấy danh sách tất cả chương của khóa học
-POST   /api/v1/courses/{course_id}/chapters    # Thêm chương mới vào khóa học
-PUT    /api/v1/courses/{course_id}/chapters/{chapter_id} # Sửa nội dung, tiêu đề chương
-DELETE /api/v1/courses/{course_id}/chapters/{chapter_id} # Xóa chương khỏi khóa học
+POST   /api/v1/courses/from-upload             # Tạo khóa học từ file tài liệu
+POST   /api/v1/courses/{course_id}/duplicate   # Sao chép khóa học
+PATCH  /api/v1/courses/{course_id}/visibility  # Thay đổi trạng thái hiển thị
 ```
 
-### 7.4 Enrollments & Payments 
+#### 7.2.4 Chapter Management (Quản lý chương học)
+```
+GET    /api/v1/courses/{course_id}/chapters    # Lấy danh sách chương
+POST   /api/v1/courses/{course_id}/chapters    # Thêm chương mới
+PUT    /api/v1/courses/{course_id}/chapters/{chapter_id} # Sửa chương
+DELETE /api/v1/courses/{course_id}/chapters/{chapter_id} # Xóa chương
+```
+
+### 7.3 Enrollment & Learning Progress (Đăng ký và tiến độ học tập)
 
 ```
-# Quản lý đăng ký khóa học
-POST   /api/v1/enrollments/{course_id}         # Đăng ký tham gia khóa học (miễn phí hoặc trả phí)
+# Quản lý đăng ký khóa học (miễn phí)
+POST   /api/v1/enrollments/{course_id}         # Đăng ký tham gia khóa học miễn phí
 DELETE /api/v1/enrollments/{course_id}         # Hủy đăng ký, rời khỏi khóa học
 GET    /api/v1/enrollments                     # Danh sách tất cả khóa học đã đăng ký
-GET    /api/v1/enrollments/{course_id}/progress # Xem tiến độ học tập chi tiết từng chương
+GET    /api/v1/enrollments/{course_id}/progress # Xem tiến độ học tập chi tiết
 POST   /api/v1/enrollments/{course_id}/progress # Cập nhật tiến độ khi hoàn thành bài học
 
-# Xử lý thanh toán (Payment Processing)
-# Ghi chú: Có thể đơn giản hóa bằng Stripe Checkout cho giai đoạn đầu
+# Quản lý lớp học (Class Management)
+GET    /api/v1/classes                         # Danh sách lớp học (instructor)
+POST   /api/v1/classes                         # Tạo lớp học mới từ khóa học có sẵn
+GET    /api/v1/classes/{class_id}              # Chi tiết lớp học và danh sách học viên
+POST   /api/v1/classes/{class_id}/invite       # Mời học viên vào lớp (email/link)
+DELETE /api/v1/classes/{class_id}/students/{student_id} # Xóa học viên khỏi lớp
+GET    /api/v1/classes/{class_id}/analytics    # Thống kê tiến độ lớp học
 
 POST   /api/v1/payments/create-intent          # Tạo ý định thanh toán cho khóa học trả phí
 POST   /api/v1/payments/confirm                # Xác nhận thanh toán thành công
@@ -1167,79 +2361,327 @@ GET    /api/v1/recommendations/instructors     # Gợi ý giảng viên phù h�
 
 ---
 
-## 8. CÔNG NGHỆ SỬ DỤNG
+## 8. CÔNG NGHỆ SỬ DỤNG - CHI TIẾT VÀ LÝ DO CHỌN
 
-### 8.1 Backend Technologies
+### 8.1 Bảng tổng quan công nghệ và phiên bản
 
-**Core Framework:**
-- FastAPI 0.116.2 (Python web framework)
-- Python 3.11+ (Programming language)
-- Pydantic 2.11.1 (Data validation)
-- Uvicorn (ASGI server)
+| Lớp (Layer) | Công nghệ | Phiên bản | Lý do chọn |
+|-------------|-----------|-----------|-------------|
+| **Backend Core** | FastAPI | 0.104.1 | Framework Python hiện đại, tự động tạo OpenAPI docs, hiệu suất cao, async native |
+| | Python | 3.11+ | Phiên bản ổn định mới nhất, hỗ trợ async/await tốt, ecosystem AI phong phú |
+| | Pydantic | 2.5.0 | Validation dữ liệu mạnh mẽ, tích hợp tốt FastAPI, type safety |
+| | Uvicorn | 0.24.0 | ASGI server hiệu suất cao, hỗ trợ WebSocket, phù hợp production |
+| **Database** | MongoDB | 7.0+ | NoSQL linh hoạt cho dữ liệu đa dạng, Atlas managed service, vector search |
+| | Beanie | 1.24.0 | ODM hiện đại cho MongoDB, async native, type hints tốt |
+| | Redis | 7.2+ | Cache nhanh, session storage, queue tasks |
+| **AI Services** | Google GenAI | 0.3.2 | API ổn định, giá cả hợp lý, hỗ trợ tiếng Việt tốt |
+| | Sentence Transformers | 2.2.2 | Tạo embeddings chất lượng cao cho semantic search |
+| **Storage** | CloudFlare R2 | - | Chi phí thấp, tốc độ cao, tương thích S3 API |
+| **Frontend** | React | 18.2.0 | UI library phổ biến, ecosystem lớn, component-based |
+| | TypeScript | 5.3.0 | Type safety, IntelliSense tốt, maintainability cao |
+| | Vite | 5.0.0 | Build tool nhanh, HMR tốt, plugin ecosystem phong phú |
+| | Zustand | 4.4.7 | State management đơn giản, ít boilerplate |
+| | Tailwind CSS | 3.3.6 | Utility-first, design system nhất quán, responsive |
 
-**Database & Storage:**
-- MongoDB Atlas (Primary database)
-- Beanie 2.0.0 (ODM for MongoDB)
-- Redis (Session storage, cache)
-- AWS S3 / CloudFlare R2 (File storage)
+### 8.2 Backend Technologies - Chi tiết kỹ thuật
 
-**AI & Machine Learning:**
-- Google GenAI 1.38.0 (Gemini API)
-- OpenAI API (Alternative AI provider)
-- LangChain (AI workflow orchestration)
-- Sentence Transformers (Text embeddings)
+#### 8.2.1 Core Framework (Khung chính)
+```python
+# Cấu trúc project backend
+BEDB/
+├── app/
+│   ├── main.py              # FastAPI application entry point
+│   ├── config.py            # Environment variables và settings
+│   ├── database.py          # MongoDB connection setup
+│   ├── models/              # Beanie ODM models
+│   │   ├── user.py
+│   │   ├── course.py
+│   │   └── ...
+│   ├── routers/             # API route handlers
+│   │   ├── auth.py
+│   │   ├── courses.py
+│   │   └── ...
+│   ├── schemas/             # Pydantic request/response models
+│   ├── services/            # Business logic
+│   │   ├── genai_service.py
+│   │   ├── vector_service.py
+│   │   └── ...
+│   └── utils/               # Helper functions
+├── requirements.txt         # Python dependencies
+└── .env.example            # Environment variables template
+```
 
-**Authentication & Security:**
-- JWT (JSON Web Tokens)
-- Passlib (Password hashing)
-- OAuth2 (Social login)
-- CORS middleware
+**FastAPI 0.104.1** - Framework chính
+- **Ưu điểm**: Tự động generate OpenAPI docs, type validation, async support
+- **Cấu hình**: Auto-reload trong development, production-ready
+- **Performance**: ~65k requests/second (benchmark)
 
-**Payment Processing:**
-- Stripe API (Primary payment processor)
-- PayPal API (Alternative payment)
-- VNPay (Local Vietnam payment)
+**Python 3.11+** - Ngôn ngữ lập trình
+- **Lý do chọn**: Ecosystem AI/ML mạnh mẽ, syntax đơn giản
+- **Features sử dụng**: Type hints, async/await, dataclasses
+- **Packages chính**: FastAPI, Beanie, Google GenAI, Pydantic
 
-**Other Services:**
-- SendGrid (Email service)
-- Cloudinary (Image processing)
-- Docker (Containerization)
-- Nginx (Reverse proxy)
+#### 8.2.2 Database Layer (Lớp cơ sở dữ liệu)
 
-### 8.2 Frontend Technologies
+**MongoDB Atlas 7.0+** - Primary Database
+- **Lý do chọn**: 
+  - Schema linh hoạt phù hợp với dữ liệu đa dạng (courses, assessments, chat)
+  - Vector Search tích hợp cho AI features
+  - Atlas managed service, auto-scaling
+  - Aggregation pipeline mạnh mẽ cho analytics
+- **Configuration**:
+  ```python
+  # Connection settings
+  MONGODB_URL = "mongodb+srv://cluster.mongodb.net"
+  MAX_CONNECTIONS = 50
+  MIN_CONNECTIONS = 5
+  ```
 
-**Core Framework:**
-- React 18.2.0 (UI framework)
-- TypeScript 5.5.3 (Type safety)
-- Vite 7.1.6 (Build tool)
-- Node.js 18+ (Runtime)
+**Beanie 1.24.0** - ODM (Object Document Mapper)
+- **Lý do chọn**: 
+  - Async native, tích hợp type hints
+  - Validation tự động với Pydantic
+  - Relationship handling tốt
+- **Example Model**:
+  ```python
+  class Course(Document):
+      title: str
+      description: str
+      owner_id: PydanticObjectId
+      chapters: List[Chapter]
+      
+      class Settings:
+          name = "courses"
+  ```
 
-**State Management:**
-- Zustand (Global state)
-- TanStack Query (Server state)
-- React Hook Form (Form state)
+**Redis 7.2+** - Caching & Session
+- **Use cases**:
+  - Session storage (JWT blacklist)
+  - Cache API responses thường xuyên
+  - Rate limiting counters
+  - Temporary data (OTP, reset tokens)
 
-**UI & Styling:**
-- Tailwind CSS 4.1.13 (Utility-first CSS)
-- Headless UI (Accessible components)
-- Framer Motion (Animations)
-- React Icons (Icon library)
+#### 8.2.3 AI & Machine Learning Stack
 
-**Data Visualization:**
-- Chart.js (Charts and graphs)
-- D3.js (Advanced visualizations)
-- Recharts (React charts)
+**Google GenAI (Gemini) 0.3.2** - Primary AI Service  
+- **Lý do chọn**:
+  - Giá cả hợp lý (1M tokens = $0.5)
+  - Hỗ trợ tiếng Việt tốt
+  - Context window lớn (1M tokens)
+  - Multimodal support (text + images)
+- **Use cases**:
+  - Course content generation
+  - Quiz question creation  
+  - Chat responses
+  - Content summarization
 
-**Communication:**
-- Axios (HTTP client)
-- Socket.io (Real-time communication)
-- React Toastify (Notifications)
+**Sentence Transformers 2.2.2** - Text Embeddings
+- **Model sử dụng**: `all-MiniLM-L6-v2` (384 dimensions)
+- **Purpose**: Vector embeddings cho semantic search
+- **Performance**: ~14K sentences/second
 
-**Development Tools:**
-- ESLint (Code linting)
-- Prettier (Code formatting)
-- Husky (Git hooks)
-- Vitest (Unit testing)
+**Vector Search Architecture**:
+```python
+# Workflow tạo và tìm kiếm embeddings
+1. Content → Chunking (500 words) → Embedding → MongoDB Vector Index
+2. User Query → Embedding → Vector Search → Relevant Content → GenAI
+```
+
+#### 8.2.4 Authentication & Security (Xác thực và bảo mật)
+
+**JWT (JSON Web Tokens)** - Authentication
+- **Access Token**: 15 phút expiry, chứa user info
+- **Refresh Token**: 7 ngày expiry, stored in HTTP-only cookie
+- **Implementation**:
+  ```python
+  # JWT configuration
+  ALGORITHM = "HS256"
+  ACCESS_TOKEN_EXPIRE_MINUTES = 15
+  REFRESH_TOKEN_EXPIRE_DAYS = 7
+  ```
+
+**Security Measures**:
+- **Password Hashing**: bcrypt with salt rounds = 12
+- **CORS**: Configured origins for frontend domains
+- **Rate Limiting**: 100 requests/minute per IP
+- **Input Validation**: Pydantic schemas validate all inputs
+
+#### 8.2.5 File Storage & Processing
+
+**CloudFlare R2** - Object Storage
+- **Lý do chọn**: 
+  - Chi phí thấp ($0.015/GB/month)
+  - Không tính phí egress bandwidth
+  - S3-compatible API
+- **File Types**: PDF, DOCX, TXT, images, videos
+- **Processing Pipeline**:
+  ```
+  Upload → Virus Scan → Text Extraction → Chunking → Embedding → Storage
+  ```
+
+**File Processing Services**:
+- **PDF**: PyPDF2 for text extraction
+- **DOCX**: python-docx for document processing
+- **Images**: Pillow for image optimization
+- **Max Size**: 10MB per file
+
+### 8.3 Frontend Technologies - Chi tiết kỹ thuật
+
+#### 8.3.1 Core Framework (Khung giao diện chính)
+
+**React 18.2.0** - UI Library
+- **Lý do chọn**:
+  - Component-based architecture, tái sử dụng code hiệu quả
+  - Virtual DOM cho performance tốt
+  - Ecosystem lớn, community support mạnh
+  - Concurrent features cho UX mượt mà
+- **Features sử dụng**: Hooks, Suspense, Error Boundaries, Context API
+
+**TypeScript 5.3.0** - Language
+- **Lý do chọn**:
+  - Type safety giảm bugs trong production
+  - IntelliSense tốt, refactoring an toàn
+  - Maintainability cao cho team development
+- **Configuration**: Strict mode, path mapping, interface definitions
+
+**Vite 5.0.0** - Build Tool  
+- **Lý do chọn**:
+  - Hot Module Replacement (HMR) cực nhanh
+  - Bundle size tối ưu với tree-shaking
+  - Plugin ecosystem phong phú
+  - Dev server khởi động nhanh (<1s)
+
+#### 8.3.2 State Management (Quản lý trạng thái)
+
+**Zustand 4.4.7** - Global State
+- **Lý do chọn**:
+  - API đơn giản, ít boilerplate code
+  - Performance tốt, không re-render không cần thiết  
+  - TypeScript support tốt
+  - Persist store với localStorage
+- **Usage Pattern**:
+  ```typescript
+  const useAuthStore = create<AuthState>()(
+    persist(
+      (set) => ({
+        user: null,
+        login: async (credentials) => {
+          const user = await authService.login(credentials);
+          set({ user });
+        },
+      }),
+      { name: 'auth-storage' }
+    )
+  );
+  ```
+
+**TanStack Query 4.36.1** - Server State
+- **Lý do chọn**: 
+  - Caching thông minh, background refetch
+  - Optimistic updates cho UX tốt
+  - Error handling và retry logic
+- **Features**: Infinite queries, mutations, devtools
+
+**React Hook Form 7.48.2** - Form State
+- **Lý do chọn**: Performance cao (uncontrolled forms), validation mạnh mẽ
+
+#### 8.3.3 UI & Styling (Giao diện và thiết kế)
+
+**Tailwind CSS 3.3.6** - CSS Framework
+- **Lý do chọn**:
+  - Utility-first approach, development nhanh
+  - Design system nhất quán
+  - Responsive design dễ dàng
+  - Tree-shaking tự động, bundle size nhỏ
+- **Configuration**:
+  ```javascript
+  // tailwind.config.js
+  module.exports = {
+    darkMode: 'class',
+    theme: {
+      extend: {
+        colors: {
+          primary: { 50: '#eff6ff', 500: '#3b82f6', 900: '#1e3a8a' }
+        }
+      }
+    }
+  }
+  ```
+
+**Headless UI 1.7.17** - Accessible Components
+- **Components sử dụng**: Dialog, Dropdown, Toggle, Tabs
+- **Lý do chọn**: WAI-ARIA compliant, keyboard navigation
+
+**Framer Motion 10.16.5** - Animation Library  
+- **Use cases**: Page transitions, micro-interactions, loading states
+- **Performance**: Hardware-accelerated animations
+
+#### 8.3.4 Data Visualization (Trực quan hóa dữ liệu)
+
+**Chart.js 4.4.0** - Primary Charting
+- **Chart types**: Line (progress), Doughnut (completion), Bar (statistics)
+- **Lý do chọn**: Responsive, customizable, good documentation
+
+**Recharts 2.8.0** - React Charts
+- **Use cases**: Interactive dashboards, real-time data
+- **Integration**: Tích hợp tốt với React ecosystem
+
+#### 8.3.5 Communication & Utils (Giao tiếp và tiện ích)
+
+**Axios 1.6.2** - HTTP Client
+- **Configuration**: Request/response interceptors, auto token refresh
+- **Error Handling**: Global error handling với toast notifications
+
+**React Toastify 9.1.3** - Notifications
+- **Positioning**: Top-right, auto-dismiss sau 5s
+- **Types**: Success, error, warning, info với icons
+
+**React i18next 13.5.0** - Internationalization
+- **Languages**: Tiếng Việt (primary), English (secondary)
+- **Features**: Namespace, lazy loading, pluralization
+
+#### 8.3.6 Development Tools (Công cụ phát triển)
+
+**ESLint 8.55.0** + **Prettier 3.1.0** - Code Quality
+- **Rules**: React hooks, TypeScript strict, accessibility
+- **Integration**: VSCode extensions, pre-commit hooks
+
+**Vitest 1.0.0** - Testing Framework
+- **Features**: Component testing, mocking, coverage reports
+- **Performance**: Nhanh hơn Jest, tích hợp tốt Vite
+
+### 8.4 Deployment & DevOps (Triển khai và vận hành)
+
+#### 8.4.1 Development Environment (Môi trường phát triển)
+```bash
+# Frontend development
+npm run dev          # Vite dev server với HMR
+npm run build        # Production build với optimizations  
+npm run preview      # Preview production build locally
+npm run test         # Run unit tests với Vitest
+
+# Backend development  
+uvicorn app.main:app --reload    # FastAPI với auto-reload
+python scripts/init_database.py # Initialize sample data
+pytest tests/                   # Run test suite
+```
+
+#### 8.4.2 Production Deployment (Triển khai production)
+
+**Frontend**: Vercel/Netlify
+- **Build**: Automatic từ GitHub push
+- **CDN**: Global edge locations
+- **Performance**: Core Web Vitals optimization
+
+**Backend**: DigitalOcean Droplet / AWS EC2  
+- **Container**: Docker với multi-stage build
+- **Reverse Proxy**: Nginx cho static files và load balancing
+- **Process Manager**: Gunicorn với multiple workers
+
+**Database**: MongoDB Atlas
+- **Tier**: M10 (2GB RAM, backup tự động)
+- **Regions**: Singapore (gần Việt Nam nhất)
+- **Security**: IP whitelist, authentication
 
 ### 8.3 DevOps & Deployment (tậm thời chưa quan tâm, và có thể để sau)
 
@@ -1259,103 +2701,328 @@ GET    /api/v1/recommendations/instructors     # Gợi ý giảng viên phù h�
 
 ---
 
-## 9. GIAO DIỆN NGƯỜI DÙNG
+## 9. THIẾT KẾ UI/UX VÀ GIAO DIỆN NGƯỜI DÙNG
 
-### 9.1 Layout Structure
+### 9.1 Nguyên tắc thiết kế tổng thể
 
+#### 9.1.1 Design System (Hệ thống thiết kế)
+- **Color Palette**: 
+  - Primary: Blue (#3B82F6) - Tin cậy, chuyên nghiệp
+  - Secondary: Green (#10B981) - Success, hoàn thành
+  - Warning: Orange (#F59E0B) - Cảnh báo
+  - Error: Red (#EF4444) - Lỗi
+  - Neutral: Gray scale - Text và background
+- **Typography**: Inter font family, responsive text sizes
+- **Spacing**: 4px base unit, consistent margins/padding
+- **Elevation**: 4 levels shadow cho depth hierarchy
+
+#### 9.1.2 Responsive Design (Thiết kế đáp ứng)
+```
+Mobile: 320-640px    | Single column layout
+Tablet: 641-1024px   | Two column layout  
+Desktop: 1025px+     | Multi-column layout
+```
+
+#### 9.1.3 Accessibility Standards (Tiêu chuẩn truy cập)
+- WCAG 2.1 AA compliance
+- Keyboard navigation support
+- Screen reader compatibility
+- Color contrast ratio > 4.5:1
+- Focus indicators rõ ràng
+
+### 9.2 Layout Structure (Cấu trúc bố cục)
+
+#### 9.2.1 Cấu trúc trang chung
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        Header/Navigation                         │
+│                    Header Navigation                            │
+│  Logo | Main Menu | Search Bar | Notifications | User Avatar   │
 ├─────────────────────────────────────────────────────────────────┤
 │          │                                                      │
 │ Sidebar  │                Main Content Area                     │
-│ (Menu)   │                                                      │
-│          │                                                      │
+│ Menu     │         (Dynamic based on page)                     │
+│ (Collap- │                                                      │
+│ sible)   │                                                      │
 ├─────────────────────────────────────────────────────────────────┤
-│                           Footer                                │
+│                    Footer (Links & Info)                       │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 9.2 Student Interface
+#### 9.2.2 Component Hierarchy (Phân cấp component)
+```
+AppLayout
+├── Header
+│   ├── Logo
+│   ├── MainNavigation
+│   ├── SearchBar
+│   ├── NotificationDropdown
+│   └── UserMenu
+├── Sidebar (Collapsible)
+│   ├── PrimaryNavigation
+│   └── SecondaryActions
+├── MainContent
+│   ├── PageHeader (Breadcrumb + Actions)
+│   ├── ContentArea (Dynamic routing)
+│   └── FloatingActionButton
+└── Footer
+    ├── FooterLinks
+    └── Copyright
+```
 
-#### 9.2.1 Onboarding Flow
-1. **Welcome Screen**: Logo, tagline, action buttons
-2. **Registration Form**: Email, password, name, role selection
-3. **Email Verification**: OTP input
-4. **Profile Setup**: Avatar, bio, interests
-5. **Skill Assessment Intro**: Explanation of test purpose
-6. **Assessment Selection**: Choose category to test
-7. **Assessment Quiz**: Interactive quiz interface
-8. **Results Display**: Score, level, strengths/weaknesses
-9. **Course Recommendations**: AI-suggested courses
-10. **Dashboard Redirect**: Complete onboarding
+### 9.3 Student Interface - Giao diện học viên
 
-#### 9.2.2 Dashboard Layout
+#### 9.3.1 Luồng đăng ký và onboarding
+**Bước 1: Trang chào mừng**
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Welcome Message | Notifications | Profile Menu                  │
+│                    🎓 AI LEARNING PLATFORM                     │
+│                                                                 │
+│            "Học tập thông minh với sức mạnh AI"                │
+│                                                                 │
+│     ┌─────────────────┐    ┌─────────────────┐                │
+│     │  ĐĂNG KÝ NGAY   │    │   ĐĂNG NHẬP     │                │
+│     │  (Primary Btn)  │    │ (Secondary Btn) │                │
+│     └─────────────────┘    └─────────────────┘                │
+│                                                                 │
+│  ✨ Khóa học AI miễn phí  🚀 Tiến độ cá nhân  💬 Hỗ trợ 24/7  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Bước 2-4: Form đăng ký và xác thực**
+- Multi-step form với progress indicator
+- Real-time validation và error messages
+- OTP verification với resend functionality
+
+**Bước 5-8: Đánh giá kỹ năng ban đầu**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  📊 ĐÁNH GIÁ KỸ NĂNG BAN ĐẦU                    [Bước 1/3]     │
 ├─────────────────────────────────────────────────────────────────┤
-│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐│
-│ │ Enrolled    │ │ Progress    │ │ Time Spent  │ │ Achievements││
-│ │ Courses: 5  │ │ Avg: 67%    │ │ 24h 30m     │ │ 12 Badges   ││
-│ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘│
+│                                                                 │
+│  "Chọn lĩnh vực bạn muốn đánh giá để nhận gợi ý khóa học phù   │
+│   hợp với trình độ hiện tại của bạn"                           │
+│                                                                 │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐              │
+│  │    💻       │ │    🎨       │ │    📊       │              │
+│  │Programming  │ │   Design    │ │Data Science │              │
+│  │             │ │             │ │             │              │
+│  └─────────────┘ └─────────────┘ └─────────────┘              │
+│                                                                 │
+│  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐              │
+│  │    📱       │ │    📈       │ │     🔧      │              │
+│  │Mobile Dev   │ │  Marketing  │ │   DevOps    │              │
+│  └─────────────┘ └─────────────┘ └─────────────┘              │
+│                                                                 │
+│               ┌─────────────────┐                              │
+│               │   BỎ QUA BƯỚC   │                              │
+│               │ (Skip for now)  │                              │
+│               └─────────────────┘                              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 9.3.2 Dashboard học viên
+**Header Section:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 👋 Chào mừng trở lại, Nguyễn Văn A!    🔔(2)  👤 [Avatar]       │
+│ "Hôm nay bạn đã học được gì mới?"                              │
 ├─────────────────────────────────────────────────────────────────┤
-│                    Continue Learning                            │
+│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────┐│
+│ │📚 Khóa học   │ │📈 Tiến độ TB │ │⏰ Thời gian  │ │🏆 Thành  ││
+│ │ đã đăng ký   │ │              │ │   học tập    │ │   tích   ││
+│ │      8       │ │     72%      │ │   127 giờ    │ │    24    ││
+│ └──────────────┘ └──────────────┘ └──────────────┘ └──────────┘│
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Tiếp tục học tập:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 📖 TIẾP TỤC HỌC TẬP                                            │
+├─────────────────────────────────────────────────────────────────┤
+│ ┌────────────────────────────────────────────────────────────┐  │
+│ │ [🖼️ Thumbnail] React Fundamentals - Chapter 5: State Mgmt │  │
+│ │                                                            │  │
+│ │ Tiến độ: ████████████░░░░ 75%  ⏰ 15 phút còn lại         │  │
+│ │                                                            │  │
+│ │              ┌─────────────────┐                          │  │
+│ │              │   TIẾP TỤC →    │                          │  │
+│ │              └─────────────────┘                          │  │
+│ └────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Khóa học của tôi & Gợi ý:**
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 📚 KHÓA HỌC CỦA TÔI                    │ 💡 GỢI Ý CHO BẠN      │
+│                                        │                        │
+│ ┌─────────────┐ ┌─────────────┐       │ ┌─────────────┐        │
+│ │[Thumbnail]  │ │[Thumbnail]  │       │ │[Thumbnail]  │        │
+│ │JavaScript   │ │Python Basic │       │ │TypeScript   │        │
+│ │Cơ bản       │ │Hoàn thành ✅│       │ │Nâng cao     │        │
+│ │████░░ 60%   │ │████████100% │       │ │⭐⭐⭐⭐⭐ 4.9  │        │
+│ └─────────────┘ └─────────────┘       │ └─────────────┘        │
+│                                        │                        │
+│ ┌─────────────┐ ┌─────────────┐       │ ┌─────────────┐        │
+│ │Node.js API  │ │React Redux  │       │ │Vue.js 3     │        │
+│ │███░░░ 30%   │ │███████░ 80% │       │ │Fundamentals │        │
+│ └─────────────┘ └─────────────┘       │ └─────────────┘        │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 9.3.3 Giao diện học tập (Learning Interface)
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ ← Khóa học | React Fundamentals    🔊 📝 ⚙️     👤 Support Bot │
+├─────────────────────────────────────────────────────────────────┤
+│ Ch.Navigation │                                                 │
+│ ┌───────────┐ │           📹 Video Player                      │
+│ │✅ Intro   │ │     ┌─────────────────────────────────┐       │
+│ │✅ Setup   │ │     │                                 │       │
+│ │🔄 State   │ │     │       [▶️] Video Content       │       │
+│ │○ Props    │ │     │         00:05:30 / 00:12:45    │       │
+│ │○ Hooks    │ │     │                                 │       │
+│ │○ Quiz     │ │     └─────────────────────────────────┘       │
+│ └───────────┘ │                                                 │
+│               │  📝 Ghi chú của tôi:                           │
+│ Progress:     │  ┌─────────────────────────────────────────┐   │
+│ ████████░ 80% │  │ State là khái niệm quan trọng...        │   │
+│               │  │                                         │   │
+│               │  └─────────────────────────────────────────┘   │
+├─────────────────────────────────────────────────────────────────┤
+│                     💬 AI Chat Support                         │
+│ 🤖: "Bạn có câu hỏi nào về State Management không?"           │
 │ ┌─────────────────────────────────────────────────────────────┐ │
-│ │ [Course Thumbnail] Course Title                             │ │
-│ │ Progress: ████████░░ 80%    Continue →                      │ │
+│ │ Nhập câu hỏi của bạn...                            [Gửi] │ │
 │ └─────────────────────────────────────────────────────────────┘ │
-├─────────────────────────────────────────────────────────────────┤
-│ My Courses                           | Recommended for You     │
-│ ┌─────────────┐ ┌─────────────┐     | ┌─────────────┐          │
-│ │[Thumbnail]  │ │[Thumbnail]  │     | │[Thumbnail]  │          │
-│ │Course A     │ │Course B     │     | │New Course   │          │
-│ │Progress: 45%│ │Completed    │     | │★★★★★        │          │
-│ └─────────────┘ └─────────────┘     | └─────────────┘          │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-#### 9.2.3 Course Discovery Interface
-- **Filter Sidebar**: Category, Level, Price, Rating, Duration
-- **Search Bar**: Full-text search with suggestions
-- **Course Grid**: Responsive card layout
-- **Course Card Components**:
-  - Thumbnail image
-  - Title and instructor
-  - Rating and reviews count
-  - Price (Free/Paid indicator)
-  - Level badge
-  - Duration estimate
-  - Quick preview button
+### 9.4 Instructor Interface - Giao diện giảng viên
 
-#### 9.2.4 Learning Interface
-- **Video Player**: Custom controls, playback speed, subtitles
-- **Chapter Navigation**: Sidebar with progress indicators
-- **Note Taking**: Side panel for personal notes
-- **Quiz Integration**: Inline quizzes between sections
-- **AI Chat Widget**: Floating chat for questions
-- **Progress Tracking**: Visual progress bar
-
-### 9.3 Instructor Interface
-
-#### 9.3.1 Dashboard Layout
+#### 9.4.1 Dashboard giảng viên
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│ Instructor Dashboard                    | Create New Course     │
+│ 👨‍🏫 Dashboard Giảng viên               ┌─────────────────────┐ │
+│                                        │ ➕ TẠO KHÓA HỌC MỚI │ │
+│                                        │   (AI Assistant)    │ │
+│                                        └─────────────────────┘ │
 ├─────────────────────────────────────────────────────────────────┤
 │ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐│
-│ │Total Courses│ │Total        │ │Monthly      │ │Avg Rating   ││
-│ │     12      │ │Students: 284│ │Revenue: $1.2K│ │   4.8/5.0   ││
+│ │📚 Tổng khóa │ │👥 Tổng học  │ │📊 Engagement│ │⭐ Đánh giá  ││
+│ │    học      │ │    viên     │ │    Rate     │ │  trung bình ││
+│ │     15      │ │    1,247    │ │    87%      │ │   4.8/5.0   ││
 │ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘│
 ├─────────────────────────────────────────────────────────────────┤
-│                        Recent Activity                          │
-│ • New enrollment in "React Fundamentals"                       │
-│ • Quiz completed by John Doe in "Advanced JavaScript"          │
-│ • Course "Python Basics" reached 100 students                  │
-├─────────────────────────────────────────────────────────────────┤
-│ My Courses                                                      │
+│ 📈 PHÂN TÍCH HIỆU SUẤT                                         │
 │ ┌─────────────────────────────────────────────────────────────┐ │
-│ │ React Fundamentals      | 45 students | $299 | ████████░░  │ │
+│ │     [📊 Chart: Học viên theo tháng]                        │ │
+│ │ 200┤                                                       │ │
+│ │ 150┤     📈                                                │ │
+│ │ 100┤  📊 📈                                                │ │
+│ │  50┤📊 📊 📊                                               │ │
+│ │    └─────────────────────────────────────────────────────  │ │
+│ │     Jan Feb Mar Apr May Jun                                │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 9.4.2 Tạo khóa học với AI
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 🤖 TẠO KHÓA HỌC VỚI AI ASSISTANT                 [Bước 1/5]     │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  "Mô tả chủ đề khóa học bạn muốn tạo:"                        │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │ VD: "Khóa học React cho người mới bắt đầu, từ cơ bản đến  │ │
+│  │ nâng cao, bao gồm hooks, routing và state management"      │ │
+│  │                                                             │ │
+│  │                                                             │ │
+│  └─────────────────────────────────────────────────────────────┘ │
+│                                                                 │
+│  📚 Cấp độ:  ○ Cơ bản  ○ Trung bình  ○ Nâng cao              │
+│  ⏰ Thời lượng dự kiến: [Dropdown: 2-4 giờ / 5-10 giờ / 10+]   │
+│  🏷️ Thể loại: [Dropdown: Programming / Design / Business...]   │
+│                                                                 │
+│              ┌─────────────────┐                              │
+│              │  TIẾP THEO →    │                              │
+│              └─────────────────┘                              │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+#### 9.4.3 Quản lý khóa học
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 📚 QUẢN LÝ KHÓA HỌC                    [Tìm kiếm...] [Filter]  │
+├─────────────────────────────────────────────────────────────────┤
+│ ┌─────────────────────────────────────────────────────────────┐ │
+│ │ React Fundamentals            👥 156 học viên  📈 85% hoàn  │ │
+│ │ Trạng thái: 🟢 Công khai      ⭐ 4.7/5         💰 Miễn phí │ │
+│ │ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────────────────┐│ │
+│ │ │   SỬA   │ │ PHÂN TÍCH│ │ HỌC VIÊN│ │      XÓA KHÓA HỌC   ││ │
+│ │ └─────────┘ └─────────┘ └─────────┘ └─────────────────────┘│ │
+│ └─────────────────────────────────────────────────────────────┘ │
+│                                                                 │
+│ ┌─────────────────────────────────────────────────────────────┐ │
+│ │ Vue.js Complete Guide         👥 89 học viên   📈 72% hoàn  │ │
+│ │ Trạng thái: 🟡 Bản nháp       ⭐ 4.9/5         💰 Miễn phí │ │
+│ │ ┌─────────┐ ┌─────────┐ ┌─────────┐ ┌─────────────────────┐│ │
+│ │ │XUẤT BẢN │ │   SỬA   │ │ PREVIEW │ │      XÓA BẢN NHÁP   ││ │
+│ │ └─────────┘ └─────────┘ └─────────┘ └─────────────────────┘│ │
+│ └─────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 9.5 Admin Interface - Giao diện quản trị
+
+#### 9.5.1 Dashboard tổng quan
+```
+┌─────────────────────────────────────────────────────────────────┐
+│ 🔧 ADMIN DASHBOARD                             📊 System Health │
+├─────────────────────────────────────────────────────────────────┤
+│ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐ ┌─────────────┐│
+│ │👥 Tổng người│ │📚 Tổng khóa │ │💬 AI Chat   │ │🗄️ Database  ││
+│ │    dùng     │ │    học      │ │ Requests    │ │   Usage     ││
+│ │   12,847    │ │    3,429    │ │   15.2K     │ │   87% Full  ││
+│ └─────────────┘ └─────────────┘ └─────────────┘ └─────────────┘│
+├─────────────────────────────────────────────────────────────────┤
+│ ⚠️ CẢNH BÁO HỆ THỐNG                                           │
+│ • Database connection spike (200% increase)                     │
+│ • AI API usage approaching limit (85% of quota)                │
+│ • 3 courses pending approval                                    │
+├─────────────────────────────────────────────────────────────────┤
+│ 📊 THỐNG KÊ REAL-TIME                                          │
+│ ┌─────────────────────────────────────────────────────────────┐ │
+│ │ Người dùng online: ████████████░░ 1,247 users             │ │
+│ │ Server load:      ████████░░░░░░ 68%                       │ │
+│ │ API response time: ████░░░░░░░░░ 145ms avg                 │ │
+│ └─────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 9.6 Responsive Design Patterns (Mẫu thiết kế đáp ứng)
+
+#### 9.6.1 Mobile Layout (Mobile: 320-640px)
+- Collapsed sidebar thành hamburger menu
+- Single column layout
+- Touch-friendly buttons (min 44px)
+- Swipe gestures cho navigation
+- Bottom tab bar cho main actions
+
+#### 9.6.2 Tablet Layout (Tablet: 641-1024px)  
+- Sidebar có thể toggle
+- Two-column layout cho content
+- Adaptive font sizes
+- Optimized for both portrait/landscape
+
+#### 9.6.3 Desktop Layout (Desktop: 1025px+)
+- Full sidebar visible
+- Multi-column layouts
+- Hover states và tooltips
+- Keyboard shortcuts
+- Advanced filtering và sorting
 │ │ Advanced JavaScript     | 32 students | Free | ██████████  │ │
 │ │ Python for Beginners    | 78 students | $199 | ███████░░░  │ │
 │ └─────────────────────────────────────────────────────────────┘ │
@@ -1459,56 +3126,43 @@ GET    /api/v1/recommendations/instructors     # Gợi ý giảng viên phù h�
 | Đăng nhập/Đăng xuất | ✅ | ✅ | ✅ |
 | Cập nhật profile | ✅ | ✅ | ✅ |
 | Đổi mật khẩu | ✅ | ✅ | ✅ |
-| Xóa tài khoản | ✅ | ✅ | ❌ |
+
 | **Assessment & Onboarding** |
 | Làm test năng lực | ✅ | ❌ | ✅ |
-| Xem kết quả test | ✅ | ❌ | ✅ |
+| Xem kết quả test | ✅ | OK| ✅ |
 | Nhận gợi ý khóa học | ✅ | ❌ | ✅ |
 | **Course Discovery** |
-| Xem khóa học công khai | ✅ | ✅ | ✅ |
+| Xem khóa học  | ✅ | ✅ | ✅ |
 | Tìm kiếm khóa học | ✅ | ✅ | ✅ |
 | Lọc khóa học | ✅ | ✅ | ✅ |
 | Xem chi tiết khóa học | ✅ | ✅ | ✅ |
 | **Course Enrollment** |
-| Đăng ký khóa học miễn phí | ✅ | ✅ | ✅ |
-| Đăng ký khóa học trả phí | ✅ | ❌ | ✅ |
+| Đăng ký khóa học | ✅ | X | ✅ |
 | Hủy đăng ký | ✅ | ❌ | ✅ |
-| Nhận mời khóa học private | ✅ | ❌ | ✅ |
+| Nhận mời khóa học  | ✅ | ❌ | ✅ |
 | **Learning Experience** |
 | Học bài học | ✅ | ✅ | ✅ |
 | Xem progress | ✅ | ✅ | ✅ |
 | Làm quiz | ✅ | ✅ | ✅ |
 | Chat với AI | ✅ | ✅ | ✅ |
-| Ghi chú cá nhân | ✅ | ✅ | ✅ |
 | **Personal Course Creation** |
-| Tạo khóa học cá nhân | ✅ | ✅ | ✅ |
-| AI tạo nội dung | ✅ | ✅ | ✅ |
-| Upload tài liệu | ✅ | ✅ | ✅ |
+| Tạo khóa học cá nhân , các khóa học cá nhân của học sinh được cả admin xem và quản lý trong database| ✅ | X | ✅ |
+| AI tạo nội dung | ✅ | X | ✅ |
+| Upload tài liệu | ✅ | X | ✅ |
 | **Instructor Features** |
-| Tạo khóa học công khai | ❌ | ✅ | ✅ |
-| Tạo khóa học private | ❌ | ✅ | ✅ |
-| Thiết lập giá khóa học | ❌ | ✅ | ✅ |
+| Tạo khóa học | ❌ | x| ✅ |
 | Mời học viên | ❌ | ✅ | ✅ |
 | Xem danh sách học viên | ❌ | ✅ | ✅ |
 | Theo dõi tiến độ học viên | ❌ | ✅ | ✅ |
 | Tạo quiz cho khóa học | ❌ | ✅ | ✅ |
 | Xem thống kê khóa học | ❌ | ✅ | ✅ |
 | Nhận doanh thu | ❌ | ✅ | ❌ |
-| **Payment System** |
-| Thanh toán khóa học | ✅ | ❌ | ✅ |
-| Xem lịch sử thanh toán | ✅ | ❌ | ✅ |
-| Nhận tiền từ khóa học | ❌ | ✅ | ❌ |
-| Yêu cầu rút tiền | ❌ | ✅ | ❌ |
-| Xem báo cáo doanh thu | ❌ | ✅ | ✅ |
 | **Admin Functions** |
 | Quản lý tất cả người dùng | ❌ | ❌ | ✅ |
 | Phân quyền user | ❌ | ❌ | ✅ |
-| Khóa/mở khóa tài khoản | ❌ | ❌ | ✅ |
 | Xem tất cả khóa học | ❌ | ❌ | ✅ |
-| Duyệt/khóa khóa học | ❌ | ❌ | ✅ |
-| Xóa nội dung vi phạm | ❌ | ❌ | ✅ |
+tạo sửa xóa khóa học | ❌ | ❌ | ✅ |
 | Xem thống kê hệ thống | ❌ | ❌ | ✅ |
-| Quản lỹ thanh toán | ❌ | ❌ | ✅ |
 | Tạo thông báo hệ thống | ❌ | ❌ | ✅ |
 
 ### 10.2 Chi tiết chức năng theo vai trò
@@ -1517,78 +3171,49 @@ GET    /api/v1/recommendations/instructors     # Gợi ý giảng viên phù h�
 
 **Dashboard & Overview:**
 - Xem tổng quan tiến độ học tập
-- Thống kê thời gian học, điểm số, thành tích
-- Danh sách khóa học đã đăng ký với progress
-- Lịch học và deadline sắp tới
+- Thống kê thời gian học, điểm số
+- Danh sách khóa học đã đăng ký với giáo viên và khóa học của bản thân hoặc khóa học được giáo viên thêm vào lớp
+- Lịch học 
 - Thông báo từ instructors và hệ thống
 
 **Skill Assessment:**
-- Chọn lĩnh vực muốn đánh giá (Programming, Design, Business, etc.)
-- Làm quiz đánh giá trình độ (10-15 câu hỏi)
+- Chọn lĩnh vực muốn đánh giá (Programming, Design, Business, etc.) (phần này sẽ là dữ liệu cứng được hiển thị bên FE và BE sẽ lấy kết quả để gợi ý khóa học có sẵn)
+- Làm quiz đánh giá trình độ (10-15 câu hỏi) để biết được trình độ để đưaa gợi ý khóa học có sẵn
 - Xem kết quả chi tiết: level, strengths, weaknesses
 - Nhận gợi ý khóa học dựa trên kết quả
-- Làm lại test để cập nhật trình độ
+  
 
 **Course Enrollment & Learning:**
 - Browse danh sách khóa học public với filters
 - Preview nội dung khóa học trước khi đăng ký
 - Đăng ký khóa học miễn phí ngay lập tức
-- Thanh toán cho khóa học trả phí
-- Học theo tiến độ cá nhân
+- Học theo tiến độ cá nhân hóa, dựa vào phần đánh giá sau khi làm bài test để cập nhật
 - Tương tác với AI chatbot trong context khóa học
-- Làm quiz và xem kết quả
-- Ghi chú và bookmark
+- Làm quiz và xem kết quả trong khóa học
 
 **Personal Learning:**
 - Tạo khóa học cá nhân với AI assistance
-- Upload tài liệu và tạo khóa học từ file
-- Tự tạo quiz practice
+- Upload tài liệu và tạo khóa học từ file do học sinh up lên
+- Tự tạo quiz practice cho khóa học do học sinh up lên
 - Chat với AI về nội dung đã upload
 - Theo dõi tiến độ học tập cá nhân
-
-**Payment & History:**
-- Xem lịch sử thanh toán
-- Quản lý payment methods
-- Yêu cầu refund (trong thời hạn)
-- Download receipts
 
 #### 10.2.2 INSTRUCTOR Functions
 
 **Course Creation & Management:**
-- Tạo khóa học từ template hoặc từ đầu
-- Sử dụng AI để generate course outline
-- Upload video, documents, resources
-- Thiết lập chapter structure
-- Tạo quiz và assignments
-- Preview khóa học trước khi publish
+- Tạo lớp cho học sinh đăng ký hoặc mời học sinh vào lớp, sử dụng khóa học có sẵn , không được phép tạo khóa học.
+- Tạo quiz và assignments trong các khóa học có sẵn
+quản lý học sinh trong lớp (thêm sửa xóa... ra khỏi lớp)
 
-**Pricing & Monetization:**
-- Thiết lập giá cho khóa học
-- Chọn payment model (one-time, subscription)
-- Xem thống kê doanh thu theo thời gian
-- Yêu cầu payout
-- Xem báo cáo thuế
 
 **Student Management:**
 - Xem danh sách học viên đã enrolled
 - Theo dõi progress từng học viên
 - Gửi thông báo và announcements
 - Trả lời câu hỏi của học viên
-- Invite học viên vào khóa học private
-- Grade quiz và assignments thủ công
+- Invite học viên vào khóa học 
+- Grade quiz và assignments 
 
-**Analytics & Insights:**
-- Xem engagement metrics của khóa học
-- Completion rates và drop-off points
-- Student feedback và ratings
-- Revenue analytics
-- Comparison với courses khác
-
-**Communication:**
-- Chat với học viên qua platform
-- Tạo discussion forums
-- Send bulk emails
-- Live Q&A sessions (future feature)
 
 #### 10.2.3 ADMIN Functions
 
@@ -1596,51 +3221,10 @@ GET    /api/v1/recommendations/instructors     # Gợi ý giảng viên phù h�
 - Xem danh sách tất cả users với search/filter
 - View detailed user profiles và activity
 - Assign/change user roles
-- Suspend/activate accounts
-- Handle user reports và complaints
-- Mass actions on users
-
-**Content Moderation:**
-- Review courses trước khi public
-- Handle reported content
-- Automatic content scanning
-- Approve/reject course submissions
-- Set content guidelines
-- Monitor compliance
-
-**System Analytics:**
-- Platform-wide statistics
-- User growth và engagement metrics
-- Revenue tracking across all instructors
-- System performance monitoring
-- Popular content analysis
-- Market trend insights
-
-**Payment Management:**
-- Monitor all platform transactions
-- Handle payment disputes
-- Process refunds
-- Manage instructor payouts
-- Financial reporting
-- Integration với payment providers
-
-**System Configuration:**
-- Platform settings và configurations
-- Manage categories và tags
-- Set platform policies
-- Configure AI parameters
-- System maintenance
-- Feature flags management
-
-**Communication & Support:**
-- Create system-wide announcements  
-- Manage help desk và support tickets
-- Platform newsletter
-- Community guidelines enforcement
-- Customer support escalation
 
 ---
 
 **Kết thúc tài liệu HE_THONG.md**
 
 > Nếu cần thêm chi tiết hoặc chỉnh sửa, vui lòng thông báo!
+còn thiếu 10,11,12,13
