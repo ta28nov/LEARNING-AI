@@ -1,4 +1,7 @@
-Lưu ý quan trọng, mọi thứ trong file này chỉ là hướng dẫn các đề mục để có tài liệu chi tiết nhất, mọi cấu trúc có sẵn hay nội dung ko cần sửa trong file C:\Users\Admin\LEARNING-AI\HE_THONG.md không cần phải thay thế nếu ko liên quan. và đảm bảo bạn làm tốt và đủ dựa trên 12,13 đề mục này
+Lưu ý quan trọng, mọi thứ trong file này chỉ là hướng dẫn các đề mục để có tài liệu chi tiết nhất, mọi cấu trúc có sẵn hay nội dung ko cần sửa trong file C:\Users\Admin\LEARNING-AI\HE_THONG.md không cần phải thay thế nếu ko liên quan. và đảm bảo bạn làm tốt và đủ dựa trên 12,13 đề mục này. Lưu ý hệ thống này ko có khoá học trả phí và không có thanh toán nhé.
+hiện tại sửa tới mục 9 rồi giờ mục 10,11,12,13 bạn làm tiếp nhé
+Sau khi sửa và thêm mới các mục, tôi cần bạn xem lại toàn bộ file và đảm bảo nó hoàn chỉnh, logic, dễ hiểu, không thừa không thiếu, không sai chính tả, ngữ pháp, format markdown đúng chuẩn, có mục lục ở đầu file với link điều hướng tới từng đề mục bên dưới.Chỉ sửa file HE_THONG.md này, không sửa file khác. Tôi cần bạn hoàn thành trong 1 lần trả lời duy nhất, không trả lời từng phần.Chia nhỏ tác vu thành nhiều lần trả lời sẽ làm mất mạch suy nghĩ và dễ
+Sau đó lên time line cho BE dev bao gồm 2 người để thực hiện phát triển hệ thống này trong 1 tháng, chia nhỏ công việc theo tuần, theo ngày, theo người (Khang và Tuấn Anh) bắt đầu từ 13/10/2025-13/11/2025. Timeline cần chi tiết, rõ ràng, có thể theo dõi tiến độ từng ngày, có thể điều chỉnh linh hoạt nếu có phát sinh. Timeline cần bao gồm cả việc review code, test,. Timeline cần rõ ràng, cụ thể, dễ hiểu, dễ theo dõi tiến độ. Timeline cần đảm bảo hoàn thành đúng hạn trong 1 tháng.
 ⸻
 1. TỔNG QUAN HỆ THỐNG (System Overview)
 

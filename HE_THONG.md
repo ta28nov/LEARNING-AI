@@ -15,6 +15,10 @@
 8. [CÔNG NGHỆ SỬ DỤNG](#8-công-nghệ-sử-dụng)
 9. [GIAO DIỆN NGƯỜI DÙNG](#9-giao-diện-người-dùng)
 10. [BẢNG CHỨC NĂNG THEO VAI TRÒ](#10-bảng-chức-năng-theo-vai-trò)
+11. [SPEC CHI TIẾT MODULE](#11-spec-chi-tiết-module)
+12. [SECURITY & AUTHORIZATION DESIGN](#12-security--authorization-design)
+13. [AI PIPELINE DOCUMENT](#13-ai-pipeline-document)
+14. [TIMELINE PHÁT TRIỂN BACKEND (13-10 ➝ 13-11-2025)](#14-timeline-phát-triển-backend-13-10--13-11-2025)
 
 ---
 
@@ -373,13 +377,9 @@ graph TB
     INSTRUCTOR_DASHBOARD --> MANAGE_STUDENTS[Quản lý học viên]
     INSTRUCTOR_DASHBOARD --> ANALYTICS[Xem thống kê]
     
-    BROWSE_COURSES --> COURSE_DETAIL[Chi tiết khóa học]
-    COURSE_DETAIL --> ENROLL_FREE[Đăng ký miễn phí]
-    COURSE_DETAIL --> ENROLL_PAID[Thanh toán & Đăng ký]
-    
-    ENROLL_FREE --> LEARNING[Bắt đầu học]
-    ENROLL_PAID --> PAYMENT[Xử lý thanh toán]
-    PAYMENT --> LEARNING
+  BROWSE_COURSES --> COURSE_DETAIL[Chi tiết khóa học]
+  COURSE_DETAIL --> ENROLL[Đăng ký khóa học]
+  ENROLL --> LEARNING[Bắt đầu học]
     
     LEARNING --> QUIZ[Làm quiz]
     LEARNING --> CHAT_AI[Chat với AI]
@@ -396,7 +396,7 @@ graph TB
 ```
 1. Trang chủ → Đăng ký → Xác thực email → Chọn vai trò: Học viên  
 2. Thiết lập hồ sơ → Kiểm tra năng lực → Phân tích bởi AI → Gợi ý khóa học  
-3. Duyệt danh sách khóa học → Xem chi tiết → Đăng ký (Miễn phí / Trả phí) → Thanh toán (nếu có)  
+3. Duyệt danh sách khóa học → Xem chi tiết → Đăng ký khóa học (miễn phí)  
 4. Bảng điều khiển học tập → Chọn khóa học → Duyệt chương → Học nội dung  
 5. Học tương tác → Làm quiz → Trò chuyện với AI → Theo dõi tiến độ → Hoàn thành khóa học  
 6. Tự tạo khóa học cá nhân → Hỗ trợ AI → Sinh lộ trình học tập riêng  
@@ -408,10 +408,10 @@ graph TB
 1. Landing → Register → Email Verify → Role: Instructor
 2. Profile Setup → Teaching Experience → Subject Expertise → Portfolio
 3. Instructor Dashboard → Course Creation → Content Development → AI Assistance
-4. Course Setup → Pricing → Visibility → Publishing → Student Management
-5. Analytics Dashboard → Student Progress → Revenue Tracking → Course Optimization
+4. Course Setup → Thiết lập nội dung → Chia sẻ → Student Management
+5. Analytics Dashboard → Student Progress → Học viên phản hồi → Course Optimization
 6. Student Communication → Q&A → Feedback → Course Updates
-7. Payout Management → Revenue Reports → Tax Documents
+7. Collaboration → Chia sẻ tài nguyên → Tổng kết khóa học
 ```
 
 #### 2.3.3 Admin Journey
@@ -419,9 +419,9 @@ graph TB
 1. Truy cập hệ thống → Bảng điều khiển Admin → Tổng quan hệ thống → Theo dõi tình trạng  
 2. Quản lý người dùng → Gán vai trò → Kiểm duyệt tài khoản → Theo dõi hoạt động  
 3. Kiểm duyệt nội dung → Duyệt khóa học (có thể bỏ) 
-4. Phân tích & Báo cáo → Chỉ số nền tảng → Phân tích doanh thu → Thống kê người dùng  
-5. Cấu hình hệ thống → Quản lý tính năng → Cài đặt thanh toán → Tham số AI  (có thể bỏ)
-6. Hỗ trợ người dùng → Xử lý khiếu nại → Liên hệ hỗ trợ → Chuyển cấp xử lý (có thể bỏ
+4. Phân tích & Báo cáo → Chỉ số nền tảng → Theo dõi mức độ tham gia → Thống kê người dùng  
+5. Cấu hình hệ thống → Quản lý tính năng → Thiết lập tham số AI (có thể bỏ)
+6. Hỗ trợ người dùng → Xử lý khiếu nại → Liên hệ hỗ trợ → Chuyển cấp xử lý (có thể bỏ)
 
 
 ```
@@ -445,14 +445,14 @@ graph TB
         RATE_LIMIT[Rate Limiting]
     end
     
-    subgraph "Core Services"
-        USER_SVC[User Service]
-        COURSE_SVC[Course Service]
-        ASSESSMENT_SVC[Assessment Service]
-        PAYMENT_SVC[Payment Service]
-        ANALYTICS_SVC[Analytics Service]
-        NOTIFICATION_SVC[Notification Service]
-    end
+  subgraph "Core Services"
+    USER_SVC[User Service]
+    COURSE_SVC[Course Service]
+    ASSESSMENT_SVC[Assessment Service]
+    ANALYTICS_SVC[Analytics Service]
+    NOTIFICATION_SVC[Notification Service]
+    COLLAB_SVC[Collaboration Service]
+  end
     
     subgraph "AI Services"
         GENAI[Google GenAI]
@@ -468,12 +468,11 @@ graph TB
         VECTOR_DB[(Vector Database)]
     end
     
-    subgraph "External Services"
-        STRIPE[Stripe Payment]
-        EMAIL[SendGrid Email]
-        CDN[CloudFlare CDN]
-        MONITOR[Monitoring Tools]
-    end
+  subgraph "External Services"
+    EMAIL[SendGrid Email]
+    CDN[CloudFlare CDN]
+    MONITOR[Monitoring Tools]
+  end
     
     WEB --> GATEWAY
     MOBILE --> GATEWAY
@@ -481,19 +480,18 @@ graph TB
     GATEWAY --> AUTH
     GATEWAY --> USER_SVC
     GATEWAY --> COURSE_SVC
-    GATEWAY --> ASSESSMENT_SVC
-    GATEWAY --> PAYMENT_SVC
+  GATEWAY --> ASSESSMENT_SVC
+  GATEWAY --> COLLAB_SVC
     
     USER_SVC --> MONGODB
     COURSE_SVC --> MONGODB
-    ASSESSMENT_SVC --> MONGODB
-    PAYMENT_SVC --> MONGODB
+  ASSESSMENT_SVC --> MONGODB
+  COLLAB_SVC --> MONGODB
     
     COURSE_SVC --> CONTENT_AI
     ASSESSMENT_SVC --> GENAI
     CHAT_AI --> VECTOR_DB
     
-    PAYMENT_SVC --> STRIPE
     NOTIFICATION_SVC --> EMAIL
     
     All_Services --> REDIS
@@ -544,10 +542,10 @@ sequenceDiagram
 | **Assessment Service** | Tổ chức và đánh giá bài kiểm tra năng lực, quiz hoặc bài thi tự động. | MongoDB | Tạo câu hỏi tự động và phân tích kết quả đánh giá. |
 | **Course Service** | Quản lý nội dung khóa học, bao gồm các thao tác tạo, đọc, cập nhật và xóa (CRUD). | MongoDB | Sinh nội dung khóa học và dịch tự động sang nhiều ngôn ngữ. |
 | **Enrollment Service** | Quản lý đăng ký khóa học và theo dõi tiến độ học tập của học viên. | MongoDB | Tối ưu lộ trình học tập cá nhân dựa trên kết quả và hành vi học. |
-| **Payment Service** | Xử lý giao dịch thanh toán và quản lý hóa đơn, gói học. | MongoDB | Phát hiện và ngăn chặn gian lận trong thanh toán. |
 | **Chat Service** | Cung cấp tính năng trò chuyện với AI và quản lý ngữ cảnh hội thoại. | MongoDB + Vector | Hỗ trợ hội thoại thông minh, trợ lý học tập dựa trên AI. |
 | **Analytics Service** | Thu thập, tổng hợp và báo cáo dữ liệu thống kê về người dùng, khóa học và hệ thống. | MongoDB | Phân tích dữ liệu và tạo ra các báo cáo, thông tin chi tiết (insights). |
 | **Notification Service** | Gửi email, thông báo đẩy và nhắc nhở tự động cho người dùng. | Redis | Dự đoán thời điểm gửi thông báo tối ưu nhằm tăng khả năng tương tác. |
+| **Collaboration Service** | Quản lý lớp học, tài nguyên chia sẻ và tương tác nhóm giữa giảng viên – học viên. | MongoDB | Đề xuất nhóm học tập và gợi ý tài liệu phù hợp với từng lớp. |
 
 
 ```mermaid
@@ -588,7 +586,6 @@ Backend Requirements:
   - MongoDB Atlas cluster
   - Redis instance
   - Google Cloud AI API key
-  - Stripe test keys
   - SendGrid API key
   - AWS S3 bucket (optional)
 
@@ -695,7 +692,6 @@ LEARNING-AI/
    - Create dashboard interfaces
    - Implement course management
    - Add assessment system
-   - Build payment integration
    - Create chat interface
 
 5. Testing & Optimization
@@ -715,7 +711,6 @@ collections = [
   'courses', 
   'assessments',
   'enrollments',
-  'payments',
   'quizzes',
   'chat_sessions',
   'chat_messages',
@@ -753,7 +748,6 @@ db.courses.createIndex({ "category": 1, "level": 1 })
 db.enrollments.createIndex({ "student_id": 1, "status": 1 })
 db.enrollments.createIndex({ "course_id": 1, "status": 1 })
 db.assessments.createIndex({ "user_id": 1, "assessment_type": 1 })
-db.payments.createIndex({ "user_id": 1, "status": 1 })
 db.chat_messages.createIndex({ "session_id": 1, "created_at": -1 })
 
 // Vector search index for AI features
@@ -1011,7 +1005,7 @@ Frontend Optimization:
   - Level: Beginner, Intermediate, Advanced
   - Duration: < 5h, 5-20h, 20h+
   - Language: Vietnamese, English
-  - Price: Free, Paid
+  - Access type: Public, Private (mời tham gia)
 - **Search functionality**: Full-text search với auto-suggestions
 - **Sorting options**: Popularity, Rating, Recent, A-Z
 
@@ -1028,7 +1022,6 @@ Frontend Optimization:
 
 **Bước 3: Enrollment process**
 - **One-click enrollment** cho khóa học miễn phí
-- **Payment flow** cho khóa học trả phí (tích hợp Stripe/PayPal)
 - **Join via invitation link** từ giảng viên
 - **Bulk enrollment** cho enterprise users
 
@@ -1126,7 +1119,7 @@ flowchart TD
 - **Engagement rates**: Average completion rate, time spent
 - **Performance metrics**: Average quiz scores, assignment submissions  
 - **Rating & Feedback**: Student ratings và recent feedback
-- **Revenue tracking**: Nếu có khóa học trả phí (tương lai)
+- **Class workload**: Tổng số giờ giảng dạy và khối lượng công việc dự kiến
 
 **Quick Actions Panel:**
 - 🎯 **Tạo lớp học mới**
@@ -1237,9 +1230,9 @@ flowchart TD
 │ 🔧 AI Learning Platform - Admin Portal            [Settings] [🔔]   │
 ├─────────────────────────────────────────────────────────────────────┤
 │ ┌───────────────┐ ┌───────────────┐ ┌───────────────┐ ┌──────────┐ │
-│ │📊 Total Users │ │📚 Courses     │ │💰 Revenue     │ │⚡System  │ │
-│ │   1,247       │ │   89 Active   │ │  $12,450      │ │ 99.8%   │ │
-│ │ (+23 today)   │ │  156 Total    │ │  This Month   │ │ Uptime  │ │
+│ │📊 Total Users │ │📚 Courses     │ │🧠 Engagement  │ │⚡System  │ │
+│ │   1,247       │ │   89 Active   │ │  72% Avg      │ │ 99.8%   │ │
+│ │ (+23 today)   │ │  156 Total    │ │  Completion   │ │ Uptime  │ │
 │ └───────────────┘ └───────────────┘ └───────────────┘ └──────────┘ │
 │ ┌─────────────────────────────────┐ ┌─────────────────────────────┐ │
 │ │     User Activity Trends        │ │      System Health          │ │
@@ -1252,7 +1245,7 @@ flowchart TD
 │ │ • New user registration: minh.nv@example.com                    │ │
 │ │ • Course published: "Advanced React" by instructor_123          │ │
 │ │ • System alert: High memory usage on server-2                  │ │
-│ │ • Payment processed: $49.99 from user_456                      │ │
+│ │ • AI knowledge base refreshed for "Advanced React"             │ │
 │ │ [View All Activities] [Export Report]                          │ │
 │ └─────────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────────┘
@@ -1266,7 +1259,7 @@ flowchart TD
 - **User Activity**: DAU (Daily Active Users), WAU, MAU
 - **Retention Rate**: 30-day, 90-day retention
 - **Geographic Distribution**: By country/region
-- **User Segmentation**: Active vs Inactive, Paid vs Free
+- **User Segmentation**: Active vs Inactive, Student vs Instructor
 
 **B. Course & Content Metrics:**
 - **Total Courses**: 156 (Active: 89, Draft: 34, Archived: 33)
@@ -1360,12 +1353,11 @@ flowchart TD
 - **Feature flags**: Enable/disable features for testing
 - **AI parameters**: GenAI model settings, rate limits
 - **Email templates**: Notification templates management
-- **Payment settings**: Stripe/PayPal configuration (future)
 - **Security policies**: Password requirements, session timeouts
 
 **C. Analytics & Reporting:**
 - **Content performance**: Course popularity, completion rates
-- **Revenue analytics**: Course sales, instructor payouts (future)
+- **Engagement analytics**: Tương tác khóa học, mức độ tham gia của học viên
 - **System usage**: Feature adoption, user engagement
 - **Custom dashboards**: Drag-drop dashboard builder
 - **Automated reports**: Scheduled email reports
@@ -2219,16 +2211,6 @@ POST   /api/v1/classes/{class_id}/invite       # Mời học viên vào lớp (e
 DELETE /api/v1/classes/{class_id}/students/{student_id} # Xóa học viên khỏi lớp
 GET    /api/v1/classes/{class_id}/analytics    # Thống kê tiến độ lớp học
 
-POST   /api/v1/payments/create-intent          # Tạo ý định thanh toán cho khóa học trả phí
-POST   /api/v1/payments/confirm                # Xác nhận thanh toán thành công
-GET    /api/v1/payments/history                # Lịch sử tất cả giao dịch thanh toán
-POST   /api/v1/payments/refund                 # Yêu cầu hoàn tiền (trong thời hạn cho phép)
-GET    /api/v1/payments/{payment_id}/status    # Kiểm tra trạng thái giao dịch cụ thể
-
-# Quản lý doanh thu giảng viên
-GET    /api/v1/instructor/revenue              # Xem tổng doanh thu và thống kê theo thời gian
-GET    /api/v1/instructor/payouts              # Lịch sử các lần rút tiền
-POST   /api/v1/instructor/payouts/request      # Yêu cầu rút tiền về tài khoản ngân hàng
 ```
 
 ### 7.5 Quiz & Assessment 
@@ -2266,13 +2248,11 @@ GET    /api/v1/analytics/student/achievements  # Hụy hiệu, chứng chỉ, th
 GET    /api/v1/analytics/instructor/overview   # Tổng quan: số khóa học, học viên, rating
 GET    /api/v1/analytics/instructor/courses    # Hiệu suất từng khóa học: đăng ký, hoàn thành
 GET    /api/v1/analytics/instructor/students   # Thông tin học viên: tiến độ, hoạt động
-GET    /api/v1/analytics/instructor/revenue    # Doanh thu theo thời gian (nếu có khóa học trả phí)
 
 # Thống kê dành cho quản trị viên (Admin Analytics)
 GET    /api/v1/analytics/admin/system          # Trạng thái hệ thống: hiệu suất, lượng truy cập
 GET    /api/v1/analytics/admin/users           # Thống kê người dùng: tăng trưởng, hoạt động
 GET    /api/v1/analytics/admin/courses         # Thống kê khóa học: phổ biến nhất, chất lượng
-GET    /api/v1/analytics/admin/revenue         # Tổng doanh thu nền tảng (nếu có hệ thống thanh toán)
 ```
 
 ### 7.7 Chat & AI 
@@ -3023,15 +3003,15 @@ AppLayout
 - Hover states và tooltips
 - Keyboard shortcuts
 - Advanced filtering và sorting
-│ │ Advanced JavaScript     | 32 students | Free | ██████████  │ │
-│ │ Python for Beginners    | 78 students | $199 | ███████░░░  │ │
+│ │ Advanced JavaScript     | 32 students | Public | ██████████ │ │
+│ │ Python for Beginners    | 78 students | Private | ███████░░ │ │
 │ └─────────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 #### 9.3.2 Course Creation Wizard
 1. **Basic Info**: Title, description, category, level
-2. **Pricing Setup**: Free/paid, price, payment model
+2. **Visibility Setup**: Công khai, riêng tư theo lời mời
 3. **Content Creation**: Manual or AI-generated
 4. **Chapter Structure**: Add/edit chapters and lessons
 5. **Materials Upload**: Videos, documents, resources
@@ -3061,7 +3041,7 @@ AppLayout
 │                    Recent System Activity                       │
 │ • New instructor registration: jane.doe@email.com              │
 │ • Course flagged for review: "Suspicious Content"              │
-│ • Payment issue resolved for order #12345                      │
+│ • AI safety policy updated for new content moderation rules    │
 ├─────────────────────────────────────────────────────────────────┤
 │ Quick Actions                                                   │
 │ [Review Pending Courses] [Manage Users] [System Settings]      │
@@ -3117,114 +3097,437 @@ AppLayout
 
 ## 10. BẢNG CHỨC NĂNG THEO VAI TRÒ
 
-### 10.1 Phân quyền tổng quan
+### 10.1 Mục tiêu & phạm vi
+- Đảm bảo mỗi vai trò (Student, Instructor, Admin) hiểu rõ quyền hạn, trách nhiệm và giới hạn thao tác.
+- Chuẩn hóa thông tin cho FE/BE khi triển khai phân quyền giao diện và API.
+- Làm căn cứ cho kiểm thử phân quyền và thiết kế bảo mật ở mục 12.
 
-| Chức năng | Student | Instructor | Admin |
-|-----------|---------|------------|-------|
-| **Account Management** |
-| Đăng ký tài khoản | ✅ | ✅ | ✅ |
-| Đăng nhập/Đăng xuất | ✅ | ✅ | ✅ |
-| Cập nhật profile | ✅ | ✅ | ✅ |
-| Đổi mật khẩu | ✅ | ✅ | ✅ |
+### 10.2 Ma trận quyền hạn tổng hợp
 
-| **Assessment & Onboarding** |
-| Làm test năng lực | ✅ | ❌ | ✅ |
-| Xem kết quả test | ✅ | OK| ✅ |
-| Nhận gợi ý khóa học | ✅ | ❌ | ✅ |
-| **Course Discovery** |
-| Xem khóa học  | ✅ | ✅ | ✅ |
-| Tìm kiếm khóa học | ✅ | ✅ | ✅ |
-| Lọc khóa học | ✅ | ✅ | ✅ |
-| Xem chi tiết khóa học | ✅ | ✅ | ✅ |
-| **Course Enrollment** |
-| Đăng ký khóa học | ✅ | X | ✅ |
-| Hủy đăng ký | ✅ | ❌ | ✅ |
-| Nhận mời khóa học  | ✅ | ❌ | ✅ |
-| **Learning Experience** |
-| Học bài học | ✅ | ✅ | ✅ |
-| Xem progress | ✅ | ✅ | ✅ |
-| Làm quiz | ✅ | ✅ | ✅ |
-| Chat với AI | ✅ | ✅ | ✅ |
-| **Personal Course Creation** |
-| Tạo khóa học cá nhân , các khóa học cá nhân của học sinh được cả admin xem và quản lý trong database| ✅ | X | ✅ |
-| AI tạo nội dung | ✅ | X | ✅ |
-| Upload tài liệu | ✅ | X | ✅ |
-| **Instructor Features** |
-| Tạo khóa học | ❌ | x| ✅ |
-| Mời học viên | ❌ | ✅ | ✅ |
-| Xem danh sách học viên | ❌ | ✅ | ✅ |
-| Theo dõi tiến độ học viên | ❌ | ✅ | ✅ |
-| Tạo quiz cho khóa học | ❌ | ✅ | ✅ |
-| Xem thống kê khóa học | ❌ | ✅ | ✅ |
-| Nhận doanh thu | ❌ | ✅ | ❌ |
-| **Admin Functions** |
-| Quản lý tất cả người dùng | ❌ | ❌ | ✅ |
-| Phân quyền user | ❌ | ❌ | ✅ |
-| Xem tất cả khóa học | ❌ | ❌ | ✅ |
-tạo sửa xóa khóa học | ❌ | ❌ | ✅ |
-| Xem thống kê hệ thống | ❌ | ❌ | ✅ |
-| Tạo thông báo hệ thống | ❌ | ❌ | ✅ |
+| Nhóm chức năng | Mô tả ngắn | Student | Instructor | Admin |
+| --- | --- | :---: | :---: | :---: |
+| **Quản lý tài khoản** | Đăng ký, đăng nhập, cập nhật hồ sơ, đổi mật khẩu | ✅ | ✅ | ✅ |
+| Khóa/Mở tài khoản | Vô hiệu hóa, khôi phục user | 🔒 | 🔒 | ✅ |
+| **Đánh giá năng lực & gợi ý** | Làm bài test đầu vào, xem kết quả, nhận gợi ý khóa học phù hợp | ✅ | 🔒 | ✅ |
+| **Khám phá & đăng ký khóa học** | Duyệt danh sách, lọc, xem chi tiết, đăng ký/hủy đăng ký | ✅ | ✅ | ✅ |
+| **Quản lý lớp học** | Tạo lớp, mời học viên, duyệt yêu cầu tham gia | 🔒 | ✅ | ✅ |
+| **Học tập & tương tác** | Học bài, xem tiến độ cá nhân, làm quiz, chat AI | ✅ | ✅ | ✅ |
+| **Tạo khóa học cá nhân** | Dành cho học viên tự học, AI hỗ trợ nội dung | ✅ | 🔒 | ✅ |
+| **Tạo khóa học giảng dạy** | Biên soạn khóa học chính thức, quản trị nội dung | 🔒 | ✅ | ✅ |
+| **Quản lý tài liệu** | Upload, gắn tài liệu vào khóa học/lớp | ✅ | ✅ | ✅ |
+| **Theo dõi học viên** | Xem tiến độ, kết quả quiz, nhận xét | 🔒 | ✅ | ✅ |
+| **Thống kê hệ thống** | Dashboard tổng quan toàn nền tảng | 🔒 | 🔒 | ✅ |
+| **Phân quyền & cấu hình** | Cấp/thu hồi role, điều chỉnh tham số hệ thống | 🔒 | 🔒 | ✅ |
+| **Thông báo hệ thống** | Tạo thông báo chung, gửi broadcast | 🔒 | 🔒 | ✅ |
 
-### 10.2 Chi tiết chức năng theo vai trò
+> **Chú thích:** ✅ = toàn quyền sử dụng · 🔒 = không được phép · ⚠️ = được phép nhưng cần điều kiện (không xuất hiện ở bảng này vì chưa có use case).
 
-#### 10.2.1 STUDENT Functions
+### 10.3 Chi tiết quyền hạn theo vai trò
 
-**Dashboard & Overview:**
-- Xem tổng quan tiến độ học tập
-- Thống kê thời gian học, điểm số
-- Danh sách khóa học đã đăng ký với giáo viên và khóa học của bản thân hoặc khóa học được giáo viên thêm vào lớp
-- Lịch học 
-- Thông báo từ instructors và hệ thống
+#### 10.3.1 Student (Học viên)
+- Toàn quyền các thao tác liên quan tới học tập cá nhân: đăng ký/hủy khóa, làm quiz, chat AI, tạo khóa cá nhân.
+- Chỉ xem được thống kê của chính mình, không truy cập dữ liệu các học viên khác.
+- Được upload tài liệu phục vụ học cá nhân (giới hạn dung lượng theo cấu hình mục 12).
 
-**Skill Assessment:**
-- Chọn lĩnh vực muốn đánh giá (Programming, Design, Business, etc.) (phần này sẽ là dữ liệu cứng được hiển thị bên FE và BE sẽ lấy kết quả để gợi ý khóa học có sẵn)
-- Làm quiz đánh giá trình độ (10-15 câu hỏi) để biết được trình độ để đưaa gợi ý khóa học có sẵn
-- Xem kết quả chi tiết: level, strengths, weaknesses
-- Nhận gợi ý khóa học dựa trên kết quả
-  
+#### 10.3.2 Instructor (Giảng viên)
+- Quản lý lớp học chính thức, phê duyệt yêu cầu tham gia, theo dõi tiến độ học viên trong lớp.
+- Biên soạn khóa học giảng dạy, tạo quiz/bài tập, sử dụng AI để gợi ý nội dung nhưng không chỉnh sửa khóa cá nhân của học viên.
+- Xem thống kê liên quan tới lớp/khóa do mình quản lý.
 
-**Course Enrollment & Learning:**
-- Browse danh sách khóa học public với filters
-- Preview nội dung khóa học trước khi đăng ký
-- Đăng ký khóa học miễn phí ngay lập tức
-- Học theo tiến độ cá nhân hóa, dựa vào phần đánh giá sau khi làm bài test để cập nhật
-- Tương tác với AI chatbot trong context khóa học
-- Làm quiz và xem kết quả trong khóa học
+#### 10.3.3 Admin (Quản trị viên)
+- Toàn quyền đọc/ghi trên toàn hệ thống, bao gồm khóa học cá nhân của học viên (phục vụ kiểm duyệt).
+- Quản lý phân quyền người dùng, cấu hình hệ thống, xử lý sự cố.
+- Theo dõi log bảo mật, giới hạn rate limit và kiểm duyệt nội dung AI.
 
-**Personal Learning:**
-- Tạo khóa học cá nhân với AI assistance
-- Upload tài liệu và tạo khóa học từ file do học sinh up lên
-- Tự tạo quiz practice cho khóa học do học sinh up lên
-- Chat với AI về nội dung đã upload
-- Theo dõi tiến độ học tập cá nhân
+### 10.4 Quy trình phối hợp phân quyền
+1. **Yêu cầu mới** ⇒ Product Owner tạo ticket mô tả chức năng và role được phép.
+2. **BE cập nhật quyền** ⇒ Thêm middleware kiểm tra role, cập nhật specs ở mục 11 và test case.
+3. **FE hiển thị điều kiện** ⇒ Ẩn/khóa nút thao tác khi không đủ quyền, hiển thị tooltip giải thích.
+4. **QA kiểm chứng** ⇒ Chạy test matrix dựa vào bảng 10.2 trước khi release.
+5. **Ghi nhận log** ⇒ Admin kiểm tra log truy cập định kỳ để phát hiện sai lệch.
 
-#### 10.2.2 INSTRUCTOR Functions
+---
 
-**Course Creation & Management:**
-- Tạo lớp cho học sinh đăng ký hoặc mời học sinh vào lớp, sử dụng khóa học có sẵn , không được phép tạo khóa học.
-- Tạo quiz và assignments trong các khóa học có sẵn
-quản lý học sinh trong lớp (thêm sửa xóa... ra khỏi lớp)
+## 11. SPEC CHI TIẾT MODULE
+
+### 11.1 Authentication & User Management
+
+| Thuộc tính | Nội dung |
+| --- | --- |
+| Mục tiêu | Cung cấp đăng ký/đăng nhập an toàn, quản lý hồ sơ, refresh token |
+| Endpoint chính | `POST /api/v1/auth/register`, `POST /api/v1/auth/login`, `POST /api/v1/auth/refresh`, `GET /api/v1/auth/me`, `POST /api/v1/auth/logout` |
+| Input | Email, mật khẩu, tên hiển thị, role (mặc định Student) |
+| Output | Access token (15 phút), refresh token (7 ngày), hồ sơ user |
+| Quy tắc | Bcrypt hash, email unique, refresh token lưu trong collection `refresh_tokens`, mỗi user tối đa 5 phiên |
+| Priority | **P0** – Bắt buộc trước khi tích hợp chức năng khác |
+| Trạng thái | Đang phát triển (BE), đã mock API cho FE |
+| Phụ thuộc | MongoDB Atlas, module Security (mục 12) |
+
+**Luồng xử lý:** đăng ký ⇒ hash mật khẩu ⇒ lưu user ⇒ trả token ⇒ FE lưu access token trong memory, refresh token dạng httpOnly cookie.
+
+### 11.2 Course Management
+
+| Thuộc tính | Nội dung |
+| --- | --- |
+| Mục tiêu | Quản lý khóa học chuẩn hóa cho Instructor/Admin & khóa cá nhân cho Student |
+| Endpoint chính | `GET/POST/PUT/DELETE /api/v1/courses`, `POST /api/v1/courses/{id}/publish`, `GET /api/v1/courses/{id}` |
+| Input | Thông tin khóa học (title, description, level, tags, thumbnail, outline), nguồn tạo (manual/AI) |
+| Output | Đối tượng Course, trạng thái (draft/published/personal), metadata AI |
+| Quy tắc | Instructor chỉ sửa khóa do mình sở hữu, Student chỉ sửa khóa cá nhân, Admin toàn quyền |
+| Priority | **P0** cho release đầu |
+| Trạng thái | Đang phát triển song song FE/BE |
+| Phụ thuộc | Upload Service, AI Pipeline (mục 13) |
+
+**Luồng xử lý:** tạo khóa ⇒ lưu draft ⇒ (tùy chọn) gọi AI để sinh outline ⇒ Instructor/Admin publish ⇒ xuất hiện ở danh sách public.
+
+### 11.3 Enrollment & Classroom
+
+| Thuộc tính | Nội dung |
+| --- | --- |
+| Mục tiêu | Quản lý quan hệ học viên-khóa học, lớp giảng dạy |
+| Endpoint chính | `POST /api/v1/enrollments`, `DELETE /api/v1/enrollments/{id}`, `GET /api/v1/classes/{id}/students` |
+| Input | course_id, user_id, vai trò trong lớp |
+| Output | Bản ghi Enrollment, trạng thái (pending/approved/rejected) |
+| Quy tắc | Student tự đăng ký khóa public; lớp Instructor cần phê duyệt; Admin có thể ép ghi danh |
+| Priority | **P0** |
+| Trạng thái | Chờ hoàn thiện business rule |
+| Phụ thuộc | Auth module, Notification module |
+
+### 11.4 Quiz & Assessment
+
+| Thuộc tính | Nội dung |
+| --- | --- |
+| Mục tiêu | Tạo quiz, auto-grade và lưu kết quả |
+| Endpoint chính | `POST /api/v1/quiz`, `GET /api/v1/quiz/{id}`, `POST /api/v1/quiz/{id}/submit` |
+| Input | Danh sách câu hỏi, đáp án, điểm số, thời lượng |
+| Output | Kết quả chấm điểm, thống kê tiến độ |
+| Quy tắc | Quiz thuộc về khóa/lớp cụ thể, chấm điểm tự động single-choice/multiple-choice, hỗ trợ explain |
+| Priority | **P1** (ra sau khi core learning ổn định) |
+| Trạng thái | Thiết kế API |
+| Phụ thuộc | Course module, Progress module |
+
+### 11.5 AI Chat & Mentor
+
+| Thuộc tính | Nội dung |
+| --- | --- |
+| Mục tiêu | Chatbot hỗ trợ giải đáp trong phạm vi tài liệu khóa học |
+| Endpoint chính | `POST /api/v1/ai/chat`, `GET /api/v1/ai/history` |
+| Input | user_id, course_id, câu hỏi, ngữ cảnh bổ sung |
+| Output | Câu trả lời đã được lọc, citation tài liệu, log hội thoại |
+| Quy tắc | Chat chỉ truy cập vector store theo khóa đang học; kiểm duyệt nội dung nhạy cảm; giới hạn 100 lượt/ngày/user |
+| Priority | **P1** |
+| Trạng thái | Đang POC với Google GenAI |
+| Phụ thuộc | AI Pipeline (mục 13), Security (rate limit) |
+
+### 11.6 Progress Tracking & Analytics
+
+| Thuộc tính | Nội dung |
+| --- | --- |
+| Mục tiêu | Theo dõi tiến độ học viên, thống kê cho Instructor/Admin |
+| Endpoint chính | `GET /api/v1/progress/my`, `GET /api/v1/progress/course/{id}`, `POST /api/v1/progress` |
+| Input | course_id, user_id, lesson_id, trạng thái hoàn thành |
+| Output | Thành phần progress, phần trăm hoàn thành, streak |
+| Quy tắc | Student chỉ xem dữ liệu bản thân; Instructor/Admin xem theo phạm vi quyền |
+| Priority | **P1** |
+| Trạng thái | Chờ dữ liệu từ quiz & enrollment |
+| Phụ thuộc | Course, Enrollment, Quiz |
+
+### 11.7 Upload & Document Processing
+
+| Thuộc tính | Nội dung |
+| --- | --- |
+| Mục tiêu | Xử lý file (PDF, DOCX, PPTX, video ngắn) phục vụ học tập và AI |
+| Endpoint chính | `POST /api/v1/uploads`, `GET /api/v1/uploads/{id}`, `DELETE /api/v1/uploads/{id}` |
+| Input | File theo chuẩn MIME, metadata (loại tài liệu, thuộc khóa nào) |
+| Output | Đường dẫn lưu trữ, trạng thái xử lý (pending/processing/completed/failed) |
+| Quy tắc | Kích thước ≤ 50MB, quét virus, lưu metadata phục vụ chunking |
+| Priority | **P0** |
+| Trạng thái | BE đã có skeleton, cần tích hợp queue |
+| Phụ thuộc | Storage, AI Pipeline |
+
+### 11.8 Notification & Communication
+
+| Thuộc tính | Nội dung |
+| --- | --- |
+| Mục tiêu | Gửi thông báo hệ thống, nhắc lịch, cảnh báo |
+| Endpoint chính | `POST /api/v1/notifications`, `GET /api/v1/notifications`, `PUT /api/v1/notifications/{id}/read` |
+| Input | message, audience (role, lớp, user list), thời điểm gửi |
+| Output | Notification record, trạng thái đã đọc |
+| Quy tắc | Admin có quyền broadcast; Instructor gửi trong lớp; Student chỉ nhận |
+| Priority | **P2** |
+| Trạng thái | Chưa phát triển |
+| Phụ thuộc | Auth, Enrollment |
+
+---
+
+## 12. SECURITY & AUTHORIZATION DESIGN
+
+### 12.1 Mục tiêu bảo mật
+- Bảo vệ dữ liệu cá nhân (email, tiến độ, tài liệu học).
+- Đảm bảo chỉ người có quyền mới truy cập API tương ứng.
+- Giảm thiểu rò rỉ token, ngăn ngừa tấn công phổ biến (XSS, CSRF, brute force).
+- Tuân thủ nguyên tắc **privacy by design** cho toàn hệ thống.
+
+### 12.2 Kiến trúc xác thực
+
+```mermaid
+sequenceDiagram
+  participant Client
+  participant FE as Frontend (React)
+  participant API as FastAPI Auth
+  participant DB as MongoDB
+
+  Client->>FE: Nhập email + mật khẩu
+  FE->>API: POST /api/v1/auth/login
+  API->>DB: Tra cứu user + verify bcrypt
+  DB-->>API: Trả thông tin user
+  API->>API: Ký Access Token (RS256) + Refresh Token
+  API-->>FE: JSON {access_token, refresh_token}
+  FE->>Client: Lưu access token (memory); refresh token (httpOnly cookie)
+```
+
+### 12.3 Cấu trúc JWT & lưu trữ
+
+| Token | TTL | Lưu trữ | Trường payload | Mục đích |
+| --- | --- | --- | --- | --- |
+| Access Token | 15 phút | Memory/Redux store | `sub` (user_id), `role`, `exp`, `iss`, `session_id` | Gọi API nhanh |
+| Refresh Token | 7 ngày | httpOnly cookie + collection `refresh_tokens` | `sub`, `token_id`, `exp`, `fingerprint` | Làm mới access token |
+
+- Refresh token có thể bị thu hồi (revoke) theo `token_id`.
+- Ký bằng khóa bất đối xứng để hỗ trợ scale (RS256).
+- Thêm `fingerprint` (hash user agent + IP) nhằm phát hiện token bị đánh cắp.
+
+### 12.4 Quy trình phân quyền (RBAC)
+- Middleware kiểm tra: (1) token hợp lệ → (2) tra role → (3) so khớp bảng 10.2.
+- Các route nhạy cảm (quản trị, cập nhật tài liệu) yêu cầu thêm kiểm tra owner (Instructor) hoặc scope (Admin).
+- FE ẩn/disabled các thao tác không hợp lệ, kèm tooltip “Bạn không đủ quyền”.
+- Log mọi request 401/403 để phục vụ phân tích bảo mật.
+
+### 12.5 Chính sách bảo vệ dữ liệu
+- **Mật khẩu**: Bcrypt 12 rounds, không lưu plaintext.
+- **Tài liệu upload**: Quét virus, lưu trên storage riêng, chỉ trả signed URL có TTL.
+- **Dữ liệu cá nhân**: Ẩn email/ID trong các danh sách công khai, chỉ hiển thị nickname.
+- **Logging**: Mask thông tin nhạy cảm, tuân thủ nguyên tắc tối thiểu hóa.
+- **Backup**: Snapshot database hằng ngày, mã hóa ở trạng thái nghỉ (at-rest).
+- **Rate limiting**: 60 requests/phút/user cho API public, 20 requests/phút cho AI chat.
+
+### 12.6 Kiểm thử & phản ứng sự cố
+- Pen-test nội bộ mỗi quý, ưu tiên auth, upload, AI endpoints.
+- Thiết lập cảnh báo khi có >5 lần đăng nhập sai/phút cùng IP.
+- Kịch bản sự cố: khóa token, reset mật khẩu bắt buộc, thông báo người dùng trong 24h.
+
+---
+
+## 13. AI PIPELINE DOCUMENT
+
+### 13.1 Tổng quan pipeline
+
+```mermaid
+flowchart LR
+  A[Upload tài liệu / Course content] --> B[Pre-processing]
+  B --> C[Chunking & Metadata]
+  C --> D[Embedding bằng Vertex AI / Gemini]
+  D --> E[(Atlas Vector Search)]
+  E --> F[Query Router]
+  F --> G[LLM (Google GenAI)]
+  G --> H[Post-processing & Guardrails]
+  H --> I[Trả kết quả cho FE]
+```
+
+### 13.2 Các bước chi tiết
+
+| Bước | Mô tả | Công cụ | Thời điểm chạy |
+| --- | --- | --- | --- |
+| 1. Pre-processing | Chuẩn hóa file (PDF → text), loại bỏ stop-words, trích metadata (chapter, độ khó) | Python worker + `pymupdf`, `textract` | Ngay khi upload hoàn tất |
+| 2. Chunking | Chia thành đoạn 500-700 token, lưu liên kết tới khóa/chapter | `vector_chunking.py` | Batch job |
+| 3. Embedding | Gọi API Gemini Embedding | Google GenAI | Batch/Real-time |
+| 4. Lưu trữ vector | Đưa vector + metadata vào Atlas Vector Search | MongoDB Atlas | Liên tục |
+| 5. Query | Khi user hỏi, lấy top-k vector (k=5) theo cosine similarity | Beanie + Aggregation | Real-time |
+| 6. LLM Completion | Gửi prompt (context + câu hỏi) tới Gemini | Google GenAI | Real-time |
+| 7. Guardrail | Kiểm duyệt nội dung (ấn định danh sách từ cấm, policy) | Custom filter | Real-time |
+
+### 13.3 Cập nhật dữ liệu khi khóa học thay đổi
+- Khi khóa học cập nhật: đánh dấu `content_version++`, thêm job re-chunk.
+- Hệ thống queue (Celery/RQ) xử lý lại embedding, cập nhật vector store.
+- Giữ lại version cũ 7 ngày để rollback nếu cần.
+- Khóa học cá nhân của student được xử lý tương tự nhưng giới hạn dung lượng (≤ 10MB).
+
+### 13.4 Tích hợp GenAI / LLM
+- Sử dụng Google GenAI (model Gemini 1.5) với chế độ **grounded generation**.
+- Prompt template chuẩn (system + context + question), kèm theo instruction “Không bịa thông tin ngoài tài liệu”.
+- Timeout 15 giây; nếu vượt quá trả fallback “Vui lòng thử lại”.
+- Logging câu hỏi/đáp án (ẩn dữ liệu cá nhân) để huấn luyện cải tiến.
+
+### 13.5 Quản lý ngữ cảnh học viên
+- Lưu lịch sử chat theo session (course_id + user_id) tối đa 50 lượt/giai đoạn 7 ngày.
+- Tự động xóa/ẩn thông tin nhạy cảm theo chính sách bảo mật.
+- Dùng `progress` + `enrollment` để cá nhân hóa câu trả lời (ví dụ nhắc chương chưa hoàn thành).
+- Cho phép Instructor xem báo cáo tổng hợp về câu hỏi phổ biến (ẩn danh học viên).
+
+---
+
+## 14. TIMELINE PHÁT TRIỂN BACKEND (13-10 ➝ 13-11-2025)
+
+### 14.1 Nguyên tắc chung
+- Team Backend gồm 2 thành viên: **Khang** (tập trung Auth, Security, Upload) và **Tuấn Anh** (Course, Enrollment, Analytics), phối hợp chéo review.
 
 
-**Student Management:**
-- Xem danh sách học viên đã enrolled
-- Theo dõi progress từng học viên
-- Gửi thông báo và announcements
-- Trả lời câu hỏi của học viên
-- Invite học viên vào khóa học 
-- Grade quiz và assignments 
+### 14.2 Kế hoạch chi tiết dạng bảng (định dạng Google Sheet)
 
+> Bảng dưới đây chuyển hóa toàn bộ kế hoạch 13/10 ➝ 13/11 thành định dạng phù hợp để nhập trực tiếp vào Google Sheet.
 
-#### 10.2.3 ADMIN Functions
+#### Tuần 1 – Thiết lập nền tảng & Auth cơ bản
 
-**User Management:**
-- Xem danh sách tất cả users với search/filter
-- View detailed user profiles và activity
-- Assign/change user roles
+| TRẠNG THÁI | MỤC TIÊU LỚN | MỤC TIÊU NHỎ | MÔ TẢ | BẮT ĐẦU | KẾT THÚC | ƯỚC LƯỢNG (h) | NGƯỜI THỰC HIỆN | TIẾN ĐỘ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Thiết lập môi trường & tooling | Chuẩn hóa Python env, virtualenv, cấu hình pytest/ruff, xác nhận dependencies. | 13/10/2025 | 13/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Chuẩn bị tài liệu & cấu trúc dự án | Biên soạn tài liệu môi trường, cập nhật `.env.example`, chuẩn hóa tree dự án. | 13/10/2025 | 13/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Xây dựng endpoint đăng ký | Implement `POST /api/v1/auth/register`, hashing, validation, chuẩn hóa error map. | 14/10/2025 | 14/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Docker Compose & chỉ mục Mongo | Thiết lập Docker Compose (API, Mongo, Redis), định nghĩa index Mongo chủ đạo. | 14/10/2025 | 14/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Hoàn thiện đăng nhập & refresh | Hoàn thiện `POST /api/v1/auth/login`, luồng refresh rotation và revoke token service. | 15/10/2025 | 15/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Seed quyền và tài liệu auth | Viết script seed `roles`, `users` mẫu và tài liệu hóa luồng đăng nhập backend. | 15/10/2025 | 15/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | GET /auth/me & revoke token | Xây dựng `GET /api/v1/auth/me`, endpoint revoke refresh token, middleware kiểm tra session. | 16/10/2025 | 16/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Tài liệu cấu trúc DB | Xây dựng tài liệu cấu trúc database (users, profiles, refresh_tokens), cập nhật README backend. | 16/10/2025 | 16/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Audit log & rate limit auth | Bổ sung audit log, rate limit cơ bản cho `/auth`, cấu hình logging bảo mật. | 17/10/2025 | 17/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Tài liệu secrets & backup | Hoàn thiện tài liệu secrets rotation, backup, hướng dẫn khôi phục DB. | 17/10/2025 | 17/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Buffer & harden auth | Buffer xử lý bug auth, bổ sung guard chống brute-force, rà soát log. | 18/10/2025 | 18/10/2025 | 4 | Khang | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Checklist QA auth | Rà soát migration/seed, viết checklist QA cho auth và cập nhật hướng dẫn. | 18/10/2025 | 18/10/2025 | 4 | Tuấn Anh | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Nghiên cứu OAuth 2.0 | Nghiên cứu tùy chọn OAuth 2.0 cho tương lai, ghi chú lại kết quả. | 19/10/2025 | 19/10/2025 | 3 | Khang | 0% |
+| Planned | Tuần 1 - Thiết lập nền tảng & Auth | Tổng kết tài liệu tuần | Tổng hợp tài liệu tuần, hoàn thiện sơ đồ DB ở mục 6 và báo cáo tiến độ. | 19/10/2025 | 19/10/2025 | 3 | Tuấn Anh | 0% |
+
+#### Tuần 2 – Course & Enrollment API
+
+| TRẠNG THÁI | MỤC TIÊU LỚN | MỤC TIÊU NHỎ | MÔ TẢ | BẮT ĐẦU | KẾT THÚC | ƯỚC LƯỢNG (h) | NGƯỜI THỰC HIỆN | TIẾN ĐỘ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Planned | Tuần 2 - Course & Enrollment | GET /courses filter & pagination | Implement `GET /api/v1/courses` với filter, pagination, search params. | 20/10/2025 | 20/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 2 - Course & Enrollment | POST /enrollments | Xây dựng `POST /api/v1/enrollments`, validate chỗ ngồi và trạng thái đăng ký. | 20/10/2025 | 20/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 2 - Course & Enrollment | POST /courses (draft) | Tạo `POST /api/v1/courses` (draft, ownership, slug) và unit test services. | 21/10/2025 | 21/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 2 - Course & Enrollment | DELETE /enrollments | Xây dựng `DELETE /api/v1/enrollments/{course_id}` và ghi log background. | 21/10/2025 | 21/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 2 - Course & Enrollment | PUT /courses publish/unpublish | Hoàn thiện `PUT /api/v1/courses/{id}` với metadata và trạng thái publish/unpublish. | 22/10/2025 | 22/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 2 - Course & Enrollment | GET /classes/{id} | Xây dựng `GET /api/v1/classes/{class_id}` với phân trang và phân quyền role. | 22/10/2025 | 22/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 2 - Course & Enrollment | GET /courses/{id} & metadata | Hoàn thiện `GET /api/v1/courses/{id}` trả syllabus, files, quyền truy cập. | 23/10/2025 | 23/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 2 - Course & Enrollment | POST /classes | Tạo `POST /api/v1/classes`, cấu hình link mời và stub email queue. | 23/10/2025 | 23/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 2 - Course & Enrollment | Search nâng cao /courses | Bổ sung filter category/level, search text cho `/courses`. | 24/10/2025 | 24/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 2 - Course & Enrollment | POST /classes/{id}/students | Triển khai invite & accept cho `POST /api/v1/classes/{id}/students`. | 24/10/2025 | 24/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 2 - Course & Enrollment | Refactor service layer | Refactor services, bổ sung repository unit test, dọn dẹp mã. | 25/10/2025 | 25/10/2025 | 4 | Khang | 0% |
+| Planned | Tuần 2 - Course & Enrollment | Chuẩn bị schema quiz/progress | Chuẩn hóa schema quiz/progress, thiết lập foreign keys lỏng. | 25/10/2025 | 25/10/2025 | 4 | Tuấn Anh | 0% |
+| Planned | Tuần 2 - Course & Enrollment | Nghỉ & tổng kết sprint | Nghỉ, rà soát backlog, cập nhật ghi chú sprint. | 26/10/2025 | 26/10/2025 | 0 | Khang | 0% |
+| Planned | Tuần 2 - Course & Enrollment | Nghỉ & tổng kết sprint | Nghỉ, rà soát backlog, cập nhật ghi chú sprint. | 26/10/2025 | 26/10/2025 | 0 | Tuấn Anh | 0% |
+
+#### Tuần 3 – Quiz, Progress & AI Baseline
+
+| TRẠNG THÁI | MỤC TIÊU LỚN | MỤC TIÊU NHỎ | MÔ TẢ | BẮT ĐẦU | KẾT THÚC | ƯỚC LƯỢNG (h) | NGƯỜI THỰC HIỆN | TIẾN ĐỘ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Planned | Tuần 3 - Quiz & AI Baseline | Service upload & kiểm tra file | Xây dựng service upload, scan virus, ký URL tạm thời và validate kích thước. | 27/10/2025 | 27/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | CRUD quiz cơ bản | Triển khai `POST/GET /api/v1/quizzes` với logic CRUD cơ bản. | 27/10/2025 | 27/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | RBAC uploads | Hoàn thiện `GET/DELETE /api/v1/uploads/{id}` với RBAC. | 28/10/2025 | 28/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Submit quiz & auto-grade | Xây dựng `POST /api/v1/quizzes/{id}/submit` + auto-grade logic. | 28/10/2025 | 28/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Worker xử lý upload | Viết worker xử lý `POST /api/v1/uploads/{id}/process`, queue vector hóa. | 29/10/2025 | 29/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Lịch sử quiz & dashboard | Hoàn thiện `GET /api/v1/quizzes/history`, map kết quả cho dashboard. | 29/10/2025 | 29/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Proxy AI chat | Triển khai `POST /api/v1/ai/chat` proxy GenAI, guardrail baseline. | 30/10/2025 | 30/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Progress API | Xây dựng `GET /api/v1/progress/my` & `POST /api/v1/progress` cập nhật tiến độ. | 30/10/2025 | 30/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Logging & retry AI | Thiết lập rate limit, logging ẩn danh, retry policy cho AI. | 31/10/2025 | 31/10/2025 | 6 | Khang | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Kết nối quiz với progress | Gắn kết quả quiz vào progress, phát thông báo. | 31/10/2025 | 31/10/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Buffer upload | Buffer tối ưu storage adapter, cập nhật tài liệu uploads. | 01/11/2025 | 01/11/2025 | 4 | Khang | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Buffer quiz/progress docs | Buffer, cập nhật doc module quiz/progress. | 01/11/2025 | 01/11/2025 | 4 | Tuấn Anh | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Review sprint | Nghỉ, review sprint, cập nhật bảng kiểm tra. | 02/11/2025 | 02/11/2025 | 0 | Khang | 0% |
+| Planned | Tuần 3 - Quiz & AI Baseline | Review sprint | Nghỉ, review sprint, cập nhật bảng kiểm tra. | 02/11/2025 | 02/11/2025 | 0 | Tuấn Anh | 0% |
+
+#### Tuần 4 – Analytics, Admin & Hardening
+
+| TRẠNG THÁI | MỤC TIÊU LỚN | MỤC TIÊU NHỎ | MÔ TẢ | BẮT ĐẦU | KẾT THÚC | ƯỚC LƯỢNG (h) | NGƯỜI THỰC HIỆN | TIẾN ĐỘ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Planned | Tuần 4 - Analytics & Hardening | Middleware bảo mật nâng cao | Triển khai HTTP headers, CSP, rate limit nâng cao cho backend. | 03/11/2025 | 03/11/2025 | 6 | Khang | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Analytics student dashboard | Implement `GET /api/v1/analytics/student/dashboard` + filter thời gian. | 03/11/2025 | 03/11/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Pen-test auth/upload | Pen-test nội bộ auth/upload, xử lý findings OWASP. | 04/11/2025 | 04/11/2025 | 6 | Khang | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Analytics instructor overview | Triển khai `GET /api/v1/analytics/instructor/overview` & `/courses`. | 04/11/2025 | 04/11/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Docker packaging | Đóng gói Dockerfile + docker-compose (API, Mongo, Redis, worker). | 05/11/2025 | 05/11/2025 | 6 | Khang | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Analytics admin system | Xây dựng `GET /api/v1/analytics/admin/system` + thống kê người dùng. | 05/11/2025 | 05/11/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Thiết lập CI/CD | Thiết lập pipeline lint, pytest, staging deploy, pre-commit. | 06/11/2025 | 06/11/2025 | 6 | Khang | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Seed analytics fixtures | Viết script seed demo analytics + fixtures NDJSON. | 06/11/2025 | 06/11/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | E2E backend-only test | Kiểm thử Postman collection full + smoke AI backend. | 07/11/2025 | 07/11/2025 | 6 | Khang | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Báo cáo UAT backend | Tổng hợp báo cáo UAT backend, regression analytics. | 07/11/2025 | 07/11/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Buffer hardening | Buffer sửa lỗi bảo mật, cập nhật tài liệu hardening. | 08/11/2025 | 08/11/2025 | 4 | Khang | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Buffer analytics | Buffer sửa lỗi thống kê, tối ưu aggregation. | 08/11/2025 | 08/11/2025 | 4 | Tuấn Anh | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Tổng kết sprint | Nghỉ, tổng kết sprint, cập nhật backlog tuần 5. | 09/11/2025 | 09/11/2025 | 0 | Khang | 0% |
+| Planned | Tuần 4 - Analytics & Hardening | Tổng kết sprint | Nghỉ, tổng kết sprint, cập nhật backlog tuần 5. | 09/11/2025 | 09/11/2025 | 0 | Tuấn Anh | 0% |
+
+#### Tuần 5 – Stabilize & Release
+
+| TRẠNG THÁI | MỤC TIÊU LỚN | MỤC TIÊU NHỎ | MÔ TẢ | BẮT ĐẦU | KẾT THÚC | ƯỚC LƯỢNG (h) | NGƯỜI THỰC HIỆN | TIẾN ĐỘ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Planned | Tuần 5 - Stabilize & Release | Checklist bảo mật cuối | Rà soát secret rotation, chuẩn bị bàn giao và checklist bảo mật. | 10/11/2025 | 10/11/2025 | 6 | Khang | 0% |
+| Planned | Tuần 5 - Stabilize & Release | Rà soát tài liệu API | Soát xét tài liệu API, cập nhật README và `HE_THONG.md`. | 10/11/2025 | 10/11/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 5 - Stabilize & Release | Hỗ trợ QA & changelog | Hỗ trợ QA, fix bug P0/P1, cập nhật changelog backend. | 11/11/2025 | 11/11/2025 | 6 | Khang | 0% |
+| Planned | Tuần 5 - Stabilize & Release | Hoàn thiện test report | Hoàn thiện test report, finalise Postman collection. | 11/11/2025 | 11/11/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 5 - Stabilize & Release | Release candidate & tag | Freeze code, tạo release candidate, ký tag Git, chuẩn bị artifacts. | 12/11/2025 | 12/11/2025 | 6 | Khang | 0% |
+| Planned | Tuần 5 - Stabilize & Release | Script deploy + rollback | Chuẩn bị script deploy production, rollback, document quy trình. | 12/11/2025 | 12/11/2025 | 6 | Tuấn Anh | 0% |
+| Planned | Tuần 5 - Stabilize & Release | Deploy & postmortem | Deploy production (nếu pass UAT), viết postmortem, bàn giao bảo trì. | 13/11/2025 | 13/11/2025 | 6 | Khang | 0% |
+| Planned | Tuần 5 - Stabilize & Release | Giám sát & tổng kết | Giám sát logs, tổng hợp báo cáo cuối kỳ, archive bộ test. | 13/11/2025 | 13/11/2025 | 6 | Tuấn Anh | 0% |
+
+### 14.3 Hoạt động bổ trợ
+- **Daily standup**: cập nhật tiến độ, block, kế hoạch.
+- **Code review**: mỗi merge request bắt buộc người còn lại review.
+- **Local runbook & seed data**: duy trì `docker-compose`, script seed JSON/NDJSON, đảm bảo ai cũng chạy được API và database cục bộ.
+- **API test automation**: cập nhật Postman/Newman collection, pytest suites; log kết quả test vào báo cáo tuần.
+- **QA phối hợp**: dành ít nhất 1h/ngày tương tác với QA để đồng bộ test case backend.
+- **Retrospective**: cuối mỗi tuần đánh giá điều chỉnh timeline.
+
+---
+
+## 15. ĐỊNH DẠNG DỮ LIỆU KHÓA HỌC MẪU CHO DATABASE
+
+### 15.1 Khuyến nghị tổng quan
+- **Ưu tiên JSON/NDJSON**: MongoDB làm việc tốt với document JSON. Dùng định dạng **NDJSON** (mỗi dòng một object) để import bằng `mongoimport` nhanh chóng và hỗ trợ version control.
+- **Tách nhỏ theo module**: lưu từng nhóm dữ liệu vào file riêng trong thư mục `seed/` (`courses.ndjson`, `chapters.ndjson`, `quizzes.ndjson`, ...).
+- **Giữ metadata đầy đủ**: bao gồm `course_id`, `slug`, `visibility`, `modules`, `resources`, `vector_status` để phục vụ AI pipeline và analytics.
+- **Version & timestamps**: thêm trường `content_version`, `created_at`, `updated_at` để đồng bộ với các script migrate.
+
+### 15.2 Cấu trúc mẫu `courses.ndjson`
+```json
+{"_id": {"$oid": "6528b1f9a5c6c01d5f1a0001"},
+ "slug": "python-foundations",
+ "title": "Python Foundations",
+ "description": "Khóa học Python cơ bản dành cho người mới bắt đầu",
+ "level": "beginner",
+ "category": "programming",
+ "visibility": "public",
+ "owner_id": {"$oid": "6528b1f9a5c6c01d5f1a1000"},
+ "content_version": 1,
+ "modules": [
+   {"module_id": "intro", "title": "Giới thiệu", "summary": "Tổng quan Python", "lessons": [
+     {"lesson_id": "history", "title": "Lịch sử Python", "duration": 10},
+     {"lesson_id": "setup", "title": "Cài đặt môi trường", "duration": 15}
+   ]},
+   {"module_id": "data-types", "title": "Kiểu dữ liệu", "lessons": [
+     {"lesson_id": "numbers", "title": "Số và toán tử", "duration": 20},
+     {"lesson_id": "strings", "title": "Chuỗi", "duration": 25}
+   ]}
+ ],
+ "resources": [
+   {"type": "pdf", "title": "Cheat Sheet", "url": "s3://learning-ai/courses/python/cheatsheet.pdf"},
+   {"type": "quiz", "quiz_id": "python-intro-quiz"}
+ ],
+ "tags": ["python", "beginner"],
+ "vector_status": "not_indexed",
+ "created_at": {"$date": "2025-10-01T00:00:00Z"},
+ "updated_at": {"$date": "2025-10-01T00:00:00Z"}}
+```
+
+### 15.3 Nội dung chi tiết bài học
+- **Markdown cho lesson**: lưu nội dung dài của từng bài học trong file Markdown dưới `seed/lessons/<course_slug>/<lesson_id>.md` để dễ chỉnh sửa, đồng thời import vào Mongo qua script (Field `content_markdown`).
+- **Tài liệu bổ sung**: nếu cần lưu file gốc (Word/PDF), đặt trong `seed/resources/` và lưu đường dẫn tới storage trong JSON.
+- **Mapping**: script seed đọc JSON chính, sau đó attach nội dung Markdown/tài liệu vào trường `content_html` hoặc `content_markdown` tương ứng trước khi ghi vào DB.
+
+### 15.4 Công cụ hỗ trợ
+- Dùng `scripts/init_database.py` để đọc toàn bộ file NDJSON/Markdown và insert dữ liệu.
+- Với NDJSON: `mongoimport --db learning_ai --collection courses --file courses.ndjson` (mặc định đọc từng dòng JSON).
+- Với JSON array: `mongoimport --db learning_ai --collection courses --file courses.json --jsonArray`.
+- Quản lý phiên bản seed bằng Git, kèm README mô tả ý nghĩa từng dataset.
+
 
 ---
 
 **Kết thúc tài liệu HE_THONG.md**
 
 > Nếu cần thêm chi tiết hoặc chỉnh sửa, vui lòng thông báo!
-còn thiếu 10,11,12,13
